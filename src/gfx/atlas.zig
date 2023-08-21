@@ -3,22 +3,11 @@ const builtin = @import("builtin");
 const math = @import("../math/math.zig");
 const fs = @import("../tools/fs.zig");
 
-pub const Animation = struct {
-    name: [:0]const u8,
-    start: usize,
-    length: usize,
-    fps: usize,
-};
-
-pub const Sprite = struct {
-    name: [:0]const u8,
-    source: [4]u32,
-    origin: [2]i32,
-};
+const game = @import("../scoop'ems.zig");
 
 pub const Atlas = struct {
-    sprites: []Sprite,
-    animations: []Animation,
+    sprites: []game.gfx.Sprite,
+    animations: []game.gfx.Animation,
 
     pub fn initFromFile(allocator: std.mem.Allocator, file: [:0]const u8) !Atlas {
         const read = try fs.read(allocator, file);

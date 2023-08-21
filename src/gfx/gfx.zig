@@ -1,12 +1,14 @@
 const std = @import("std");
 const zm = @import("zmath");
-const game = @import("game");
+const game = @import("../scoop'ems.zig");
 const zstbi = @import("zstbi");
 
 pub const Quad = @import("quad.zig").Quad;
 pub const Batcher = @import("batcher.zig").Batcher;
 pub const Texture = @import("texture.zig").Texture;
 pub const Camera = @import("camera.zig").Camera;
+pub const Sprite = @import("sprite.zig").Sprite;
+pub const Animation = @import("animation.zig").Animation;
 
 pub const Vertex = struct {
     position: [3]f32 = [_]f32{ 0.0, 0.0, 0.0 },

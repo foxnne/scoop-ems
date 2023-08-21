@@ -5,8 +5,8 @@ const gpu = core.gpu;
 
 const zgui = @import("zgui").MachImgui(core);
 const zstbi = @import("zstbi");
-const zm = @import("zmath");
-const nfd = @import("nfd");
+const zmath = @import("zmath");
+const zflecs = @import("zflecs");
 
 pub const App = @This();
 

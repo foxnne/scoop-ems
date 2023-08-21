@@ -142,7 +142,7 @@ pub const Batcher = struct {
     };
 
     /// Appends a quad at the passed position set to the size needed to render the target texture.
-    pub fn texture(self: *Batcher, position: zm.F32x4, t: gfx.Texture, options: TextureOptions) !void {
+    pub fn texture(self: *Batcher, position: zm.F32x4, t: *gfx.Texture, options: TextureOptions) !void {
         const width = @as(f32, @floatFromInt(t.width));
         const height = @as(f32, @floatFromInt(t.height));
         const pos = zm.trunc(position);
@@ -199,7 +199,7 @@ pub const Batcher = struct {
     };
 
     /// Appends a quad to the batcher set to the size needed to render the target sprite from the target texture.
-    pub fn sprite(self: *Batcher, position: zm.F32x4, t: gfx.Texture, s: gfx.Sprite, options: SpriteOptions) !void {
+    pub fn sprite(self: *Batcher, position: zm.F32x4, t: *gfx.Texture, s: gfx.Sprite, options: SpriteOptions) !void {
         const x = @as(f32, @floatFromInt(s.source[0]));
         const y = @as(f32, @floatFromInt(s.source[1]));
         const width = @as(f32, @floatFromInt(s.source[2]));

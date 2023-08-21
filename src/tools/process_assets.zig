@@ -59,26 +59,16 @@ pub const ProcessAssetsStep = struct {
                     var path_fixed = try self.builder.allocator.alloc(u8, file.len);
                     _ = std.mem.replace(u8, file, "\\", "/", path_fixed);
 
-                    var name_fixed = try self.builder.allocator.alloc(u8, name.len);
-                    _ = std.mem.replace(u8, name, "-", "_", name_fixed);
-
                     // Pngs
                     if (std.mem.eql(u8, ext, ".png")) {
-                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name_fixed, "_png" });
-                        try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
-                        try assets_writer.print("}};\n\n", .{});
-                    }
-
-                    // Hex
-                    if (std.mem.eql(u8, ext, ".hex")) {
-                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name_fixed, "_hex" });
+                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_png" });
                         try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
                         try assets_writer.print("}};\n\n", .{});
                     }
 
                     // Atlases
                     if (std.mem.eql(u8, ext, ".atlas")) {
-                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name_fixed, "_atlas" });
+                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_atlas" });
                         try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
 
                         var atlas = Atlas.initFromFile(self.builder.allocator, file) catch unreachable;
@@ -88,7 +78,7 @@ pub const ProcessAssetsStep = struct {
                             _ = std.mem.replace(u8, sprite.name, " ", "_", sprite_name);
                             _ = std.mem.replace(u8, sprite_name, ".", "_", sprite_name);
 
-                            try assets_writer.print("  pub const {s} = {};\n", .{ sprite_name, i });
+                            try assets_writer.print("  pub const {s} = {d};\n", .{ sprite_name, i });
                         }
 
                         try assets_writer.print("}};\n\n", .{});
@@ -113,7 +103,6 @@ pub const ProcessAssetsStep = struct {
                                 try animations_writer.print("pub var {s} = [_]usize {{\n", .{animation_name});
 
                                 var animation_index = animation.start;
-
                                 while (animation_index < animation.start + animation.length) : (animation_index += 1) {
                                     var sprite_name = try self.builder.allocator.alloc(u8, atlas.sprites[animation_index].name.len);
                                     _ = std.mem.replace(u8, atlas.sprites[animation_index].name, " ", "_", sprite_name);

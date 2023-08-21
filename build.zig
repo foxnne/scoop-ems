@@ -4,6 +4,7 @@ const builtin = @import("builtin");
 const zmath = @import("src/deps/zig-gamedev/zmath/build.zig");
 const zstbi = @import("src/deps/zig-gamedev/zstbi/build.zig");
 const zgui = @import("src/deps/zig-gamedev/zgui/build.zig");
+const zflecs = @import("src/deps/zig-gamedev/zflecs/build.zig");
 
 const mach_core = @import("mach_core");
 const mach_gpu_dawn = @import("mach_gpu_dawn");
@@ -20,6 +21,7 @@ pub fn build(b: *std.Build) !void {
 
     const zstbi_pkg = zstbi.package(b, target, optimize, .{});
     const zmath_pkg = zmath.package(b, target, optimize, .{});
+    const zflecs_pkg = zflecs.package(b, target, optimize, .{});
 
     const zgui_pkg = zgui.Package(.{
         .gpu_dawn = mach_gpu_dawn,
@@ -39,6 +41,7 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zstbi", .module = zstbi_pkg.zstbi },
             .{ .name = "zmath", .module = zmath_pkg.zmath },
             .{ .name = "zgui", .module = zgui_pkg.zgui },
+            .{ .name = "zflecs", .module = zflecs_pkg.zflecs },
         },
         .optimize = optimize,
     });
@@ -59,6 +62,7 @@ pub fn build(b: *std.Build) !void {
     unit_tests.addModule("zstbi", zstbi_pkg.zstbi);
     unit_tests.addModule("zgui", zgui_pkg.zgui);
     unit_tests.addModule("zmath", zmath_pkg.zmath);
+    unit_tests.addModule("zflecs", zflecs_pkg.zflecs);
 
     const run_unit_tests = b.addRunArtifact(unit_tests);
     const test_step = b.step("test", "Run unit tests");
@@ -67,10 +71,12 @@ pub fn build(b: *std.Build) !void {
     app.compile.addModule("zstbi", zstbi_pkg.zstbi);
     app.compile.addModule("zgui", zgui_pkg.zgui);
     app.compile.addModule("zmath", zmath_pkg.zmath);
+    app.compile.addModule("zflecs", zflecs_pkg.zflecs);
 
     zstbi_pkg.link(app.compile);
     zmath_pkg.link(app.compile);
     zgui_pkg.link(app.compile);
+    zflecs_pkg.link(app.compile);
 
     const assets = ProcessAssetsStep.init(b, "assets", "src/assets.zig", "src/animations.zig");
     const process_assets_step = b.step("process-assets", "generates struct for all assets");
