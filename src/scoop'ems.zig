@@ -6,7 +6,7 @@ const gpu = core.gpu;
 const zgui = @import("zgui").MachImgui(core);
 const zstbi = @import("zstbi");
 const zmath = @import("zmath");
-const zflecs = @import("zflecs");
+const ecs = @import("zflecs");
 
 pub const App = @This();
 
@@ -23,6 +23,8 @@ pub const fa = @import("tools/font_awesome.zig");
 pub const math = @import("math/math.zig");
 pub const gfx = @import("gfx/gfx.zig");
 pub const input = @import("input/input.zig");
+
+pub const components = @import("ecs/components/components.zig");
 
 test {
     _ = zstbi;
@@ -45,9 +47,12 @@ pub const GameState = struct {
     mouse: input.Mouse = undefined,
     root_path: [:0]const u8 = undefined,
     fox_logo: gfx.Texture = undefined,
+    atlas: gfx.Atlas = undefined,
+    diffusemap: gfx.Texture = undefined,
     fonts: Fonts = .{},
     delta_time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
+    world: *ecs.world_t = undefined,
 };
 
 pub const Fonts = struct {
@@ -56,6 +61,20 @@ pub const Fonts = struct {
     fa_small_regular: zgui.Font = undefined,
     fa_small_solid: zgui.Font = undefined,
 };
+
+/// Registers all public declarations within the passed type
+/// as components.
+fn register(world: *ecs.world_t, comptime T: type) void {
+    const decls = comptime std.meta.declarations(T);
+    inline for (decls) |decl| {
+        const Type = @field(T, decl.name);
+        if (@TypeOf(Type) == type) {
+            if (@sizeOf(Type) > 0) {
+                ecs.COMPONENT(world, Type);
+            } else ecs.TAG(world, Type);
+        }
+    }
+}
 
 pub fn init(app: *App) !void {
     const allocator = gpa.allocator();
@@ -85,6 +104,8 @@ pub fn init(app: *App) !void {
 
     state.allocator = allocator;
     state.fox_logo = try gfx.Texture.loadFromFile(assets.fox1024_png.path, .{});
+    state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
+    state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
 
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
@@ -110,6 +131,9 @@ pub fn init(app: *App) !void {
     state.fonts.fa_standard_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 12 * scale_factor, config, ranges.ptr);
     state.fonts.fa_small_solid = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-solid-900.ttf", 10 * scale_factor, config, ranges.ptr);
     state.fonts.fa_small_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 10 * scale_factor, config, ranges.ptr);
+
+    state.world = ecs.init();
+    register(state.world, components);
 }
 
 pub fn updateMainThread(_: *App) !bool {
@@ -162,6 +186,8 @@ pub fn update(app: *App) !bool {
     }
 
     try input.process();
+
+    _ = ecs.progress(state.world, 0);
 
     if (core.swap_chain.getCurrentTextureView()) |back_buffer_view| {
         defer back_buffer_view.release();
@@ -220,6 +246,8 @@ pub fn update(app: *App) !bool {
 pub fn deinit(_: *App) void {
     state.allocator.free(state.hotkeys.hotkeys);
     state.fox_logo.deinit();
+    state.diffusemap.deinit();
+    state.atlas.deinit(state.allocator);
     zgui.mach_backend.deinit();
     zgui.deinit();
     zstbi.deinit();

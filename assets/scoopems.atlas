@@ -1,0 +1,1304 @@
+{
+    "sprites": [
+        {
+            "name": "Ham_0_Layer",
+            "source": [
+                41,
+                213,
+                9,
+                8
+            ],
+            "origin": [
+                5,
+                4
+            ]
+        },
+        {
+            "name": "Ham_1_Layer",
+            "source": [
+                127,
+                193,
+                13,
+                14
+            ],
+            "origin": [
+                6,
+                7
+            ]
+        },
+        {
+            "name": "Ham_2_Layer",
+            "source": [
+                98,
+                193,
+                15,
+                14
+            ],
+            "origin": [
+                8,
+                7
+            ]
+        },
+        {
+            "name": "Ham_3_Layer",
+            "source": [
+                232,
+                173,
+                18,
+                17
+            ],
+            "origin": [
+                8,
+                10
+            ]
+        },
+        {
+            "name": "Ham_4_Layer",
+            "source": [
+                169,
+                187,
+                22,
+                14
+            ],
+            "origin": [
+                11,
+                7
+            ]
+        },
+        {
+            "name": "Cooked_Ham_0_Layer",
+            "source": [
+                50,
+                213,
+                9,
+                8
+            ],
+            "origin": [
+                5,
+                4
+            ]
+        },
+        {
+            "name": "Cooked_Ham_1_Layer",
+            "source": [
+                0,
+                194,
+                13,
+                14
+            ],
+            "origin": [
+                6,
+                7
+            ]
+        },
+        {
+            "name": "Cooked_Ham_2_Layer",
+            "source": [
+                229,
+                190,
+                15,
+                14
+            ],
+            "origin": [
+                7,
+                7
+            ]
+        },
+        {
+            "name": "Cooked_Ham_3_Layer",
+            "source": [
+                214,
+                173,
+                18,
+                17
+            ],
+            "origin": [
+                8,
+                10
+            ]
+        },
+        {
+            "name": "Cooked_Ham_4_Layer",
+            "source": [
+                32,
+                185,
+                22,
+                14
+            ],
+            "origin": [
+                11,
+                7
+            ]
+        },
+        {
+            "name": "Sprite_16_Layer",
+            "source": [
+                90,
+                198,
+                8,
+                10
+            ],
+            "origin": [
+                5,
+                5
+            ]
+        },
+        {
+            "name": "Sprite_17_Layer",
+            "source": [
+                191,
+                174,
+                10,
+                16
+            ],
+            "origin": [
+                6,
+                8
+            ]
+        },
+        {
+            "name": "Sprite_18_Layer",
+            "source": [
+                214,
+                190,
+                15,
+                14
+            ],
+            "origin": [
+                8,
+                8
+            ]
+        },
+        {
+            "name": "Sprite_19_Layer",
+            "source": [
+                146,
+                182,
+                15,
+                17
+            ],
+            "origin": [
+                8,
+                9
+            ]
+        },
+        {
+            "name": "Sprite_20_Layer",
+            "source": [
+                80,
+                181,
+                18,
+                17
+            ],
+            "origin": [
+                8,
+                9
+            ]
+        },
+        {
+            "name": "Cooked_Meat_0_Layer",
+            "source": [
+                161,
+                194,
+                8,
+                10
+            ],
+            "origin": [
+                5,
+                5
+            ]
+        },
+        {
+            "name": "Cooked_Meat_1_Layer",
+            "source": [
+                191,
+                158,
+                10,
+                16
+            ],
+            "origin": [
+                6,
+                8
+            ]
+        },
+        {
+            "name": "Cooked_Meat_2_Layer",
+            "source": [
+                199,
+                191,
+                15,
+                14
+            ],
+            "origin": [
+                8,
+                8
+            ]
+        },
+        {
+            "name": "Cooked_Meat_3_Layer",
+            "source": [
+                56,
+                183,
+                15,
+                17
+            ],
+            "origin": [
+                8,
+                9
+            ]
+        },
+        {
+            "name": "Cooked_Meat_4_Layer",
+            "source": [
+                0,
+                177,
+                18,
+                17
+            ],
+            "origin": [
+                8,
+                9
+            ]
+        },
+        {
+            "name": "Apple_0_Layer",
+            "source": [
+                13,
+                201,
+                5,
+                6
+            ],
+            "origin": [
+                4,
+                1
+            ]
+        },
+        {
+            "name": "Apple_1_Layer",
+            "source": [
+                80,
+                212,
+                10,
+                9
+            ],
+            "origin": [
+                4,
+                2
+            ]
+        },
+        {
+            "name": "Apple_2_Layer",
+            "source": [
+                199,
+                205,
+                10,
+                12
+            ],
+            "origin": [
+                4,
+                5
+            ]
+        },
+        {
+            "name": "Apple_3_Layer",
+            "source": [
+                32,
+                199,
+                10,
+                14
+            ],
+            "origin": [
+                4,
+                6
+            ]
+        },
+        {
+            "name": "Apple_4_Layer",
+            "source": [
+                113,
+                193,
+                14,
+                14
+            ],
+            "origin": [
+                8,
+                6
+            ]
+        },
+        {
+            "name": "Plum_0_Layer",
+            "source": [
+                13,
+                207,
+                5,
+                6
+            ],
+            "origin": [
+                4,
+                1
+            ]
+        },
+        {
+            "name": "Plum_1_Layer",
+            "source": [
+                0,
+                208,
+                10,
+                9
+            ],
+            "origin": [
+                4,
+                2
+            ]
+        },
+        {
+            "name": "Plum_2_Layer",
+            "source": [
+                18,
+                205,
+                10,
+                12
+            ],
+            "origin": [
+                4,
+                5
+            ]
+        },
+        {
+            "name": "Plum_3_Layer",
+            "source": [
+                80,
+                198,
+                10,
+                14
+            ],
+            "origin": [
+                4,
+                6
+            ]
+        },
+        {
+            "name": "Plum_4_Layer",
+            "source": [
+                18,
+                191,
+                14,
+                14
+            ],
+            "origin": [
+                8,
+                6
+            ]
+        },
+        {
+            "name": "Pear_0_Layer",
+            "source": [
+                13,
+                194,
+                5,
+                7
+            ],
+            "origin": [
+                3,
+                2
+            ]
+        },
+        {
+            "name": "Pear_1_Layer",
+            "source": [
+                161,
+                182,
+                7,
+                12
+            ],
+            "origin": [
+                4,
+                6
+            ]
+        },
+        {
+            "name": "Pear_2_Layer",
+            "source": [
+                182,
+                201,
+                10,
+                13
+            ],
+            "origin": [
+                6,
+                7
+            ]
+        },
+        {
+            "name": "Pear_3_Layer",
+            "source": [
+                244,
+                190,
+                11,
+                14
+            ],
+            "origin": [
+                6,
+                7
+            ]
+        },
+        {
+            "name": "Pear_4_Layer",
+            "source": [
+                18,
+                177,
+                14,
+                14
+            ],
+            "origin": [
+                7,
+                7
+            ]
+        },
+        {
+            "name": "Blueberry_0_Layer",
+            "source": [
+                192,
+                207,
+                6,
+                7
+            ],
+            "origin": [
+                3,
+                3
+            ]
+        },
+        {
+            "name": "Blueberry_1_Layer",
+            "source": [
+                146,
+                212,
+                13,
+                8
+            ],
+            "origin": [
+                7,
+                3
+            ]
+        },
+        {
+            "name": "Blueberry_2_Layer",
+            "source": [
+                98,
+                207,
+                14,
+                11
+            ],
+            "origin": [
+                7,
+                4
+            ]
+        },
+        {
+            "name": "Torch_Flame_0_Layer",
+            "source": [
+                56,
+                162,
+                12,
+                21
+            ],
+            "origin": [
+                6,
+                13
+            ]
+        },
+        {
+            "name": "Torch_Flame_1_Layer",
+            "source": [
+                146,
+                159,
+                12,
+                23
+            ],
+            "origin": [
+                6,
+                15
+            ]
+        },
+        {
+            "name": "Torch_Flame_2_Layer",
+            "source": [
+                32,
+                162,
+                12,
+                23
+            ],
+            "origin": [
+                6,
+                15
+            ]
+        },
+        {
+            "name": "Torch_Flame_3_Layer",
+            "source": [
+                158,
+                159,
+                12,
+                23
+            ],
+            "origin": [
+                6,
+                15
+            ]
+        },
+        {
+            "name": "Torch_Flame_4_Layer",
+            "source": [
+                68,
+                162,
+                12,
+                21
+            ],
+            "origin": [
+                6,
+                13
+            ]
+        },
+        {
+            "name": "Torch_Flame_5_Layer",
+            "source": [
+                44,
+                162,
+                12,
+                22
+            ],
+            "origin": [
+                6,
+                14
+            ]
+        },
+        {
+            "name": "Torch_Flame_6_Layer",
+            "source": [
+                202,
+                173,
+                12,
+                18
+            ],
+            "origin": [
+                6,
+                10
+            ]
+        },
+        {
+            "name": "Torch_Flame_7_Layer",
+            "source": [
+                80,
+                162,
+                12,
+                19
+            ],
+            "origin": [
+                6,
+                11
+            ]
+        },
+        {
+            "name": "Torch_0_Layer",
+            "source": [
+                228,
+                204,
+                12,
+                12
+            ],
+            "origin": [
+                6,
+                4
+            ]
+        },
+        {
+            "name": "Bucket_0_Layer",
+            "source": [
+                122,
+                207,
+                10,
+                11
+            ],
+            "origin": [
+                5,
+                4
+            ]
+        },
+        {
+            "name": "Bucket_1_Layer",
+            "source": [
+                112,
+                207,
+                10,
+                11
+            ],
+            "origin": [
+                5,
+                4
+            ]
+        },
+        {
+            "name": "Vial_0_Layer",
+            "source": [
+                192,
+                190,
+                6,
+                10
+            ],
+            "origin": [
+                3,
+                7
+            ]
+        },
+        {
+            "name": "Smoke_0_Layer",
+            "source": [
+                142,
+                114,
+                4,
+                5
+            ],
+            "origin": [
+                1,
+                3
+            ]
+        },
+        {
+            "name": "Smoke_1_Layer",
+            "source": [
+                209,
+                205,
+                5,
+                6
+            ],
+            "origin": [
+                2,
+                4
+            ]
+        },
+        {
+            "name": "Smoke_2_Layer",
+            "source": [
+                90,
+                208,
+                8,
+                7
+            ],
+            "origin": [
+                3,
+                5
+            ]
+        },
+        {
+            "name": "Smoke_3_Layer",
+            "source": [
+                132,
+                207,
+                10,
+                10
+            ],
+            "origin": [
+                4,
+                8
+            ]
+        },
+        {
+            "name": "Smoke_4_Layer",
+            "source": [
+                240,
+                204,
+                12,
+                12
+            ],
+            "origin": [
+                5,
+                10
+            ]
+        },
+        {
+            "name": "Smoke_5_Layer",
+            "source": [
+                146,
+                199,
+                14,
+                13
+            ],
+            "origin": [
+                6,
+                12
+            ]
+        },
+        {
+            "name": "Smoke_6_Layer",
+            "source": [
+                169,
+                201,
+                13,
+                13
+            ],
+            "origin": [
+                5,
+                13
+            ]
+        },
+        {
+            "name": "Smoke_7_Layer",
+            "source": [
+                214,
+                204,
+                14,
+                12
+            ],
+            "origin": [
+                6,
+                13
+            ]
+        },
+        {
+            "name": "Reeds_0_Layer",
+            "source": [
+                174,
+                158,
+                17,
+                29
+            ],
+            "origin": [
+                9,
+                28
+            ]
+        },
+        {
+            "name": "Gold_0_Layer",
+            "source": [
+                142,
+                119,
+                4,
+                4
+            ],
+            "origin": [
+                2,
+                0
+            ]
+        },
+        {
+            "name": "Gold_1_Layer",
+            "source": [
+                192,
+                200,
+                7,
+                7
+            ],
+            "origin": [
+                4,
+                2
+            ]
+        },
+        {
+            "name": "Gold_2_Layer",
+            "source": [
+                32,
+                213,
+                9,
+                8
+            ],
+            "origin": [
+                4,
+                2
+            ]
+        },
+        {
+            "name": "Gold_3_Layer",
+            "source": [
+                59,
+                213,
+                10,
+                5
+            ],
+            "origin": [
+                4,
+                1
+            ]
+        },
+        {
+            "name": "Gold_4_Layer",
+            "source": [
+                159,
+                212,
+                10,
+                8
+            ],
+            "origin": [
+                4,
+                1
+            ]
+        },
+        {
+            "name": "Oak_0_Needles",
+            "source": [
+                144,
+                127,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Pine_0_Needles",
+            "source": [
+                109,
+                0,
+                37,
+                114
+            ],
+            "origin": [
+                14,
+                170
+            ]
+        },
+        {
+            "name": "Oak_0_Leaves01",
+            "source": [
+                202,
+                134,
+                43,
+                39
+            ],
+            "origin": [
+                4,
+                68
+            ]
+        },
+        {
+            "name": "Pine_0_Leaves01",
+            "source": [
+                142,
+                127,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Oak_0_Leaves02",
+            "source": [
+                98,
+                158,
+                39,
+                35
+            ],
+            "origin": [
+                37,
+                56
+            ]
+        },
+        {
+            "name": "Pine_0_Leaves02",
+            "source": [
+                144,
+                125,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Oak_0_Leaves03",
+            "source": [
+                146,
+                65,
+                50,
+                51
+            ],
+            "origin": [
+                43,
+                95
+            ]
+        },
+        {
+            "name": "Pine_0_Leaves03",
+            "source": [
+                142,
+                125,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Oak_0_Leaves04",
+            "source": [
+                146,
+                0,
+                71,
+                65
+            ],
+            "origin": [
+                29,
+                117
+            ]
+        },
+        {
+            "name": "Pine_0_Leaves04",
+            "source": [
+                144,
+                123,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Oak_0_Trunk",
+            "source": [
+                32,
+                0,
+                77,
+                122
+            ],
+            "origin": [
+                37,
+                112
+            ]
+        },
+        {
+            "name": "Pine_0_Trunk",
+            "source": [
+                0,
+                0,
+                32,
+                177
+            ],
+            "origin": [
+                13,
+                172
+            ]
+        },
+        {
+            "name": "Oak_0_Ground",
+            "source": [
+                42,
+                200,
+                38,
+                13
+            ],
+            "origin": [
+                16,
+                2
+            ]
+        },
+        {
+            "name": "Pine_0_Ground",
+            "source": [
+                142,
+                123,
+                2,
+                2
+            ],
+            "origin": [
+                0,
+                0
+            ]
+        },
+        {
+            "name": "Campfire_0_Layer 0",
+            "source": [
+                217,
+                90,
+                28,
+                44
+            ],
+            "origin": [
+                14,
+                28
+            ]
+        },
+        {
+            "name": "Campfire_1_Layer 0",
+            "source": [
+                217,
+                0,
+                28,
+                45
+            ],
+            "origin": [
+                14,
+                29
+            ]
+        },
+        {
+            "name": "Campfire_2_Layer 0",
+            "source": [
+                217,
+                45,
+                28,
+                45
+            ],
+            "origin": [
+                14,
+                29
+            ]
+        },
+        {
+            "name": "Campfire_3_Layer 0",
+            "source": [
+                146,
+                116,
+                28,
+                43
+            ],
+            "origin": [
+                14,
+                27
+            ]
+        },
+        {
+            "name": "Campfire_4_Layer 0",
+            "source": [
+                109,
+                114,
+                28,
+                44
+            ],
+            "origin": [
+                14,
+                28
+            ]
+        },
+        {
+            "name": "Campfire_5_Layer 0",
+            "source": [
+                60,
+                122,
+                28,
+                40
+            ],
+            "origin": [
+                14,
+                24
+            ]
+        },
+        {
+            "name": "Campfire_6_Layer 0",
+            "source": [
+                32,
+                122,
+                28,
+                40
+            ],
+            "origin": [
+                14,
+                24
+            ]
+        },
+        {
+            "name": "Campfire_7_Layer 0",
+            "source": [
+                174,
+                116,
+                28,
+                42
+            ],
+            "origin": [
+                14,
+                26
+            ]
+        }
+    ],
+    "animations": [
+        {
+            "name": "Ham_Layer",
+            "start": 0,
+            "length": 5,
+            "fps": 5
+        },
+        {
+            "name": "Cooked_Ham_Layer",
+            "start": 5,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Meat\u0000nimation_Layer",
+            "start": 10,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Cooked_Meat_Layer",
+            "start": 15,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Apple_Layer",
+            "start": 20,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Plum_Layer",
+            "start": 25,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Pear_Layer",
+            "start": 30,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Blueberry_Layer",
+            "start": 35,
+            "length": 3,
+            "fps": 8
+        },
+        {
+            "name": "Torch_Flame_Layer",
+            "start": 38,
+            "length": 8,
+            "fps": 12
+        },
+        {
+            "name": "Torch_Layer",
+            "start": 46,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Bucket_Layer",
+            "start": 47,
+            "length": 2,
+            "fps": 8
+        },
+        {
+            "name": "Vial_Layer",
+            "start": 49,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Smoke_Layer",
+            "start": 50,
+            "length": 8,
+            "fps": 8
+        },
+        {
+            "name": "Reeds_Layer",
+            "start": 58,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Gold_Layer",
+            "start": 59,
+            "length": 5,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Needles",
+            "start": 64,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Needles",
+            "start": 65,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Leaves01",
+            "start": 66,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Leaves01",
+            "start": 67,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Leaves02",
+            "start": 68,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Leaves02",
+            "start": 69,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Leaves03",
+            "start": 70,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Leaves03",
+            "start": 71,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Leaves04",
+            "start": 72,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Leaves04",
+            "start": 73,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Trunk",
+            "start": 74,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Trunk",
+            "start": 75,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Oak_Ground",
+            "start": 76,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Pine_Ground",
+            "start": 77,
+            "length": 1,
+            "fps": 8
+        },
+        {
+            "name": "Campfire_Layer 0",
+            "start": 78,
+            "length": 8,
+            "fps": 8
+        }
+    ]
+}

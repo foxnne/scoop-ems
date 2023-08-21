@@ -9,6 +9,7 @@ pub const Texture = @import("texture.zig").Texture;
 pub const Camera = @import("camera.zig").Camera;
 pub const Sprite = @import("sprite.zig").Sprite;
 pub const Animation = @import("animation.zig").Animation;
+pub const Atlas = @import("atlas.zig").Atlas;
 
 pub const Vertex = struct {
     position: [3]f32 = [_]f32{ 0.0, 0.0, 0.0 },

@@ -71,7 +71,7 @@ pub const ProcessAssetsStep = struct {
                         try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_atlas" });
                         try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
 
-                        var atlas = Atlas.initFromFile(self.builder.allocator, file) catch unreachable;
+                        var atlas = Atlas.loadFromFile(self.builder.allocator, file) catch unreachable;
 
                         for (atlas.sprites, 0..) |sprite, i| {
                             var sprite_name = try self.builder.allocator.alloc(u8, sprite.name.len);

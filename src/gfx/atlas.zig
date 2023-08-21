@@ -9,7 +9,7 @@ pub const Atlas = struct {
     sprites: []game.gfx.Sprite,
     animations: []game.gfx.Animation,
 
-    pub fn initFromFile(allocator: std.mem.Allocator, file: [:0]const u8) !Atlas {
+    pub fn loadFromFile(allocator: std.mem.Allocator, file: [:0]const u8) !Atlas {
         const read = try fs.read(allocator, file);
         defer allocator.free(read);
 
@@ -17,6 +17,14 @@ pub const Atlas = struct {
         const parsed = try std.json.parseFromSlice(Atlas, allocator, read, options);
         defer parsed.deinit();
 
-        return parsed.value;
+        return .{
+            .sprites = try allocator.dupe(game.gfx.Sprite, parsed.value.sprites),
+            .animations = try allocator.dupe(game.gfx.Animation, parsed.value.animations),
+        };
+    }
+
+    pub fn deinit(self: *Atlas, allocator: std.mem.Allocator) void {
+        allocator.free(self.sprites);
+        allocator.free(self.animations);
     }
 };
