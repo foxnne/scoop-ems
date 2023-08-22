@@ -55,10 +55,17 @@ pub const GameState = struct {
     pipeline_diffuse: *gpu.RenderPipeline = undefined,
     bind_group_final: *gpu.BindGroup = undefined,
     pipeline_final: *gpu.RenderPipeline = undefined,
+    output_diffuse: gfx.Texture = undefined,
+    output_channel: Channel = .final,
     fonts: Fonts = .{},
     delta_time: f32 = 0.0,
+    time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
     world: *ecs.world_t = undefined,
+};
+
+pub const Channel = enum(i32) {
+    final,
 };
 
 pub const Fonts = struct {
@@ -113,6 +120,8 @@ pub fn init(app: *App) !void {
     state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
     state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
 
+    state.output_diffuse = try gfx.Texture.createEmpty(settings.design_width, settings.design_height, .{});
+
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
 
@@ -140,7 +149,8 @@ pub fn init(app: *App) !void {
     state.fonts.fa_small_solid = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-solid-900.ttf", 10 * scale_factor, config, ranges.ptr);
     state.fonts.fa_small_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 10 * scale_factor, config, ranges.ptr);
 
-    const shader_module = core.device.createShaderModuleWGSL("diffuse.wgsl", @embedFile("shaders/diffuse.wgsl"));
+    const diffuse_shader_module = core.device.createShaderModuleWGSL("diffuse.wgsl", @embedFile("shaders/diffuse.wgsl"));
+    const final_shader_module = core.device.createShaderModuleWGSL("final.wgsl", @embedFile("shaders/final.wgsl"));
 
     const vertex_attributes = [_]gpu.VertexAttribute{
         .{ .format = .float32x3, .offset = @offsetOf(gfx.Vertex, "position"), .shader_location = 0 },
@@ -167,23 +177,24 @@ pub fn init(app: *App) !void {
         },
     };
     const color_target = gpu.ColorTargetState{
-        .format = core.descriptor.format,
+        .format = .bgra8_unorm,
         .blend = &blend,
         .write_mask = gpu.ColorWriteMaskFlags.all,
     };
-    const fragment = gpu.FragmentState.init(.{
-        .module = shader_module,
+    const diffuse_fragment = gpu.FragmentState.init(.{
+        .module = diffuse_shader_module,
         .entry_point = "frag_main",
         .targets = &.{color_target},
     });
 
-    const pipeline_descriptor = gpu.RenderPipeline.Descriptor{
-        .fragment = &fragment,
-        .vertex = gpu.VertexState.init(.{ .module = shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
+    const diffuse_pipeline_descriptor = gpu.RenderPipeline.Descriptor{
+        .fragment = &diffuse_fragment,
+        .vertex = gpu.VertexState.init(.{ .module = diffuse_shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
     };
-    state.pipeline_diffuse = core.device.createRenderPipeline(&pipeline_descriptor);
 
-    const uniform_buffer = core.device.createBuffer(&.{
+    state.pipeline_diffuse = core.device.createRenderPipeline(&diffuse_pipeline_descriptor);
+
+    const diffuse_uniform_buffer = core.device.createBuffer(&.{
         .usage = .{ .copy_dst = true, .uniform = true },
         .size = @sizeOf(gfx.UniformBufferObject),
         .mapped_at_creation = .false,
@@ -193,7 +204,7 @@ pub fn init(app: *App) !void {
         &gpu.BindGroup.Descriptor.init(.{
             .layout = state.pipeline_diffuse.getBindGroupLayout(0),
             .entries = &.{
-                gpu.BindGroup.Entry.buffer(0, uniform_buffer, 0, @sizeOf(gfx.UniformBufferObject)),
+                gpu.BindGroup.Entry.buffer(0, diffuse_uniform_buffer, 0, @sizeOf(gfx.UniformBufferObject)),
                 gpu.BindGroup.Entry.textureView(1, state.diffusemap.view_handle),
                 gpu.BindGroup.Entry.textureView(2, state.palette.view_handle),
                 gpu.BindGroup.Entry.sampler(3, state.diffusemap.sampler_handle),
@@ -201,8 +212,58 @@ pub fn init(app: *App) !void {
         }),
     );
 
+    const final_fragment = gpu.FragmentState.init(.{
+        .module = final_shader_module,
+        .entry_point = "frag_main",
+        .targets = &.{color_target},
+    });
+
+    const final_pipeline_descriptor = gpu.RenderPipeline.Descriptor{
+        .fragment = &final_fragment,
+        .vertex = gpu.VertexState.init(.{ .module = final_shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
+    };
+
+    const FinalUniformObject = @import("ecs/systems/render_final_pass.zig").FinalUniforms;
+
+    const final_uniform_buffer = core.device.createBuffer(&.{
+        .usage = .{ .copy_dst = true, .uniform = true },
+        .size = @sizeOf(FinalUniformObject),
+        .mapped_at_creation = .false,
+    });
+
+    state.bind_group_final = core.device.createBindGroup(
+        &gpu.BindGroup.Descriptor.init(.{
+            .layout = state.pipeline_final.getBindGroupLayout(0),
+            .entries = &.{
+                gpu.BindGroup.Entry.buffer(0, final_uniform_buffer, 0, @sizeOf(FinalUniformObject)),
+                gpu.BindGroup.Entry.textureView(1, state.output_diffuse.view_handle),
+                gpu.BindGroup.Entry.sampler(2, state.output_diffuse.sampler_handle),
+            },
+        }),
+    );
+
+    state.pipeline_final = core.device.createRenderPipeline(&final_pipeline_descriptor);
+
     state.world = ecs.init();
     register(state.world, components);
+
+    // - Animation
+    var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
+    ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
+
+    // - Render
+    var render_culling_system = @import("ecs/systems/render_culling.zig").system();
+    ecs.SYSTEM(state.world, "RenderCullingSystem", ecs.PostUpdate, &render_culling_system);
+    var render_diffuse_system = @import("ecs/systems/render_diffuse_pass.zig").system();
+    ecs.SYSTEM(state.world, "RenderDiffuseSystem", ecs.PostUpdate, &render_diffuse_system);
+    var render_final_system = @import("ecs/systems/render_final_pass.zig").system();
+    ecs.SYSTEM(state.world, "RenderFinalSystem", ecs.PostUpdate, &render_final_system);
+
+    const player = ecs.new_entity(state.world, "Player");
+    _ = ecs.set(state.world, player, components.Position, .{ .x = 0.0, .y = 0.0 });
+    _ = ecs.set(state.world, player, components.SpriteRenderer, .{
+        .index = assets.scoopems_atlas.Oak_0_Trunk,
+    });
 }
 
 pub fn updateMainThread(_: *App) !bool {
@@ -212,6 +273,7 @@ pub fn updateMainThread(_: *App) !bool {
 pub fn update(app: *App) !bool {
     zgui.mach_backend.newFrame();
     state.delta_time = app.timer.lap();
+    state.time = app.timer.read();
 
     const descriptor = core.descriptor;
     window_size = .{ @floatFromInt(core.size().width), @floatFromInt(core.size().height) };
@@ -267,8 +329,8 @@ pub fn update(app: *App) !bool {
 
             const background: gpu.Color = .{
                 .r = 0.0,
-                .g = 0.2,
-                .b = 0.8,
+                .g = 0.0,
+                .b = 0.0,
                 .a = 1.0,
             };
 
@@ -295,7 +357,10 @@ pub fn update(app: *App) !bool {
         };
         defer zgui_commands.release();
 
-        core.queue.submit(&.{zgui_commands});
+        const batcher_commands = try state.batcher.finish();
+        defer batcher_commands.release();
+
+        core.queue.submit(&.{ batcher_commands, zgui_commands });
         core.swap_chain.present();
     }
 

@@ -5,14 +5,13 @@ const game = @import("../../scoop'ems.zig");
 const gfx = game.gfx;
 const math = game.math;
 const components = game.components;
+const core = @import("core");
 
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.Position) };
     desc.query.filter.terms[1] = .{ .id = ecs.id(components.Rotation), .oper = ecs.oper_kind_t.Optional };
     desc.query.filter.terms[2] = .{ .id = ecs.id(components.SpriteRenderer), .oper = ecs.oper_kind_t.Optional };
-    desc.query.filter.terms[3] = .{ .id = ecs.id(components.CharacterRenderer), .oper = ecs.oper_kind_t.Optional };
-    desc.query.filter.terms[4] = .{ .id = ecs.id(components.ParticleRenderer), .oper = ecs.oper_kind_t.Optional };
     desc.query.order_by_component = ecs.id(components.Position);
     desc.query.order_by = orderBy;
     desc.run = run;
@@ -20,14 +19,21 @@ pub fn system() ecs.system_desc_t {
 }
 
 pub fn run(it: *ecs.iter_t) callconv(.C) void {
-    const uniforms = gfx.Uniforms{ .mvp = zm.transpose(game.state.camera.renderTextureMatrix()) };
+    const uniforms = gfx.UniformBufferObject{ .mvp = zm.transpose(game.state.camera.renderTextureMatrix()) };
+
+    const background: core.gpu.Color = .{
+        .r = 0.0,
+        .g = 0.8,
+        .b = 1.0,
+        .a = 1.0,
+    };
 
     // Draw diffuse texture sprites using diffuse pipeline
     game.state.batcher.begin(.{
         .pipeline_handle = game.state.pipeline_diffuse,
         .bind_group_handle = game.state.bind_group_diffuse,
-        .output_handle = game.state.diffuse_output.view_handle,
-        .clear_color = math.Colors.white,
+        .output_handle = game.state.output_diffuse.view_handle,
+        .clear_color = background,
     }) catch unreachable;
 
     while (ecs.query_next(it)) {
@@ -43,13 +49,13 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
 
                     game.state.batcher.sprite(
                         position,
-                        game.state.diffusemap,
+                        &game.state.diffusemap,
                         game.state.atlas.sprites[renderers[i].index],
                         .{
                             .color = renderers[i].color,
                             .vert_mode = renderers[i].vert_mode,
                             .frag_mode = renderers[i].frag_mode,
-                            .time = @as(f32, @floatCast(game.state.gctx.stats.time)) + @as(f32, @floatFromInt(renderers[i].order)),
+                            .time = @as(f32, @floatCast(game.state.time)) + @as(f32, @floatFromInt(renderers[i].order)),
                             .flip_x = renderers[i].flip_x,
                             .flip_y = renderers[i].flip_y,
                             .rotation = rotation,

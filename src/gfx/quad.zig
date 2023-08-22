@@ -1,6 +1,6 @@
 const std = @import("std");
 const zm = @import("zmath");
-const game = @import("game");
+const game = @import("../scoop'ems.zig");
 const gfx = game.gfx;
 
 pub const Quad = struct {

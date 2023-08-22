@@ -109,12 +109,12 @@ pub const Batcher = struct {
         self.vertex_buffer_handle.release();
         self.index_buffer_handle.release();
 
-        const vertex_buffer_handle = core.device.createBuffer(.{
+        const vertex_buffer_handle = core.device.createBuffer(&.{
             .usage = .{ .copy_dst = true, .vertex = true },
             .size = self.vertices.len * @sizeOf(gfx.Vertex),
         });
 
-        const index_buffer_handle = core.device.createBuffer(.{
+        const index_buffer_handle = core.device.createBuffer(&.{
             .usage = .{ .copy_dst = true, .index = true },
             .size = self.indices.len * @sizeOf(u32),
         });
@@ -143,8 +143,8 @@ pub const Batcher = struct {
 
     /// Appends a quad at the passed position set to the size needed to render the target texture.
     pub fn texture(self: *Batcher, position: zm.F32x4, t: *gfx.Texture, options: TextureOptions) !void {
-        const width = @as(f32, @floatFromInt(t.width));
-        const height = @as(f32, @floatFromInt(t.height));
+        const width = @as(f32, @floatFromInt(t.image.width));
+        const height = @as(f32, @floatFromInt(t.image.height));
         const pos = zm.trunc(position);
 
         var color: [4]f32 = [_]f32{ 1.0, 1.0, 1.0, 1.0 };
@@ -206,8 +206,8 @@ pub const Batcher = struct {
         const height = @as(f32, @floatFromInt(s.source[3]));
         const o_x = @as(f32, @floatFromInt(s.origin[0]));
         const o_y = @as(f32, @floatFromInt(s.origin[1]));
-        const tex_width = @as(f32, @floatFromInt(t.width));
-        const tex_height = @as(f32, @floatFromInt(t.height));
+        const tex_width = @as(f32, @floatFromInt(t.image.width));
+        const tex_height = @as(f32, @floatFromInt(t.image.height));
 
         const origin_x = if (options.flip_x) o_x - width else -o_x;
         const origin_y = if (options.flip_y) -o_y else o_y - height;
@@ -297,7 +297,7 @@ pub const Batcher = struct {
                 .color_attachments = &color_attachments,
             };
 
-            const pass = encoder.beginRenderPass(render_pass_info);
+            const pass = encoder.beginRenderPass(&render_pass_info);
             defer {
                 pass.end();
                 pass.release();
@@ -309,11 +309,9 @@ pub const Batcher = struct {
             pass.setPipeline(self.context.pipeline_handle);
 
             if (uniforms_fields_info.len > 0) {
-                const mem = self.gctx.uniformsAllocate(UniformsType, 1);
-                mem.slice[0] = uniforms;
-                pass.setBindGroup(0, self.context.bind_group, &.{mem.offset});
+                pass.setBindGroup(0, self.context.bind_group_handle, &.{0});
             } else {
-                pass.setBindGroup(0, self.context.bind_group, null);
+                pass.setBindGroup(0, self.context.bind_group_handle, null);
             }
 
             // Draw only the quads appended this cycle
@@ -325,8 +323,8 @@ pub const Batcher = struct {
         if (self.encoder) |encoder| {
 
             // Write the current vertex and index buffers to the queue.
-            core.queue.writeBuffer(self.vertex_buffer_handle, 0, gfx.Vertex, self.vertices[0 .. self.quad_count * 4]);
-            core.queue.writeBuffer(self.index_buffer_handle, 0, u32, self.indices[0 .. self.quad_count * 6]);
+            core.queue.writeBuffer(self.vertex_buffer_handle, 0, self.vertices[0 .. self.quad_count * 4]);
+            core.queue.writeBuffer(self.index_buffer_handle, 0, self.indices[0 .. self.quad_count * 6]);
             // Reset the Batcher for the next time begin is called.
             self.quad_count = 0;
             self.vert_index = 0;

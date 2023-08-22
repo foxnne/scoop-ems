@@ -1,7 +1,7 @@
 const std = @import("std");
 const zm = @import("zmath");
 const ecs = @import("zflecs");
-const game = @import("root");
+const game = @import("../../scoop'ems.zig");
 const gfx = game.gfx;
 const components = game.components;
 
@@ -26,7 +26,7 @@ pub fn callback(it: *ecs.iter_t) callconv(.C) void {
         .bind_group_handle = game.state.bind_group_final,
     }) catch unreachable;
 
-    game.state.batcher.texture(zm.f32x4s(0), game.state.diffuse_output, .{}) catch unreachable;
+    game.state.batcher.texture(zm.f32x4s(0), &game.state.output_diffuse, .{}) catch unreachable;
 
     game.state.batcher.end(uniforms) catch unreachable;
 }

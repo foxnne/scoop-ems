@@ -10,7 +10,8 @@ struct VertexOut {
     @location(1) color: vec4<f32>,
     @location(2) data: vec3<f32>
 }
-@vertex fn main(
+@vertex 
+fn vert_main(
     @location(0) position: vec3<f32>,
     @location(1) uv: vec2<f32>,
     @location(2) color: vec4<f32>,
@@ -22,4 +23,18 @@ struct VertexOut {
     output.color = color;
     output.data = data;
     return output;
+}
+
+@group(0) @binding(1) var diffuse: texture_2d<f32>;
+@group(0) @binding(2) var diffuse_sampler: sampler;
+
+@fragment 
+fn frag_main(
+    @location(0) uv: vec2<f32>,
+    @location(1) color: vec4<f32>,
+    @location(2) data: vec3<f32>,
+) -> @location(0) vec4<f32> {
+    var diffuse = textureSample(diffuse, diffuse_sampler, uv);
+
+    return diffuse;
 }
