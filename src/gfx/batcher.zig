@@ -265,7 +265,7 @@ pub const Batcher = struct {
         return self.append(quad);
     }
 
-    pub fn end(self: *Batcher, uniforms: anytype) !void {
+    pub fn end(self: *Batcher, uniforms: anytype, buffer: *core.gpu.Buffer) !void {
         const UniformsType = @TypeOf(uniforms);
         const uniforms_type_info = @typeInfo(UniformsType);
         if (uniforms_type_info != .Struct) {
@@ -297,6 +297,10 @@ pub const Batcher = struct {
                 .color_attachments = &color_attachments,
             };
 
+            encoder.writeBuffer(buffer, 0, &[_]UniformsType{uniforms});
+            //encoder.writeBuffer(self.vertex_buffer_handle, 0, self.vertices[0 .. self.quad_count * 4]);
+            //encoder.writeBuffer(self.index_buffer_handle, 0, self.indices[0 .. self.quad_count * 6]);
+
             const pass = encoder.beginRenderPass(&render_pass_info);
             defer {
                 pass.end();
@@ -309,7 +313,7 @@ pub const Batcher = struct {
             pass.setPipeline(self.context.pipeline_handle);
 
             if (uniforms_fields_info.len > 0) {
-                pass.setBindGroup(0, self.context.bind_group_handle, &.{0});
+                pass.setBindGroup(0, self.context.bind_group_handle, &.{});
             } else {
                 pass.setBindGroup(0, self.context.bind_group_handle, null);
             }
@@ -321,7 +325,6 @@ pub const Batcher = struct {
 
     pub fn finish(self: *Batcher) !*core.gpu.CommandBuffer {
         if (self.encoder) |encoder| {
-
             // Write the current vertex and index buffers to the queue.
             core.queue.writeBuffer(self.vertex_buffer_handle, 0, self.vertices[0 .. self.quad_count * 4]);
             core.queue.writeBuffer(self.index_buffer_handle, 0, self.indices[0 .. self.quad_count * 6]);

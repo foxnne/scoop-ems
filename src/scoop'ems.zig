@@ -55,6 +55,8 @@ pub const GameState = struct {
     pipeline_diffuse: *gpu.RenderPipeline = undefined,
     bind_group_final: *gpu.BindGroup = undefined,
     pipeline_final: *gpu.RenderPipeline = undefined,
+    uniform_buffer_diffuse: *gpu.Buffer = undefined,
+    uniform_buffer_final: *gpu.Buffer = undefined,
     output_diffuse: gfx.Texture = undefined,
     output_channel: Channel = .final,
     fonts: Fonts = .{},
@@ -65,7 +67,7 @@ pub const GameState = struct {
 };
 
 pub const Channel = enum(i32) {
-    final,
+    final = 0,
 };
 
 pub const Fonts = struct {
@@ -172,19 +174,20 @@ pub fn init(app: *App) !void {
         },
         .alpha = .{
             .operation = .add,
-            .src_factor = .one,
-            .dst_factor = .zero,
+            .src_factor = .src_alpha,
+            .dst_factor = .one_minus_src_alpha,
         },
     };
-    const color_target = gpu.ColorTargetState{
-        .format = .bgra8_unorm,
+
+    const diffuse_color_target = gpu.ColorTargetState{
+        .format = core.descriptor.format,
         .blend = &blend,
         .write_mask = gpu.ColorWriteMaskFlags.all,
     };
     const diffuse_fragment = gpu.FragmentState.init(.{
         .module = diffuse_shader_module,
         .entry_point = "frag_main",
-        .targets = &.{color_target},
+        .targets = &.{diffuse_color_target},
     });
 
     const diffuse_pipeline_descriptor = gpu.RenderPipeline.Descriptor{
@@ -194,7 +197,7 @@ pub fn init(app: *App) !void {
 
     state.pipeline_diffuse = core.device.createRenderPipeline(&diffuse_pipeline_descriptor);
 
-    const diffuse_uniform_buffer = core.device.createBuffer(&.{
+    state.uniform_buffer_diffuse = core.device.createBuffer(&.{
         .usage = .{ .copy_dst = true, .uniform = true },
         .size = @sizeOf(gfx.UniformBufferObject),
         .mapped_at_creation = .false,
@@ -204,7 +207,7 @@ pub fn init(app: *App) !void {
         &gpu.BindGroup.Descriptor.init(.{
             .layout = state.pipeline_diffuse.getBindGroupLayout(0),
             .entries = &.{
-                gpu.BindGroup.Entry.buffer(0, diffuse_uniform_buffer, 0, @sizeOf(gfx.UniformBufferObject)),
+                gpu.BindGroup.Entry.buffer(0, state.uniform_buffer_diffuse, 0, @sizeOf(gfx.UniformBufferObject)),
                 gpu.BindGroup.Entry.textureView(1, state.diffusemap.view_handle),
                 gpu.BindGroup.Entry.textureView(2, state.palette.view_handle),
                 gpu.BindGroup.Entry.sampler(3, state.diffusemap.sampler_handle),
@@ -212,10 +215,16 @@ pub fn init(app: *App) !void {
         }),
     );
 
+    const final_color_target = gpu.ColorTargetState{
+        .format = core.descriptor.format,
+        .blend = &blend,
+        .write_mask = gpu.ColorWriteMaskFlags.all,
+    };
+
     const final_fragment = gpu.FragmentState.init(.{
         .module = final_shader_module,
         .entry_point = "frag_main",
-        .targets = &.{color_target},
+        .targets = &.{final_color_target},
     });
 
     const final_pipeline_descriptor = gpu.RenderPipeline.Descriptor{
@@ -223,9 +232,11 @@ pub fn init(app: *App) !void {
         .vertex = gpu.VertexState.init(.{ .module = final_shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
     };
 
+    state.pipeline_final = core.device.createRenderPipeline(&final_pipeline_descriptor);
+
     const FinalUniformObject = @import("ecs/systems/render_final_pass.zig").FinalUniforms;
 
-    const final_uniform_buffer = core.device.createBuffer(&.{
+    state.uniform_buffer_final = core.device.createBuffer(&.{
         .usage = .{ .copy_dst = true, .uniform = true },
         .size = @sizeOf(FinalUniformObject),
         .mapped_at_creation = .false,
@@ -235,14 +246,12 @@ pub fn init(app: *App) !void {
         &gpu.BindGroup.Descriptor.init(.{
             .layout = state.pipeline_final.getBindGroupLayout(0),
             .entries = &.{
-                gpu.BindGroup.Entry.buffer(0, final_uniform_buffer, 0, @sizeOf(FinalUniformObject)),
+                gpu.BindGroup.Entry.buffer(0, state.uniform_buffer_final, 0, @sizeOf(FinalUniformObject)),
                 gpu.BindGroup.Entry.textureView(1, state.output_diffuse.view_handle),
                 gpu.BindGroup.Entry.sampler(2, state.output_diffuse.sampler_handle),
             },
         }),
     );
-
-    state.pipeline_final = core.device.createRenderPipeline(&final_pipeline_descriptor);
 
     state.world = ecs.init();
     register(state.world, components);
@@ -360,7 +369,7 @@ pub fn update(app: *App) !bool {
         const batcher_commands = try state.batcher.finish();
         defer batcher_commands.release();
 
-        core.queue.submit(&.{ batcher_commands, zgui_commands });
+        core.queue.submit(&.{ zgui_commands, batcher_commands });
         core.swap_chain.present();
     }
 
@@ -381,6 +390,7 @@ pub fn deinit(_: *App) void {
     state.allocator.free(state.hotkeys.hotkeys);
     state.diffusemap.deinit();
     state.palette.deinit();
+    state.output_diffuse.deinit();
     state.atlas.deinit(state.allocator);
     zgui.mach_backend.deinit();
     zgui.deinit();

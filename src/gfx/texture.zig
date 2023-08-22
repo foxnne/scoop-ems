@@ -41,7 +41,7 @@ pub const Texture = struct {
 
         const texture_descriptor = .{
             .size = image_size,
-            .format = .rgba8_unorm,
+            .format = .bgra8_unorm,
             .usage = .{
                 .texture_binding = true,
                 .copy_dst = true,
@@ -52,7 +52,7 @@ pub const Texture = struct {
         const texture = core.device.createTexture(&texture_descriptor);
 
         const view_descriptor = .{
-            .format = .rgba8_unorm,
+            .format = .bgra8_unorm,
             .dimension = .dimension_2d,
             .array_layer_count = 1,
         };

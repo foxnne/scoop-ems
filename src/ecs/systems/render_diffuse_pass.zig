@@ -46,7 +46,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
 
                 if (ecs.field(it, components.SpriteRenderer, 3)) |renderers| {
                     renderers[i].order = i; // Set order so height passes can match time
-
                     game.state.batcher.sprite(
                         position,
                         &game.state.diffusemap,
@@ -66,7 +65,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
         }
     }
 
-    game.state.batcher.end(uniforms) catch unreachable;
+    game.state.batcher.end(uniforms, game.state.uniform_buffer_diffuse) catch unreachable;
 }
 
 fn orderBy(_: ecs.entity_t, c1: ?*const anyopaque, _: ecs.entity_t, c2: ?*const anyopaque) callconv(.C) c_int {
