@@ -17,6 +17,7 @@ pub const version: std.SemanticVersion = .{ .major = 0, .minor = 1, .patch = 0 }
 
 pub const assets = @import("assets.zig");
 pub const shaders = @import("shaders.zig");
+pub const settings = @import("settings.zig");
 
 pub const fs = @import("tools/fs.zig");
 pub const fa = @import("tools/font_awesome.zig");
@@ -46,11 +47,14 @@ pub const GameState = struct {
     hotkeys: input.Hotkeys = undefined,
     mouse: input.Mouse = undefined,
     root_path: [:0]const u8 = undefined,
-    fox_logo: gfx.Texture = undefined,
+    camera: gfx.Camera = undefined,
     atlas: gfx.Atlas = undefined,
     diffusemap: gfx.Texture = undefined,
     palette: gfx.Texture = undefined,
     bind_group_diffuse: *gpu.BindGroup = undefined,
+    pipeline_diffuse: *gpu.RenderPipeline = undefined,
+    bind_group_final: *gpu.BindGroup = undefined,
+    pipeline_final: *gpu.RenderPipeline = undefined,
     fonts: Fonts = .{},
     delta_time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
@@ -111,6 +115,8 @@ pub fn init(app: *App) !void {
 
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
+
+    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(window_size[0], window_size[1], 0, 0), zmath.f32x4(0, 0, 0, 0));
 
     state.batcher = try gfx.Batcher.init(allocator, 1000);
 
@@ -175,7 +181,7 @@ pub fn init(app: *App) !void {
         .fragment = &fragment,
         .vertex = gpu.VertexState.init(.{ .module = shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
     };
-    const pipeline = core.device.createRenderPipeline(&pipeline_descriptor);
+    state.pipeline_diffuse = core.device.createRenderPipeline(&pipeline_descriptor);
 
     const uniform_buffer = core.device.createBuffer(&.{
         .usage = .{ .copy_dst = true, .uniform = true },
@@ -185,7 +191,7 @@ pub fn init(app: *App) !void {
 
     state.bind_group_diffuse = core.device.createBindGroup(
         &gpu.BindGroup.Descriptor.init(.{
-            .layout = pipeline.getBindGroupLayout(0),
+            .layout = state.pipeline_diffuse.getBindGroupLayout(0),
             .entries = &.{
                 gpu.BindGroup.Entry.buffer(0, uniform_buffer, 0, @sizeOf(gfx.UniformBufferObject)),
                 gpu.BindGroup.Entry.textureView(1, state.diffusemap.view_handle),
@@ -308,8 +314,8 @@ pub fn update(app: *App) !bool {
 
 pub fn deinit(_: *App) void {
     state.allocator.free(state.hotkeys.hotkeys);
-    state.fox_logo.deinit();
     state.diffusemap.deinit();
+    state.palette.deinit();
     state.atlas.deinit(state.allocator);
     zgui.mach_backend.deinit();
     zgui.deinit();

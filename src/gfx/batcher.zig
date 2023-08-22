@@ -282,10 +282,6 @@ pub const Batcher = struct {
 
         // Begin the render pass
         pass: {
-            // const vb_info = self.gctx.lookupResourceInfo(self.vertex_buffer_handle) orelse break :pass;
-            // const ib_info = self.gctx.lookupResourceInfo(self.index_buffer_handle) orelse break :pass;
-            // const pipeline = self.gctx.lookupResource(self.context.pipeline_handle) orelse break :pass;
-            // const bind_group = self.gctx.lookupResource(self.context.bind_group_handle) orelse break :pass;
             const encoder = self.encoder orelse break :pass;
             const back_buffer_view = core.swap_chain.getCurrentTextureView() orelse break :pass;
 

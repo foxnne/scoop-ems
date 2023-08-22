@@ -16,14 +16,13 @@ pub const Camera = struct {
     target_tile: zm.F32x4 = zm.f32x4s(0),
     culling_margin: f32 = 256.0,
 
-    pub fn init(design_size: zm.F32x4, window_size: struct { w: i32, h: i32 }, position: zm.F32x4) Camera {
-        const w_size = zm.f32x4(@as(f32, @floatFromInt(window_size.w)), @as(f32, @floatFromInt(window_size.h)), 0, 0);
-        const zooms = zm.ceil(w_size / design_size);
+    pub fn init(design_size: zm.F32x4, window_size: zm.F32x4, position: zm.F32x4) Camera {
+        const zooms = zm.ceil(window_size / design_size);
         const zoom = @max(zooms[0], zooms[1]) + 1.0; // Initially set the zoom to be 1 step greater than minimum.
 
         return .{
             .design_size = design_size,
-            .window_size = w_size,
+            .window_size = window_size,
             .zoom = zoom,
             .position = position,
         };
