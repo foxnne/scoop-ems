@@ -49,6 +49,8 @@ pub const GameState = struct {
     fox_logo: gfx.Texture = undefined,
     atlas: gfx.Atlas = undefined,
     diffusemap: gfx.Texture = undefined,
+    palette: gfx.Texture = undefined,
+    bind_group_diffuse: *gpu.BindGroup = undefined,
     fonts: Fonts = .{},
     delta_time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
@@ -103,7 +105,7 @@ pub fn init(app: *App) !void {
     zstbi.init(allocator);
 
     state.allocator = allocator;
-    state.fox_logo = try gfx.Texture.loadFromFile(assets.fox1024_png.path, .{});
+    state.palette = try gfx.Texture.loadFromFile(assets.scoopems_palette_png.path, .{});
     state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
     state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
 
@@ -131,6 +133,67 @@ pub fn init(app: *App) !void {
     state.fonts.fa_standard_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 12 * scale_factor, config, ranges.ptr);
     state.fonts.fa_small_solid = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-solid-900.ttf", 10 * scale_factor, config, ranges.ptr);
     state.fonts.fa_small_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 10 * scale_factor, config, ranges.ptr);
+
+    const shader_module = core.device.createShaderModuleWGSL("diffuse.wgsl", @embedFile("shaders/diffuse.wgsl"));
+
+    const vertex_attributes = [_]gpu.VertexAttribute{
+        .{ .format = .float32x3, .offset = @offsetOf(gfx.Vertex, "position"), .shader_location = 0 },
+        .{ .format = .float32x2, .offset = @offsetOf(gfx.Vertex, "uv"), .shader_location = 1 },
+        .{ .format = .float32x4, .offset = @offsetOf(gfx.Vertex, "color"), .shader_location = 2 },
+        .{ .format = .float32x3, .offset = @offsetOf(gfx.Vertex, "data"), .shader_location = 3 },
+    };
+    const vertex_buffer_layout = gpu.VertexBufferLayout.init(.{
+        .array_stride = @sizeOf(gfx.Vertex),
+        .step_mode = .vertex,
+        .attributes = &vertex_attributes,
+    });
+
+    const blend = gpu.BlendState{
+        .color = .{
+            .operation = .add,
+            .src_factor = .src_alpha,
+            .dst_factor = .one_minus_src_alpha,
+        },
+        .alpha = .{
+            .operation = .add,
+            .src_factor = .one,
+            .dst_factor = .zero,
+        },
+    };
+    const color_target = gpu.ColorTargetState{
+        .format = core.descriptor.format,
+        .blend = &blend,
+        .write_mask = gpu.ColorWriteMaskFlags.all,
+    };
+    const fragment = gpu.FragmentState.init(.{
+        .module = shader_module,
+        .entry_point = "frag_main",
+        .targets = &.{color_target},
+    });
+
+    const pipeline_descriptor = gpu.RenderPipeline.Descriptor{
+        .fragment = &fragment,
+        .vertex = gpu.VertexState.init(.{ .module = shader_module, .entry_point = "vert_main", .buffers = &.{vertex_buffer_layout} }),
+    };
+    const pipeline = core.device.createRenderPipeline(&pipeline_descriptor);
+
+    const uniform_buffer = core.device.createBuffer(&.{
+        .usage = .{ .copy_dst = true, .uniform = true },
+        .size = @sizeOf(gfx.UniformBufferObject),
+        .mapped_at_creation = .false,
+    });
+
+    state.bind_group_diffuse = core.device.createBindGroup(
+        &gpu.BindGroup.Descriptor.init(.{
+            .layout = pipeline.getBindGroupLayout(0),
+            .entries = &.{
+                gpu.BindGroup.Entry.buffer(0, uniform_buffer, 0, @sizeOf(gfx.UniformBufferObject)),
+                gpu.BindGroup.Entry.textureView(1, state.diffusemap.view_handle),
+                gpu.BindGroup.Entry.textureView(2, state.palette.view_handle),
+                gpu.BindGroup.Entry.sampler(3, state.diffusemap.sampler_handle),
+            },
+        }),
+    );
 
     state.world = ecs.init();
     register(state.world, components);

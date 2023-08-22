@@ -18,7 +18,7 @@ pub const Vertex = struct {
     data: [3]f32 = [_]f32{ 0.0, 0.0, 0.0 },
 };
 
-pub const Uniforms = struct {
+pub const UniformBufferObject = struct {
     mvp: zm.Mat,
 };
 

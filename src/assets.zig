@@ -101,7 +101,7 @@ pub const scoopems_h_png = struct {
   pub const path = "assets/scoopems_h.png";
 };
 
-pub const fox1024_png = struct {
-  pub const path = "assets/fox1024.png";
+pub const scoopems_palette_png = struct {
+  pub const path = "assets/scoopems_palette.png";
 };
 
