@@ -25,7 +25,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
         .r = 0.0,
         .g = 0.8,
         .b = 1.0,
-        .a = 1.0,
+        .a = 0.0,
     };
 
     // Draw diffuse texture sprites using diffuse pipeline

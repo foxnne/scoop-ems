@@ -139,6 +139,7 @@ pub const Batcher = struct {
 
     pub const TextureOptions = struct {
         color: zm.F32x4 = game.math.Colors.white.value,
+        flip_y: bool = false,
     };
 
     /// Appends a quad at the passed position set to the size needed to render the target texture.
@@ -150,26 +151,29 @@ pub const Batcher = struct {
         var color: [4]f32 = [_]f32{ 1.0, 1.0, 1.0, 1.0 };
         zm.store(color[0..], options.color, 4);
 
+        const max: f32 = if (!options.flip_y) 1.0 else 0.0;
+        const min: f32 = if (!options.flip_y) 0.0 else 1.0;
+
         var quad = gfx.Quad{
             .vertices = [_]gfx.Vertex{
                 .{
                     .position = [3]f32{ pos[0], pos[1] + height, pos[2] },
-                    .uv = [2]f32{ 0.0, 0.0 },
+                    .uv = [2]f32{ min, min },
                     .color = color,
                 }, //Bl
                 .{
                     .position = [3]f32{ pos[0] + width, pos[1] + height, pos[2] },
-                    .uv = [2]f32{ 1.0, 0.0 },
+                    .uv = [2]f32{ max, min },
                     .color = color,
                 }, //Br
                 .{
                     .position = [3]f32{ pos[0] + width, pos[1], pos[2] },
-                    .uv = [2]f32{ 1.0, 1.0 },
+                    .uv = [2]f32{ max, max },
                     .color = color,
                 }, //Tr
                 .{
                     .position = [3]f32{ pos[0], pos[1], pos[2] },
-                    .uv = [2]f32{ 0.0, 1.0 },
+                    .uv = [2]f32{ min, max },
                     .color = color,
                 }, //Tl
             },
