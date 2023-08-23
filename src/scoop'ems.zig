@@ -25,6 +25,8 @@ pub const math = @import("math/math.zig");
 pub const gfx = @import("gfx/gfx.zig");
 pub const input = @import("input/input.zig");
 
+pub const map = @import("map/map.zig");
+
 pub const components = @import("ecs/components/components.zig");
 
 test {
@@ -268,11 +270,7 @@ pub fn init(app: *App) !void {
     var render_final_system = @import("ecs/systems/render_final_pass.zig").system();
     ecs.SYSTEM(state.world, "RenderFinalSystem", ecs.PostUpdate, &render_final_system);
 
-    const player = ecs.new_entity(state.world, "Player");
-    _ = ecs.set(state.world, player, components.Position, .{ .x = 0.0, .y = 0.0 });
-    _ = ecs.set(state.world, player, components.SpriteRenderer, .{
-        .index = assets.scoopems_atlas.Oak_0_Trunk,
-    });
+    map.create();
 }
 
 pub fn updateMainThread(_: *App) !bool {

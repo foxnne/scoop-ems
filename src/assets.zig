@@ -91,6 +91,8 @@ pub const scoopems_atlas = struct {
   pub const Campfire_5_Layer_0 = 83;
   pub const Campfire_6_Layer_0 = 84;
   pub const Campfire_7_Layer_0 = 85;
+  pub const Ground_full_0_Layer_0 = 86;
+  pub const Ground_full_1_Layer_0 = 87;
 };
 
 pub const scoopems_png = struct {

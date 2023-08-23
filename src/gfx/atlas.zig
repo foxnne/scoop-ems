@@ -15,7 +15,7 @@ pub const Atlas = struct {
 
         const options = std.json.ParseOptions{ .duplicate_field_behavior = .use_first, .ignore_unknown_fields = true };
         const parsed = try std.json.parseFromSlice(Atlas, allocator, read, options);
-        defer parsed.deinit();
+        //defer parsed.deinit();
 
         return .{
             .sprites = try allocator.dupe(game.gfx.Sprite, parsed.value.sprites),
