@@ -16,32 +16,33 @@ pub const Texture = struct {
     sampler_handle: *gpu.Sampler,
     image: zstbi.Image,
 
-    pub const SamplerOptions = struct {
+    pub const TextureOptions = struct {
         address_mode: gpu.Sampler.AddressMode = .clamp_to_edge,
         filter: gpu.FilterMode = .nearest,
+        format: gpu.Texture.Format = .rgba8_unorm,
     };
 
-    pub fn createEmpty(width: u32, height: u32, options: Texture.SamplerOptions) !Texture {
+    pub fn createEmpty(width: u32, height: u32, options: Texture.TextureOptions) !Texture {
         var image = try zstbi.Image.createEmpty(width, height, 4, .{});
         return create(image, options);
     }
 
-    pub fn loadFromFile(file: [:0]const u8, options: Texture.SamplerOptions) !Texture {
+    pub fn loadFromFile(file: [:0]const u8, options: Texture.TextureOptions) !Texture {
         var image = try zstbi.Image.loadFromFile(file, 4);
-        return create(image, options);
+        return create(image, .{ .address_mode = options.address_mode, .filter = options.filter });
     }
 
-    pub fn loadFromMemory(data: []const u8, options: Texture.SamplerOptions) !Texture {
+    pub fn loadFromMemory(data: []const u8, options: Texture.TextureOptions) !Texture {
         var image = try zstbi.Image.loadFromMemory(data, 0);
-        return create(image, options);
+        return create(image, .{ .address_mode = options.address_mode, .filter = options.filter });
     }
 
-    pub fn create(image: zstbi.Image, options: Texture.SamplerOptions) Texture {
+    pub fn create(image: zstbi.Image, options: Texture.TextureOptions) Texture {
         const image_size = .{ .width = image.width, .height = image.height };
 
         const texture_descriptor = .{
             .size = image_size,
-            .format = .bgra8_unorm,
+            .format = options.format,
             .usage = .{
                 .texture_binding = true,
                 .copy_dst = true,
@@ -52,7 +53,7 @@ pub const Texture = struct {
         const texture = core.device.createTexture(&texture_descriptor);
 
         const view_descriptor = .{
-            .format = .bgra8_unorm,
+            .format = options.format,
             .dimension = .dimension_2d,
             .array_layer_count = 1,
         };

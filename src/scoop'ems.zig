@@ -122,7 +122,7 @@ pub fn init(app: *App) !void {
     state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
     state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
 
-    state.output_diffuse = try gfx.Texture.createEmpty(settings.design_width, settings.design_height, .{});
+    state.output_diffuse = try gfx.Texture.createEmpty(settings.design_width, settings.design_height, .{ .format = core.descriptor.format });
 
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
