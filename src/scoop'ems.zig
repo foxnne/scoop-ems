@@ -104,7 +104,7 @@ pub fn init(app: *App) !void {
 
     try core.init(.{
         .title = name,
-        .size = .{ .width = 1920, .height = 1080 },
+        .size = .{ .width = 1280, .height = 720 },
     });
 
     const descriptor = core.descriptor;
@@ -129,7 +129,7 @@ pub fn init(app: *App) !void {
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
 
-    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(window_size[0], window_size[1], 0, 0), zmath.f32x4(0, 0, 0, 0));
+    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(framebuffer_size[0], framebuffer_size[1], 0, 0), zmath.f32x4(0, 0, 0, 0));
 
     state.batcher = try gfx.Batcher.init(allocator, 1000);
 
@@ -271,6 +271,18 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "RenderFinalSystem", ecs.PostUpdate, &render_final_system);
 
     map.create();
+
+    const tracks = ecs.new_id(state.world);
+    _ = ecs.set(state.world, tracks, components.Position, .{ .x = 0.0, .y = settings.ground_height });
+    _ = ecs.set(state.world, tracks, components.SpriteRenderer, .{
+        .index = assets.scoopems_atlas.Sprite_0_Tracks,
+    });
+
+    const frame = ecs.new_id(state.world);
+    _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height });
+    _ = ecs.set(state.world, frame, components.SpriteRenderer, .{
+        .index = assets.scoopems_atlas.Sprite_0_Frame,
+    });
 }
 
 pub fn updateMainThread(_: *App) !bool {
@@ -317,6 +329,9 @@ pub fn update(app: *App) !bool {
             },
             .close => {
                 return true;
+            },
+            .framebuffer_resize => |size| {
+                state.camera.window_size = zmath.f32x4(@floatFromInt(size.width), @floatFromInt(size.height), 0, 0);
             },
             else => {},
         }

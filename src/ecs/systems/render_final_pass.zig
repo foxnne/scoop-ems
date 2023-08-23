@@ -28,7 +28,7 @@ pub fn callback(it: *ecs.iter_t) callconv(.C) void {
     }) catch unreachable;
 
     game.state.batcher.texture(zm.f32x4s(0), &game.state.output_diffuse, .{}) catch unreachable;
-    game.state.batcher.texture(zm.f32x4(0.0, -160.0, 0, 0), &game.state.output_diffuse, .{ .flip_y = true }) catch unreachable;
+    game.state.batcher.texture(zm.f32x4(0.0, -160.0, 0, 0), &game.state.output_diffuse, .{ .flip_y = true, .flip_x = true, .color = zm.f32x4(0.5, 0.5, 0.5, 0.5) }) catch unreachable;
 
     game.state.batcher.end(uniforms, game.state.uniform_buffer_final) catch unreachable;
 }

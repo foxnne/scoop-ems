@@ -36,5 +36,5 @@ fn frag_main(
 ) -> @location(0) vec4<f32> {
     var diffuse = textureSample(diffuse, diffuse_sampler, uv);
 
-    return diffuse;
+    return diffuse * color;
 }

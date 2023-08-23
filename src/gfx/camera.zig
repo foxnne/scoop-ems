@@ -18,7 +18,7 @@ pub const Camera = struct {
 
     pub fn init(design_size: zm.F32x4, window_size: zm.F32x4, position: zm.F32x4) Camera {
         const zooms = zm.ceil(window_size / design_size);
-        const zoom = @max(zooms[0], zooms[1]) + 1.0; // Initially set the zoom to be 1 step greater than minimum.
+        const zoom = @max(zooms[0], zooms[1]) + 5.0; // Initially set the zoom to be 1 step greater than minimum.
 
         return .{
             .design_size = design_size,
