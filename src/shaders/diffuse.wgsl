@@ -27,9 +27,9 @@ struct VertexOut {
     if (vert_mode == 1) {
         var vert_ind = i32(in_vertex_index) % 4;
         if (vert_ind == 0) {
-            pos.x += sin(time) * 5.0;
+            pos.x += sin(time) * 1.5;
         } else if (vert_ind == 1) {
-            pos.x += sin(time) * 2.5;
+            pos.x += sin(time) * 2.0;
         }
     }
     

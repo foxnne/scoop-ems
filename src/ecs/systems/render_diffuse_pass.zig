@@ -42,7 +42,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
             if (ecs.field(it, components.Position, 1)) |positions| {
                 const rotation = if (ecs.field(it, components.Rotation, 2)) |rotations| rotations[i].value else 0.0;
                 var position = positions[i].toF32x4();
-                position[1] += position[2];
 
                 if (ecs.field(it, components.SpriteRenderer, 3)) |renderers| {
                     renderers[i].order = i; // Set order so height passes can match time
@@ -54,7 +53,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             .color = renderers[i].color,
                             .vert_mode = renderers[i].vert_mode,
                             .frag_mode = renderers[i].frag_mode,
-                            .time = @as(f32, @floatCast(game.state.time)) + @as(f32, @floatFromInt(renderers[i].order)),
+                            .time = game.state.time + position[0],
                             .flip_x = renderers[i].flip_x,
                             .flip_y = renderers[i].flip_y,
                             .rotation = rotation,
@@ -71,5 +70,5 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
 fn orderBy(_: ecs.entity_t, c1: ?*const anyopaque, _: ecs.entity_t, c2: ?*const anyopaque) callconv(.C) c_int {
     const position_1 = ecs.cast(components.Position, c1);
     const position_2 = ecs.cast(components.Position, c2);
-    return @as(c_int, @intCast(@intFromBool(position_1.y < position_2.y))) - @as(c_int, @intCast(@intFromBool(position_1.y > position_2.y)));
+    return @as(c_int, @intCast(@intFromBool(position_1.z < position_2.z))) - @as(c_int, @intCast(@intFromBool(position_1.z > position_2.z)));
 }

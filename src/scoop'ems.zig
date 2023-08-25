@@ -16,6 +16,7 @@ pub const name: [:0]const u8 = "Scoop'ems";
 pub const version: std.SemanticVersion = .{ .major = 0, .minor = 1, .patch = 0 };
 
 pub const assets = @import("assets.zig");
+pub const animations = @import("animations.zig");
 pub const shaders = @import("shaders.zig");
 pub const settings = @import("settings.zig");
 
@@ -273,13 +274,13 @@ pub fn init(app: *App) !void {
     map.create();
 
     const tracks = ecs.new_id(state.world);
-    _ = ecs.set(state.world, tracks, components.Position, .{ .x = 0.0, .y = settings.ground_height });
+    _ = ecs.set(state.world, tracks, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
     _ = ecs.set(state.world, tracks, components.SpriteRenderer, .{
         .index = assets.scoopems_atlas.Sprite_0_Tracks,
     });
 
     const frame = ecs.new_id(state.world);
-    _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height });
+    _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
     _ = ecs.set(state.world, frame, components.SpriteRenderer, .{
         .index = assets.scoopems_atlas.Sprite_0_Frame,
     });
@@ -292,7 +293,9 @@ pub fn updateMainThread(_: *App) !bool {
 pub fn update(app: *App) !bool {
     zgui.mach_backend.newFrame();
     state.delta_time = app.timer.lap();
-    state.time = app.timer.read();
+    state.time += (state.delta_time);
+
+    std.log.debug("{any}", .{state.time});
 
     const descriptor = core.descriptor;
     window_size = .{ @floatFromInt(core.size().width), @floatFromInt(core.size().height) };
