@@ -138,4 +138,13 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
+
+    const clouds_static = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -64.0, .y = game.settings.ground_height, .z = 600.0 });
+    _ = ecs.set(game.state.world, clouds_static, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.clouds_0_Layer_0,
+        .flip_x = false,
+        .vert_mode = .top_sway,
+        .color = .{ 1.0, 1.0, 1.0, 1.0 },
+    });
 }

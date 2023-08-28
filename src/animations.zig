@@ -150,6 +150,9 @@ pub var Oak_Ground = [_]usize {
 pub var Pine_Ground = [_]usize {
     assets.scoopems_atlas.Pine_0_Ground,
 };
+pub var clouds_Layer_0 = [_]usize {
+    assets.scoopems_atlas.clouds_0_Layer_0,
+};
 pub var Campfire_Layer_0 = [_]usize {
     assets.scoopems_atlas.Campfire_0_Layer_0,
     assets.scoopems_atlas.Campfire_1_Layer_0,
