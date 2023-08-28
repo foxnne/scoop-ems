@@ -11,4 +11,4 @@ pub const design_height: u32 = 720;
 pub const design_size = zm.f32x4(@floatFromInt(design_width), @floatFromInt(design_height), 0, 0);
 
 /// Height where ground sits
-pub const ground_height: f32 = -64.0;
+pub const ground_height: f32 = -48.0;
