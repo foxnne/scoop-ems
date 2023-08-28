@@ -96,6 +96,18 @@ pub var Gold_Layer = [_]usize {
     assets.scoopems_atlas.Gold_3_Layer,
     assets.scoopems_atlas.Gold_4_Layer,
 };
+pub var distance_0_Layer_0 = [_]usize {
+    assets.scoopems_atlas.distance_0_0_Layer_0,
+};
+pub var distance_1_Layer_0 = [_]usize {
+    assets.scoopems_atlas.distance_1_0_Layer_0,
+};
+pub var distance_2_Layer_0 = [_]usize {
+    assets.scoopems_atlas.distance_2_0_Layer_0,
+};
+pub var distance_3_Layer_0 = [_]usize {
+    assets.scoopems_atlas.distance_3_0_Layer_0,
+};
 pub var Oak_Needles = [_]usize {
     assets.scoopems_atlas.Oak_0_Needles,
 };

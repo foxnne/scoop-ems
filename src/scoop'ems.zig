@@ -130,7 +130,7 @@ pub fn init(app: *App) !void {
     state.hotkeys = try input.Hotkeys.initDefault(allocator);
     state.mouse = try input.Mouse.initDefault(allocator);
 
-    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(framebuffer_size[0], framebuffer_size[1], 0, 0), zmath.f32x4(0, 0, 0, 0));
+    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(framebuffer_size[0], framebuffer_size[1], 0, 0), zmath.f32x4(-64.0, 0, 0, 0));
 
     state.batcher = try gfx.Batcher.init(allocator, 1000);
 
@@ -294,8 +294,6 @@ pub fn update(app: *App) !bool {
     zgui.mach_backend.newFrame();
     state.delta_time = app.timer.lap();
     state.time += (state.delta_time);
-
-    std.log.debug("{any}", .{state.time});
 
     const descriptor = core.descriptor;
     window_size = .{ @floatFromInt(core.size().width), @floatFromInt(core.size().height) };

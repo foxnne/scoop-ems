@@ -1,5 +1,6 @@
 const ecs = @import("zflecs");
 const game = @import("../scoop'ems.zig");
+const math = game.math;
 
 pub fn create() void {
     const count = 24;
@@ -37,4 +38,104 @@ pub fn create() void {
             }
         }
     }
+
+    const distance_color = math.Color.initBytes(3, 0, 0, 255).toSlice();
+
+    const distance_0 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_0, game.components.Position, .{ .x = 45.0, .y = game.settings.ground_height, .z = 200.0 });
+    _ = ecs.set(game.state.world, distance_0, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.distance_0_0_Layer_0,
+        .frag_mode = .palette,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const tree_x: f32 = 100.0;
+
+    const distance_tree_trunk = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_trunk, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height - 10, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_trunk, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_tree_needles = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_needles, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height - 10, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_needles, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Needles,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_tree_trunk_2 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.Position, .{ .x = -tree_x, .y = game.settings.ground_height - 10, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_tree_needles_2 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.Position, .{ .x = -tree_x, .y = game.settings.ground_height - 10, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Needles,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_tree_trunk_3 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 25, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = true,
+        .color = distance_color,
+    });
+
+    const distance_tree_needles_3 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 25, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Pine_0_Needles,
+        .frag_mode = .palette,
+        .vert_mode = .top_sway,
+        .flip_x = true,
+        .color = distance_color,
+    });
+
+    const distance_1 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = 45.0, .y = game.settings.ground_height + 2.0, .z = 300.0 });
+    _ = ecs.set(game.state.world, distance_1, game.components.SpriteRenderer, .{
+        .frag_mode = .palette,
+        .index = game.assets.scoopems_atlas.distance_1_0_Layer_0,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_2 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
+    _ = ecs.set(game.state.world, distance_2, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.distance_2_0_Layer_0,
+        .frag_mode = .palette,
+        .flip_x = false,
+        .color = distance_color,
+    });
+
+    const distance_3 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 15.0, .z = 500.0 });
+    _ = ecs.set(game.state.world, distance_3, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.distance_3_0_Layer_0,
+        .frag_mode = .palette,
+        .flip_x = false,
+        .color = distance_color,
+    });
 }
