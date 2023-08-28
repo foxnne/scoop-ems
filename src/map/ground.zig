@@ -93,7 +93,7 @@ pub fn create() void {
     });
 
     const distance_tree_trunk_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 25, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 10, .z = 199.0 });
     _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Trunk,
         .frag_mode = .palette,
@@ -103,7 +103,7 @@ pub fn create() void {
     });
 
     const distance_tree_needles_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 25, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 10, .z = 199.0 });
     _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Needles,
         .frag_mode = .palette,
