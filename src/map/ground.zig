@@ -57,7 +57,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_trunk, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Trunk,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = false,
         .color = distance_color,
     });
@@ -67,7 +67,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_needles, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Needles,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = false,
         .color = distance_color,
     });
@@ -77,7 +77,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Trunk,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = false,
         .color = distance_color,
     });
@@ -87,7 +87,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Needles,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = false,
         .color = distance_color,
     });
@@ -97,7 +97,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Trunk,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = true,
         .color = distance_color,
     });
@@ -107,7 +107,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Needles,
         .frag_mode = .palette,
-        .vert_mode = .top_sway,
+        // .vert_mode = .top_sway,
         .flip_x = true,
         .color = distance_color,
     });
