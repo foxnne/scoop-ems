@@ -39,7 +39,7 @@ pub fn create() void {
         }
     }
 
-    const distance_color = math.Color.initBytes(3, 0, 0, 255).toSlice();
+    const distance_color = math.Color.initBytes(2, 0, 0, 255).toSlice();
 
     const distance_0 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_0, game.components.Position, .{ .x = 45.0, .y = game.settings.ground_height, .z = 200.0 });
