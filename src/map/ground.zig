@@ -142,14 +142,14 @@ pub fn create() void {
         .color = distance_color,
     });
 
-    // const distance_3 = ecs.new_id(game.state.world);
-    // _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 20.0, .z = 500.0 });
-    // _ = ecs.set(game.state.world, distance_3, game.components.SpriteRenderer, .{
-    //     .index = game.assets.scoopems_atlas.distance_3_0_Layer_0,
-    //     .frag_mode = .palette,
-    //     .flip_x = false,
-    //     .color = distance_color,
-    // });
+    const distance_3 = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 5.0, .z = 500.0 });
+    _ = ecs.set(game.state.world, distance_3, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.distance_3_0_Layer_0,
+        .frag_mode = .palette,
+        .flip_x = false,
+        .color = distance_color,
+    });
 
     const clouds_static = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -64.0, .y = game.settings.ground_height + 10.0, .z = 600.0 });
