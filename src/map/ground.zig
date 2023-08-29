@@ -63,7 +63,7 @@ pub fn create() void {
     });
 
     const distance_tree_needles = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height - 10, .z = 199.0 });
+    _ = ecs.set(game.state.world, distance_tree_needles, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height, .z = 199.0 });
     _ = ecs.set(game.state.world, distance_tree_needles, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Pine_0_Needles,
         .frag_mode = .palette,
@@ -122,7 +122,7 @@ pub fn create() void {
     });
 
     const distance_2 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
+    _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height, .z = 400.0 });
     _ = ecs.set(game.state.world, distance_2, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.distance_2_0_Layer_0,
         .frag_mode = .palette,
@@ -131,7 +131,7 @@ pub fn create() void {
     });
 
     const distance_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 15.0, .z = 500.0 });
+    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 20.0, .z = 500.0 });
     _ = ecs.set(game.state.world, distance_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.distance_3_0_Layer_0,
         .frag_mode = .palette,
@@ -140,7 +140,7 @@ pub fn create() void {
     });
 
     const clouds_static = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -64.0, .y = game.settings.ground_height, .z = 600.0 });
+    _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -64.0, .y = game.settings.ground_height + 30.0, .z = 600.0 });
     _ = ecs.set(game.state.world, clouds_static, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.clouds_0_Layer_0,
         .flip_x = false,
