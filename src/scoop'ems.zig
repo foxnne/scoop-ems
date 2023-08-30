@@ -259,9 +259,18 @@ pub fn init(app: *App) !void {
     state.world = ecs.init();
     register(state.world, components);
 
+    // - Input
+    var input_direction_system = @import("ecs/systems/input_direction.zig").system();
+    ecs.SYSTEM(state.world, "InputDirectionSystem", ecs.OnUpdate, &input_direction_system);
+
+    var cooldown_system = @import("ecs/systems/cooldown.zig").system();
+    ecs.SYSTEM(state.world, "CooldownSystem", ecs.OnUpdate, &cooldown_system);
+
     // - Animation
     var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
     ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
+    var animation_direction_system = @import("ecs/systems/animation_direction.zig").system();
+    ecs.SYSTEM(state.world, "AnimationDirectionSystem", ecs.OnUpdate, &animation_direction_system);
 
     // - Render
     var render_culling_system = @import("ecs/systems/render_culling.zig").system();
@@ -276,14 +285,16 @@ pub fn init(app: *App) !void {
     const tracks = ecs.new_id(state.world);
     _ = ecs.set(state.world, tracks, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
     _ = ecs.set(state.world, tracks, components.SpriteRenderer, .{
-        .index = assets.scoopems_atlas.Sprite_0_Tracks,
+        .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
     });
 
     const frame = ecs.new_id(state.world);
     _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
     _ = ecs.set(state.world, frame, components.SpriteRenderer, .{
-        .index = assets.scoopems_atlas.Sprite_0_Frame,
+        .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Frame,
     });
+    _ = ecs.set(state.world, frame, components.Direction, .w);
+    _ = ecs.set_pair(state.world, frame, ecs.id(components.Target), ecs.id(components.Direction), components.Direction, .w);
 }
 
 pub fn updateMainThread(_: *App) !bool {

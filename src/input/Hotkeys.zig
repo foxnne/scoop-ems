@@ -57,17 +57,8 @@ pub const Hotkey = struct {
 
 pub fn hotkey(self: *Self, action: Action) ?*Hotkey {
     for (self.hotkeys) |*hk| {
-        switch (hk.action) {
-            .tool => |tool| {
-                if (tool == action.tool) return hk;
-            },
-            .sidebar => |sidebar| {
-                if (sidebar == action.sidebar) return hk;
-            },
-            .proc => |proc| {
-                if (proc == action.proc) return hk;
-            },
-        }
+        if (hk.action == action)
+            return hk;
     }
     return null;
 }

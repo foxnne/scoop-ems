@@ -153,6 +153,16 @@ pub var Pine_Ground = [_]usize {
 pub var clouds_Layer_0 = [_]usize {
     assets.scoopems_atlas.clouds_0_Layer_0,
 };
+pub var Excavator_rotate_empty_Frame = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_empty_0_Frame,
+    assets.scoopems_atlas.Excavator_rotate_empty_1_Frame,
+    assets.scoopems_atlas.Excavator_rotate_empty_2_Frame,
+};
+pub var Excavator_rotate_empty_Tracks = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
+    assets.scoopems_atlas.Excavator_rotate_empty_1_Tracks,
+    assets.scoopems_atlas.Excavator_rotate_empty_2_Tracks,
+};
 pub var Campfire_Layer_0 = [_]usize {
     assets.scoopems_atlas.Campfire_0_Layer_0,
     assets.scoopems_atlas.Campfire_1_Layer_0,
