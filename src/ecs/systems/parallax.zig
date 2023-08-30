@@ -6,8 +6,8 @@ const components = game.components;
 
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
-    desc.query.filter.terms[1] = .{ .id = ecs.id(components.Position) };
-    desc.query.filter.terms[2] = .{ .id = ecs.id(components.Parallax) };
+    desc.query.filter.terms[0] = .{ .id = ecs.id(components.Position) };
+    desc.query.filter.terms[1] = .{ .id = ecs.id(components.Parallax) };
     desc.run = run;
     return desc;
 }
