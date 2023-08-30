@@ -265,6 +265,10 @@ pub fn init(app: *App) !void {
 
     var cooldown_system = @import("ecs/systems/cooldown.zig").system();
     ecs.SYSTEM(state.world, "CooldownSystem", ecs.OnUpdate, &cooldown_system);
+    var camera_system = @import("ecs/systems/camera.zig").system();
+    ecs.SYSTEM(state.world, "CameraSystem", ecs.OnUpdate, &camera_system);
+    var parallax_system = @import("ecs/systems/parallax.zig").system();
+    ecs.SYSTEM(state.world, "ParallaxSystem", ecs.OnUpdate, &parallax_system);
 
     // - Animation
     var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();

@@ -8,12 +8,9 @@ pub const Camera = struct {
     design_size: zm.F32x4,
     window_size: zm.F32x4,
     zoom: f32 = 1.0,
-    zoom_step: f32 = 1.0,
-    zoom_step_next: f32 = 1.0,
-    zoom_progress: f32 = -1.0,
     position: zm.F32x4 = zm.f32x4s(0),
-    tile: zm.F32x4 = zm.f32x4s(0),
-    target_tile: zm.F32x4 = zm.f32x4s(0),
+    previous_position: zm.F32x4 = zm.f32x4s(0),
+    velocity: f32 = 0.0,
     culling_margin: f32 = 256.0,
 
     pub fn init(design_size: zm.F32x4, window_size: zm.F32x4, position: zm.F32x4) Camera {

@@ -132,6 +132,7 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
+    _ = ecs.set(game.state.world, distance_1, game.components.Parallax, .{ .value = 0.45 });
 
     const distance_2 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
@@ -141,6 +142,7 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
+    _ = ecs.set(game.state.world, distance_2, game.components.Parallax, .{ .value = 0.60 });
 
     const distance_3 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 5.0, .z = 500.0 });
@@ -150,6 +152,7 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
+    _ = ecs.set(game.state.world, distance_3, game.components.Parallax, .{ .value = 0.75 });
 
     const clouds_static = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -140.0, .y = game.settings.ground_height + 10.0, .z = 600.0 });
@@ -159,4 +162,5 @@ pub fn create() void {
         .vert_mode = .top_sway,
         .color = .{ 1.0, 1.0, 1.0, 1.0 },
     });
+    _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 0.9 });
 }
