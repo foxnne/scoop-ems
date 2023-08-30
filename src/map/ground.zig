@@ -3,7 +3,7 @@ const game = @import("../scoop'ems.zig");
 const math = game.math;
 
 pub fn create() void {
-    const count = 24;
+    const count = 36;
     for (0..count + 1) |index| {
         const i: f32 = @floatFromInt(index);
         const offset: f32 = (i - @divExact(count, 2)) * 32.0;
@@ -125,7 +125,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Rotation, .{ .value = 2.5 });
 
     const distance_1 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = 45.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
+    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
     _ = ecs.set(game.state.world, distance_1, game.components.SpriteRenderer, .{
         .frag_mode = .palette,
         .index = game.assets.scoopems_atlas.distance_1_0_Layer_0,
@@ -152,7 +152,7 @@ pub fn create() void {
     });
 
     const clouds_static = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -64.0, .y = game.settings.ground_height + 10.0, .z = 600.0 });
+    _ = ecs.set(game.state.world, clouds_static, game.components.Position, .{ .x = -140.0, .y = game.settings.ground_height + 10.0, .z = 600.0 });
     _ = ecs.set(game.state.world, clouds_static, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.clouds_0_Layer_0,
         .flip_x = false,
