@@ -132,7 +132,7 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
-    _ = ecs.set(game.state.world, distance_1, game.components.Parallax, .{ .value = 0.45 });
+    _ = ecs.set(game.state.world, distance_1, game.components.Parallax, .{ .value = 0.25 });
 
     const distance_2 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
@@ -142,7 +142,7 @@ pub fn create() void {
         .flip_x = false,
         .color = distance_color,
     });
-    _ = ecs.set(game.state.world, distance_2, game.components.Parallax, .{ .value = 0.60 });
+    _ = ecs.set(game.state.world, distance_2, game.components.Parallax, .{ .value = 0.50 });
 
     const distance_3 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 5.0, .z = 500.0 });
