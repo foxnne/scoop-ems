@@ -74,6 +74,7 @@ pub fn create() void {
             .color = tree_color,
             .frag_mode = .palette,
             .flip_x = false,
+            .order = 0,
         });
 
         const tree_leaves_0_1 = ecs.new_id(game.state.world);
@@ -84,6 +85,7 @@ pub fn create() void {
             .color = tree_color,
             .frag_mode = .palette,
             .flip_x = false,
+            .order = 1,
         });
 
         const tree_leaves_0_2 = ecs.new_id(game.state.world);
@@ -94,6 +96,7 @@ pub fn create() void {
             .color = tree_color,
             .frag_mode = .palette,
             .flip_x = false,
+            .order = 2,
         });
 
         const tree_leaves_0_3 = ecs.new_id(game.state.world);
@@ -104,6 +107,7 @@ pub fn create() void {
             .color = tree_color,
             .frag_mode = .palette,
             .flip_x = false,
+            .order = 3,
         });
     }
 

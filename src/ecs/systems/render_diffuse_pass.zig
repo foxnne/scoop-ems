@@ -45,7 +45,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                 var position = positions[i].toF32x4();
 
                 if (ecs.field(it, components.SpriteRenderer, 3)) |renderers| {
-                    renderers[i].order = i; // Set order so height passes can match time
                     game.state.batcher.sprite(
                         position,
                         &game.state.diffusemap,
@@ -54,7 +53,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             .color = renderers[i].color,
                             .vert_mode = renderers[i].vert_mode,
                             .frag_mode = renderers[i].frag_mode,
-                            .time = game.state.time + position[0],
+                            .time = game.state.time + @as(f32, @floatFromInt(renderers[i].order)) + position[0],
                             .flip_x = renderers[i].flip_x,
                             .flip_y = renderers[i].flip_y,
                             .rotation = rotation,
