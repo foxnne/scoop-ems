@@ -28,3 +28,7 @@ pub const Position = struct {
 const sprites = @import("sprites.zig");
 pub const SpriteRenderer = sprites.SpriteRenderer;
 pub const SpriteAnimator = sprites.SpriteAnimator;
+
+const particles = @import("particles.zig");
+pub const ParticleRenderer = particles.ParticleRenderer;
+pub const ParticleAnimator = particles.ParticleAnimator;

@@ -158,10 +158,40 @@ pub var Excavator_rotate_empty_Frame = [_]usize {
     assets.scoopems_atlas.Excavator_rotate_empty_1_Frame,
     assets.scoopems_atlas.Excavator_rotate_empty_2_Frame,
 };
+pub var Excavator_rotate_full_Frame = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_full_0_Frame,
+    assets.scoopems_atlas.Excavator_rotate_full_1_Frame,
+    assets.scoopems_atlas.Excavator_rotate_full_2_Frame,
+};
+pub var Excavator_scoop_Frame = [_]usize {
+    assets.scoopems_atlas.Excavator_scoop_0_Frame,
+    assets.scoopems_atlas.Excavator_scoop_1_Frame,
+    assets.scoopems_atlas.Excavator_scoop_2_Frame,
+    assets.scoopems_atlas.Excavator_scoop_3_Frame,
+    assets.scoopems_atlas.Excavator_scoop_4_Frame,
+    assets.scoopems_atlas.Excavator_scoop_5_Frame,
+    assets.scoopems_atlas.Excavator_scoop_6_Frame,
+    assets.scoopems_atlas.Excavator_scoop_7_Frame,
+};
 pub var Excavator_rotate_empty_Tracks = [_]usize {
     assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
     assets.scoopems_atlas.Excavator_rotate_empty_1_Tracks,
     assets.scoopems_atlas.Excavator_rotate_empty_2_Tracks,
+};
+pub var Excavator_rotate_full_Tracks = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_full_0_Tracks,
+    assets.scoopems_atlas.Excavator_rotate_full_1_Tracks,
+    assets.scoopems_atlas.Excavator_rotate_full_2_Tracks,
+};
+pub var Excavator_scoop_Tracks = [_]usize {
+    assets.scoopems_atlas.Excavator_scoop_0_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_1_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_2_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_3_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_4_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_5_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_6_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_7_Tracks,
 };
 pub var Campfire_Layer_0 = [_]usize {
     assets.scoopems_atlas.Campfire_0_Layer_0,

@@ -275,6 +275,8 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
     var animation_direction_system = @import("ecs/systems/animation_direction.zig").system();
     ecs.SYSTEM(state.world, "AnimationDirectionSystem", ecs.OnUpdate, &animation_direction_system);
+    var animation_particle_system = @import("ecs/systems/animation_particle.zig").system();
+    ecs.SYSTEM(state.world, "AnimationParticleSystem", ecs.OnUpdate, &animation_particle_system);
 
     // - Render
     var render_culling_system = @import("ecs/systems/render_culling.zig").system();
@@ -299,6 +301,20 @@ pub fn init(app: *App) !void {
     });
     _ = ecs.set(state.world, frame, components.Direction, .w);
     _ = ecs.set_pair(state.world, frame, ecs.id(components.Target), ecs.id(components.Direction), components.Direction, .w);
+    _ = ecs.set(state.world, frame, components.ParticleRenderer, .{
+        .particles = try allocator.alloc(components.ParticleRenderer.Particle, 100),
+        .offset = .{ 23.0, 46.0, 0.0, 0.0 },
+    });
+
+    _ = ecs.set(state.world, frame, components.ParticleAnimator, .{
+        .animation = &animations.Smoke_Layer,
+        .rate = 4.0,
+        .velocity_min = .{ -2.0, 25.0 },
+        .velocity_max = .{ 2.0, 50.0 },
+        .start_life = 1.0,
+        .start_color = .{ 0.6, 0.6, 0.6, 1.0 },
+        .end_color = .{ 1.0, 1.0, 1.0, 0.5 },
+    });
 }
 
 pub fn updateMainThread(_: *App) !bool {

@@ -162,5 +162,5 @@ pub fn create() void {
         .vert_mode = .top_sway,
         .color = .{ 1.0, 1.0, 1.0, 1.0 },
     });
-    _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 0.9 });
+    _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 1.0 });
 }
