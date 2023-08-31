@@ -41,88 +41,71 @@ pub fn create() void {
 
     const distance_color = math.Color.initBytes(3, 0, 0, 255).toSlice();
 
-    // const distance_0 = ecs.new_id(game.state.world);
-    // _ = ecs.set(game.state.world, distance_0, game.components.Position, .{ .x = 45.0, .y = game.settings.ground_height, .z = 200.0 });
-    // _ = ecs.set(game.state.world, distance_0, game.components.SpriteRenderer, .{
-    //     .index = game.assets.scoopems_atlas.distance_0_0_Layer_0,
-    //     .frag_mode = .palette,
-    //     .flip_x = false,
-    //     .color = distance_color,
-    // });
+    for (0..7) |i| {
+        const tree_x: f32 = switch (i) {
+            0 => -360.0,
+            1 => -240.0,
+            2 => -180.0,
+            3 => 100.0,
+            4 => 160.0,
+            5 => 290.0,
+            6 => 340.0,
+            else => 0.0,
+        };
 
-    const tree_x: f32 = 120.0;
+        const tree_color = game.math.Color.initBytes(switch (i) {
+            0, 2, 4, 6 => 6,
+            1, 3, 5 => 7,
+            else => 6,
+        }, 0, 0, 1).toSlice();
 
-    const distance_tree_trunk = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_trunk, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height - 8.0, .z = 199.0 });
-    _ = ecs.set(game.state.world, distance_tree_trunk, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
-        .vert_mode = .top_sway,
-        .flip_x = false,
-    });
-    _ = ecs.set(game.state.world, distance_tree_trunk, game.components.Rotation, .{ .value = -5.5 });
+        const tree_trunk_0 = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, tree_trunk_0, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 210.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_trunk_0, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Oak_0_Trunk,
+            .flip_x = false,
+        });
 
-    const distance_tree_needles = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height - 8.0, .z = 14.0 });
-    _ = ecs.set(game.state.world, distance_tree_needles, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Needles,
-        .flip_x = false,
-        .vert_mode = .top_sway,
-    });
-    _ = ecs.set(game.state.world, distance_tree_needles, game.components.Rotation, .{ .value = -5.5 });
+        const tree_leaves_0_0 = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, tree_leaves_0_0, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 196.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_0, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Oak_0_Leaves01,
+            .vert_mode = .top_sway,
+            .color = tree_color,
+            .frag_mode = .palette,
+            .flip_x = false,
+        });
 
-    const distance_tree_trunk_1 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_trunk_1, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height, .z = 199.0 });
-    _ = ecs.set(game.state.world, distance_tree_trunk_1, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
-        .vert_mode = .top_sway,
-        .flip_x = false,
-    });
-    _ = ecs.set(game.state.world, distance_tree_trunk_1, game.components.Rotation, .{ .value = 2.5 });
+        const tree_leaves_0_1 = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, tree_leaves_0_1, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 197.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_1, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Oak_0_Leaves02,
+            .vert_mode = .top_sway,
+            .color = tree_color,
+            .frag_mode = .palette,
+            .flip_x = false,
+        });
 
-    const distance_tree_needles_1 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles_1, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height, .z = 14.0 });
-    _ = ecs.set(game.state.world, distance_tree_needles_1, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Needles,
-        .flip_x = false,
-        .vert_mode = .top_sway,
-    });
-    _ = ecs.set(game.state.world, distance_tree_needles_1, game.components.Rotation, .{ .value = 2.5 });
+        const tree_leaves_0_2 = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, tree_leaves_0_2, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 198.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_2, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Oak_0_Leaves03,
+            .vert_mode = .top_sway,
+            .color = tree_color,
+            .frag_mode = .palette,
+            .flip_x = false,
+        });
 
-    const distance_tree_trunk_2 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.Position, .{ .x = -tree_x + 20.0, .y = game.settings.ground_height - 10, .z = 15.0 });
-    _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
-        .flip_x = false,
-        .vert_mode = .top_sway,
-    });
-    _ = ecs.set(game.state.world, distance_tree_trunk_2, game.components.Rotation, .{ .value = -5.0 });
-
-    const distance_tree_needles_2 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.Position, .{ .x = -tree_x + 20.0, .y = game.settings.ground_height - 10, .z = 14.0 });
-    _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Needles,
-        .flip_x = false,
-        .vert_mode = .top_sway,
-    });
-    _ = ecs.set(game.state.world, distance_tree_needles_2, game.components.Rotation, .{ .value = -5.0 });
-
-    const distance_tree_trunk_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 10, .z = 15.0 });
-    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Trunk,
-        .vert_mode = .top_sway,
-        .flip_x = true,
-    });
-    _ = ecs.set(game.state.world, distance_tree_trunk_3, game.components.Rotation, .{ .value = 2.5 });
-
-    const distance_tree_needles_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Position, .{ .x = -tree_x * 2.0, .y = game.settings.ground_height - 10, .z = 14.0 });
-    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.SpriteRenderer, .{
-        .index = game.assets.scoopems_atlas.Pine_0_Needles,
-        .vert_mode = .top_sway,
-        .flip_x = true,
-    });
-    _ = ecs.set(game.state.world, distance_tree_needles_3, game.components.Rotation, .{ .value = 2.5 });
+        const tree_leaves_0_3 = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, tree_leaves_0_3, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 199.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_3, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Oak_0_Leaves04,
+            .vert_mode = .top_sway,
+            .color = tree_color,
+            .frag_mode = .palette,
+            .flip_x = false,
+        });
+    }
 
     const distance_1 = ecs.new_id(game.state.world);
     _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
