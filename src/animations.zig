@@ -172,6 +172,23 @@ pub var Excavator_scoop_Frame = [_]usize {
     assets.scoopems_atlas.Excavator_scoop_5_Frame,
     assets.scoopems_atlas.Excavator_scoop_6_Frame,
     assets.scoopems_atlas.Excavator_scoop_7_Frame,
+    assets.scoopems_atlas.Excavator_scoop_8_Frame,
+    assets.scoopems_atlas.Excavator_scoop_9_Frame,
+    assets.scoopems_atlas.Excavator_scoop_10_Frame,
+    assets.scoopems_atlas.Excavator_scoop_11_Frame,
+    assets.scoopems_atlas.Excavator_scoop_12_Frame,
+    assets.scoopems_atlas.Excavator_scoop_13_Frame,
+    assets.scoopems_atlas.Excavator_scoop_14_Frame,
+};
+pub var Excavator_dump_Frame = [_]usize {
+    assets.scoopems_atlas.Excavator_dump_0_Frame,
+    assets.scoopems_atlas.Excavator_dump_1_Frame,
+    assets.scoopems_atlas.Excavator_dump_2_Frame,
+    assets.scoopems_atlas.Excavator_dump_3_Frame,
+    assets.scoopems_atlas.Excavator_dump_4_Frame,
+    assets.scoopems_atlas.Excavator_dump_5_Frame,
+    assets.scoopems_atlas.Excavator_dump_6_Frame,
+    assets.scoopems_atlas.Excavator_dump_7_Frame,
 };
 pub var Excavator_rotate_empty_Tracks = [_]usize {
     assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
@@ -192,6 +209,23 @@ pub var Excavator_scoop_Tracks = [_]usize {
     assets.scoopems_atlas.Excavator_scoop_5_Tracks,
     assets.scoopems_atlas.Excavator_scoop_6_Tracks,
     assets.scoopems_atlas.Excavator_scoop_7_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_8_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_9_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_10_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_11_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_12_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_13_Tracks,
+    assets.scoopems_atlas.Excavator_scoop_14_Tracks,
+};
+pub var Excavator_dump_Tracks = [_]usize {
+    assets.scoopems_atlas.Excavator_dump_0_Tracks,
+    assets.scoopems_atlas.Excavator_dump_1_Tracks,
+    assets.scoopems_atlas.Excavator_dump_2_Tracks,
+    assets.scoopems_atlas.Excavator_dump_3_Tracks,
+    assets.scoopems_atlas.Excavator_dump_4_Tracks,
+    assets.scoopems_atlas.Excavator_dump_5_Tracks,
+    assets.scoopems_atlas.Excavator_dump_6_Tracks,
+    assets.scoopems_atlas.Excavator_dump_7_Tracks,
 };
 pub var Campfire_Layer_0 = [_]usize {
     assets.scoopems_atlas.Campfire_0_Layer_0,

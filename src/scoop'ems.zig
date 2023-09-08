@@ -262,6 +262,8 @@ pub fn init(app: *App) !void {
     // - Input
     var input_direction_system = @import("ecs/systems/input_direction.zig").system();
     ecs.SYSTEM(state.world, "InputDirectionSystem", ecs.OnUpdate, &input_direction_system);
+    var input_scoop_system = @import("ecs/systems/input_scoop.zig").system();
+    ecs.SYSTEM(state.world, "InputScoopSystem", ecs.OnUpdate, &input_scoop_system);
 
     var cooldown_system = @import("ecs/systems/cooldown.zig").system();
     ecs.SYSTEM(state.world, "CooldownSystem", ecs.OnUpdate, &cooldown_system);
@@ -271,8 +273,10 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "ParallaxSystem", ecs.OnUpdate, &parallax_system);
 
     // - Animation
-    var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
-    ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
+    // var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
+    // ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
+    var animation_scoop_system = @import("ecs/systems/animation_scoop.zig").system();
+    ecs.SYSTEM(state.world, "AnimationScoopSystem", ecs.OnUpdate, &animation_scoop_system);
     var animation_direction_system = @import("ecs/systems/animation_direction.zig").system();
     ecs.SYSTEM(state.world, "AnimationDirectionSystem", ecs.OnUpdate, &animation_direction_system);
     var animation_particle_system = @import("ecs/systems/animation_particle.zig").system();
@@ -295,11 +299,17 @@ pub fn init(app: *App) !void {
     });
 
     const frame = ecs.new_id(state.world);
+    _ = ecs.add(state.world, frame, components.Player);
     _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
     _ = ecs.set(state.world, frame, components.SpriteRenderer, .{
         .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Frame,
     });
+    _ = ecs.set(state.world, frame, components.SpriteAnimator, .{
+        .animation = &animations.Excavator_scoop_Frame,
+        .fps = 12,
+    });
     _ = ecs.set(state.world, frame, components.Direction, .w);
+    _ = ecs.set(state.world, frame, components.ExcavatorState, .empty);
     _ = ecs.set_pair(state.world, frame, ecs.id(components.Target), ecs.id(components.Direction), components.Direction, .w);
     _ = ecs.set(state.world, frame, components.ParticleRenderer, .{
         .particles = try allocator.alloc(components.ParticleRenderer.Particle, 100),

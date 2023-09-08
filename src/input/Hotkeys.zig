@@ -19,7 +19,7 @@ pub const KeyState = enum(u32) {
 };
 
 pub const Action = enum(u32) {
-    dig,
+    scoop,
     turn_left,
     turn_right,
 };
@@ -94,9 +94,9 @@ pub fn initDefault(allocator: std.mem.Allocator) !Self {
 
     {
         try hotkeys.append(.{
-            .shortcut = "space",
-            .key = Key.left,
-            .action = .dig,
+            .shortcut = "down arrow",
+            .key = Key.down,
+            .action = .scoop,
         });
 
         try hotkeys.append(.{

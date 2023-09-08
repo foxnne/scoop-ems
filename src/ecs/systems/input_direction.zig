@@ -23,14 +23,14 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                     if (game.state.hotkeys.hotkey(.turn_left)) |hk| {
                         if (hk.pressed()) {
                             target_directions[i] = .w;
-                            _ = ecs.set_pair(it.world, entity, ecs.id(components.Turn), ecs.id(components.Cooldown), components.Cooldown, .{});
+                            _ = ecs.set_pair(it.world, entity, ecs.id(components.Turn), ecs.id(components.Cooldown), components.Cooldown, .{ .end = 1.0 });
                         }
                     }
 
                     if (game.state.hotkeys.hotkey(.turn_right)) |hk| {
                         if (hk.pressed()) {
                             target_directions[i] = .e;
-                            _ = ecs.set_pair(it.world, entity, ecs.id(components.Turn), ecs.id(components.Cooldown), components.Cooldown, .{});
+                            _ = ecs.set_pair(it.world, entity, ecs.id(components.Turn), ecs.id(components.Cooldown), components.Cooldown, .{ .end = 1.0 });
                         }
                     }
                 }
