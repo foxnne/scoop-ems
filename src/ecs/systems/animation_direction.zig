@@ -12,6 +12,7 @@ pub fn system() ecs.system_desc_t {
     desc.query.filter.terms[3] = .{ .id = ecs.pair(ecs.id(components.Turn), ecs.id(components.Cooldown)) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.ParticleRenderer) };
     desc.query.filter.terms[5] = .{ .id = ecs.id(components.ExcavatorState) };
+    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Not };
     desc.run = run;
     return desc;
 }
@@ -29,6 +30,8 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                     const t = cooldowns[i].current / cooldowns[i].end;
 
                                     const step = cooldowns[i].end / 4.0;
+
+                                    if (cooldowns[i].end - cooldowns[i].current <= step + 0.1) continue;
 
                                     const target_x = targets[i].x();
 

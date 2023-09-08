@@ -32,7 +32,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             } else {
                                 animators[i].state = .pause;
                                 animators[i].frame = animators[i].animation.len - 1;
-                                ecs.remove_pair(it.world, it.entities()[i], ecs.id(components.Scoop), ecs.id(components.Cooldown));
                             }
                         }
                         renderers[i].index = animators[i].animation[animators[i].frame];
