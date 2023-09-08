@@ -11,6 +11,7 @@ pub fn system() ecs.system_desc_t {
     desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Target), ecs.id(components.Direction)) };
     desc.query.filter.terms[3] = .{ .id = ecs.pair(ecs.id(components.Turn), ecs.id(components.Cooldown)) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.ParticleRenderer) };
+    desc.query.filter.terms[5] = .{ .id = ecs.id(components.ExcavatorState) };
     desc.run = run;
     return desc;
 }
@@ -24,44 +25,46 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                     if (ecs.field(it, components.Direction, 3)) |targets| {
                         if (ecs.field(it, components.Cooldown, 4)) |cooldowns| {
                             if (ecs.field(it, components.ParticleRenderer, 5)) |particles| {
-                                const t = cooldowns[i].current / cooldowns[i].end;
+                                if (ecs.field(it, components.ExcavatorState, 6)) |states| {
+                                    const t = cooldowns[i].current / cooldowns[i].end;
 
-                                const step = cooldowns[i].end / 4.0;
+                                    const step = cooldowns[i].end / 4.0;
 
-                                const target_x = targets[i].x();
+                                    const target_x = targets[i].x();
 
-                                const x = game.math.ease(directions[i].x(), target_x, t, .linear);
-                                const y: f32 = if (t <= step or t >= cooldowns[i].end - step * 2.0) 0.0 else -1.0;
+                                    const x = game.math.ease(directions[i].x(), target_x, t, .linear);
+                                    const y: f32 = if (t <= step or t >= cooldowns[i].end - step * 2.0) 0.0 else -1.0;
 
-                                directions[i] = game.math.Direction.find(8, x, y);
+                                    directions[i] = game.math.Direction.find(8, x, y);
 
-                                switch (directions[i]) {
-                                    .e => {
-                                        renderers[i].index = game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame;
-                                        renderers[i].flip_x = true;
-                                        particles[i].offset = .{ -23.0, 46.0, 0, 0 };
-                                    },
-                                    .se => {
-                                        renderers[i].index = game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame;
-                                        renderers[i].flip_x = true;
-                                        particles[i].offset = .{ -16.0, 46.0, 0, 0 };
-                                    },
-                                    .s => {
-                                        renderers[i].index = game.assets.scoopems_atlas.Excavator_rotate_empty_2_Frame;
-                                        renderers[i].flip_x = false;
-                                        particles[i].offset = .{ 8.0, 46.0, 0, 0 };
-                                    },
-                                    .sw => {
-                                        renderers[i].index = game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame;
-                                        renderers[i].flip_x = false;
-                                        particles[i].offset = .{ 16.0, 46.0, 0, 0 };
-                                    },
-                                    .w => {
-                                        renderers[i].index = game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame;
-                                        renderers[i].flip_x = false;
-                                        particles[i].offset = .{ 23.0, 46.0, 0, 0 };
-                                    },
-                                    else => {},
+                                    switch (directions[i]) {
+                                        .e => {
+                                            renderers[i].index = if (states[i] == .empty) game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame else game.assets.scoopems_atlas.Excavator_rotate_full_0_Frame;
+                                            renderers[i].flip_x = true;
+                                            particles[i].offset = .{ -23.0, 46.0, 0, 0 };
+                                        },
+                                        .se => {
+                                            renderers[i].index = if (states[i] == .empty) game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame else game.assets.scoopems_atlas.Excavator_rotate_full_1_Frame;
+                                            renderers[i].flip_x = true;
+                                            particles[i].offset = .{ -16.0, 46.0, 0, 0 };
+                                        },
+                                        .s => {
+                                            renderers[i].index = if (states[i] == .empty) game.assets.scoopems_atlas.Excavator_rotate_empty_2_Frame else game.assets.scoopems_atlas.Excavator_rotate_full_2_Frame;
+                                            renderers[i].flip_x = false;
+                                            particles[i].offset = .{ 8.0, 46.0, 0, 0 };
+                                        },
+                                        .sw => {
+                                            renderers[i].index = if (states[i] == .empty) game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame else game.assets.scoopems_atlas.Excavator_rotate_full_1_Frame;
+                                            renderers[i].flip_x = false;
+                                            particles[i].offset = .{ 16.0, 46.0, 0, 0 };
+                                        },
+                                        .w => {
+                                            renderers[i].index = if (states[i] == .empty) game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame else game.assets.scoopems_atlas.Excavator_rotate_full_0_Frame;
+                                            renderers[i].flip_x = false;
+                                            particles[i].offset = .{ 23.0, 46.0, 0, 0 };
+                                        },
+                                        else => {},
+                                    }
                                 }
                             }
                         }
