@@ -33,6 +33,8 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 animators[i].frame = 0;
                                 animators[i].animation = &game.animations.Excavator_scoop_Frame;
                                 states[i] = .full;
+
+                                _ = ecs.set(it.world, entity, components.ExcavatorAction, .scoop);
                             } else {
                                 _ = ecs.set_pair(it.world, entity, ecs.id(components.Scoop), ecs.id(components.Cooldown), components.Cooldown, .{
                                     .end = 1.0,
@@ -42,6 +44,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 animators[i].frame = 0;
                                 animators[i].animation = &game.animations.Excavator_dump_Frame;
                                 states[i] = .empty;
+                                _ = ecs.set(it.world, entity, components.ExcavatorAction, .release);
                             }
                         }
                     }

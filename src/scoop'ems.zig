@@ -67,6 +67,13 @@ pub const GameState = struct {
     time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
     world: *ecs.world_t = undefined,
+    entities: Entities = .{},
+};
+
+pub const Entities = struct {
+    player: usize = 0,
+    ground_west: usize = 0,
+    ground_east: usize = 0,
 };
 
 pub const Channel = enum(i32) {
@@ -273,10 +280,11 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "ParallaxSystem", ecs.OnUpdate, &parallax_system);
 
     // - Animation
-    // var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
-    // ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
     var animation_scoop_system = @import("ecs/systems/animation_scoop.zig").system();
     ecs.SYSTEM(state.world, "AnimationScoopSystem", ecs.OnUpdate, &animation_scoop_system);
+
+    var animation_hitpoints_system = @import("ecs/systems/animation_hitpoints.zig").system();
+    ecs.SYSTEM(state.world, "AnimationHitpointsSystem", ecs.OnUpdate, &animation_hitpoints_system);
     var animation_direction_system = @import("ecs/systems/animation_direction.zig").system();
     ecs.SYSTEM(state.world, "AnimationDirectionSystem", ecs.OnUpdate, &animation_direction_system);
     var animation_particle_system = @import("ecs/systems/animation_particle.zig").system();
@@ -298,25 +306,25 @@ pub fn init(app: *App) !void {
         .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
     });
 
-    const frame = ecs.new_id(state.world);
-    _ = ecs.add(state.world, frame, components.Player);
-    _ = ecs.set(state.world, frame, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
-    _ = ecs.set(state.world, frame, components.SpriteRenderer, .{
+    state.entities.player = ecs.new_id(state.world);
+    _ = ecs.add(state.world, state.entities.player, components.Player);
+    _ = ecs.set(state.world, state.entities.player, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 1.0 });
+    _ = ecs.set(state.world, state.entities.player, components.SpriteRenderer, .{
         .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Frame,
     });
-    _ = ecs.set(state.world, frame, components.SpriteAnimator, .{
+    _ = ecs.set(state.world, state.entities.player, components.SpriteAnimator, .{
         .animation = &animations.Excavator_scoop_Frame,
         .fps = 12,
     });
-    _ = ecs.set(state.world, frame, components.Direction, .w);
-    _ = ecs.set(state.world, frame, components.ExcavatorState, .empty);
-    _ = ecs.set_pair(state.world, frame, ecs.id(components.Target), ecs.id(components.Direction), components.Direction, .w);
-    _ = ecs.set(state.world, frame, components.ParticleRenderer, .{
+    _ = ecs.set(state.world, state.entities.player, components.Direction, .w);
+    _ = ecs.set(state.world, state.entities.player, components.ExcavatorState, .empty);
+    _ = ecs.set_pair(state.world, state.entities.player, ecs.id(components.Target), ecs.id(components.Direction), components.Direction, .w);
+    _ = ecs.set(state.world, state.entities.player, components.ParticleRenderer, .{
         .particles = try allocator.alloc(components.ParticleRenderer.Particle, 100),
         .offset = .{ 23.0, 46.0, 0.0, 0.0 },
     });
 
-    _ = ecs.set(state.world, frame, components.ParticleAnimator, .{
+    _ = ecs.set(state.world, state.entities.player, components.ParticleAnimator, .{
         .animation = &animations.Smoke_Layer,
         .rate = 4.0,
         .velocity_min = .{ -2.0, 25.0 },

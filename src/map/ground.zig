@@ -9,9 +9,17 @@ pub fn create() void {
         const offset: f32 = (i - @divExact(count, 2)) * 32.0;
         var sprite_index: usize = if (@mod(index, 2) == 0) game.assets.scoopems_atlas.Ground_full_0_Layer_0 else game.assets.scoopems_atlas.Ground_full_1_Layer_0;
 
-        if (offset == 64.0 or offset == -64.0) sprite_index = game.assets.scoopems_atlas.Ground_dig_0_Layer_0;
-
         const ground = ecs.new_id(game.state.world);
+
+        if (offset == 64.0 or offset == -64.0) {
+            if (offset > 0) game.state.entities.ground_east = ground else game.state.entities.ground_west = ground;
+
+            sprite_index = game.assets.scoopems_atlas.Ground_dig_4_Layer_0;
+            const direction = math.Direction.find(4, offset, 0.0);
+            _ = ecs.set(game.state.world, ground, game.components.Direction, direction);
+            _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 4 });
+        }
+
         _ = ecs.set(game.state.world, ground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height });
         _ = ecs.set(game.state.world, ground, game.components.SpriteRenderer, .{
             .index = sprite_index,
@@ -22,7 +30,7 @@ pub fn create() void {
             const grass_count = 6;
             for (0..grass_count) |grass_ind| {
                 const grass_i: f32 = @floatFromInt(grass_ind);
-                const grass_offset = (grass_i - @divExact(grass_count, 2)) * 8.0;
+                const grass_offset = (grass_i - @divExact(grass_count, 2)) * 4.0;
 
                 const final_offset = offset + grass_offset;
 
@@ -116,7 +124,7 @@ pub fn create() void {
     }
 
     const distance_1 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -25.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
+    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -25.0, .y = game.settings.ground_height - 12.0, .z = 300.0 });
     _ = ecs.set(game.state.world, distance_1, game.components.SpriteRenderer, .{
         .frag_mode = .palette,
         .index = game.assets.scoopems_atlas.distance_1_0_Layer_0,

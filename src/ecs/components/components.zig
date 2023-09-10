@@ -14,9 +14,16 @@ pub const Rotation = struct { value: f32 = 0 };
 pub const Cooldown = struct { current: f32 = 0.0, end: f32 = 1.0 };
 pub const Parallax = struct { value: f32 = 0.0 }; // 1.0 means moves with camera
 
+pub const Hitpoints = struct { value: usize = 0 };
+
 pub const ExcavatorState = enum {
     empty,
     full,
+};
+
+pub const ExcavatorAction = enum {
+    scoop,
+    release,
 };
 
 pub const Position = struct {
