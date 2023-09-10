@@ -326,7 +326,7 @@ pub fn init(app: *App) !void {
 
     _ = ecs.set(state.world, state.entities.player, components.ParticleAnimator, .{
         .animation = &animations.Smoke_Layer,
-        .rate = 4.0,
+        .rate = 3.0,
         .velocity_min = .{ -2.0, 25.0 },
         .velocity_max = .{ 2.0, 50.0 },
         .start_life = 1.0,

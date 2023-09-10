@@ -7,7 +7,6 @@ const components = game.components;
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.Player) };
-    //desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Turn), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Not };
     desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Not };
     desc.query.filter.terms[2] = .{ .id = ecs.id(components.SpriteAnimator) };
     desc.query.filter.terms[3] = .{ .id = ecs.id(components.ExcavatorState) };

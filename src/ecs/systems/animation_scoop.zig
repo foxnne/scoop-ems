@@ -8,9 +8,10 @@ pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.SpriteAnimator) };
     desc.query.filter.terms[1] = .{ .id = ecs.id(components.SpriteRenderer) };
-    desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)) };
+    desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Optional };
     desc.query.filter.terms[3] = .{ .id = ecs.id(components.ExcavatorAction) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.Direction) };
+    desc.query.filter.terms[5] = .{ .id = ecs.id(components.ParticleAnimator) };
     desc.run = run;
     return desc;
 }
@@ -23,43 +24,52 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                 if (ecs.field(it, components.SpriteRenderer, 2)) |renderers| {
                     if (ecs.field(it, components.ExcavatorAction, 4)) |actions| {
                         if (ecs.field(it, components.Direction, 5)) |directions| {
-                            if (animators[i].state == .play) {
-                                animators[i].elapsed += it.delta_time;
+                            if (ecs.field(it, components.ParticleAnimator, 6)) |particles| {
+                                if (ecs.field(it, components.Cooldown, 3)) |cooldowns| {
+                                    _ = cooldowns;
 
-                                const interval = 1.0 / @as(f32, @floatFromInt(animators[i].fps));
+                                    if (animators[i].state == .play) {
+                                        particles[i].rate = 12.0;
+                                        animators[i].elapsed += it.delta_time;
 
-                                if (animators[i].elapsed > interval) {
-                                    animators[i].elapsed = 0.0;
+                                        const interval = 1.0 / @as(f32, @floatFromInt(animators[i].fps));
 
-                                    if (animators[i].frame < animators[i].animation.len - 1) {
-                                        animators[i].frame += 1;
-                                        if (animators[i].frame == @divTrunc(animators[i].animation.len, 2)) {
-                                            const target = switch (directions[i]) {
-                                                .e, .se, .s => game.state.entities.ground_east,
-                                                else => game.state.entities.ground_west,
-                                            };
+                                        if (animators[i].elapsed > interval) {
+                                            animators[i].elapsed = 0.0;
 
-                                            switch (actions[i]) {
-                                                .scoop => {
-                                                    if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
-                                                        if (hitpoints.value > 0)
-                                                            hitpoints.value -= 1;
+                                            if (animators[i].frame < animators[i].animation.len - 1) {
+                                                animators[i].frame += 1;
+                                                if (animators[i].frame == @divTrunc(animators[i].animation.len, 2)) {
+                                                    const target = switch (directions[i]) {
+                                                        .e, .se, .s => game.state.entities.ground_east,
+                                                        else => game.state.entities.ground_west,
+                                                    };
+
+                                                    switch (actions[i]) {
+                                                        .scoop => {
+                                                            if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
+                                                                if (hitpoints.value > 0)
+                                                                    hitpoints.value -= 1;
+                                                            }
+                                                        },
+                                                        .release => {
+                                                            if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
+                                                                if (hitpoints.value < 4)
+                                                                    hitpoints.value += 1;
+                                                            }
+                                                        },
                                                     }
-                                                },
-                                                .release => {
-                                                    if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
-                                                        if (hitpoints.value < 4)
-                                                            hitpoints.value += 1;
-                                                    }
-                                                },
+                                                }
+                                            } else {
+                                                animators[i].state = .pause;
+                                                animators[i].frame = animators[i].animation.len - 1;
                                             }
                                         }
-                                    } else {
-                                        animators[i].state = .pause;
-                                        animators[i].frame = animators[i].animation.len - 1;
+                                        renderers[i].index = animators[i].animation[animators[i].frame];
                                     }
+                                } else {
+                                    particles[i].rate = 3.0;
                                 }
-                                renderers[i].index = animators[i].animation[animators[i].frame];
                             }
                         }
                     }
