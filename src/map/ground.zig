@@ -28,8 +28,10 @@ pub fn create() void {
 
                 const grass_sprite_index = game.animations.Grass_Layer_0[grass_ind];
 
+                const back: f32 = if (@mod(grass_i, 2) == 0) 20.0 else -20.0;
+
                 const grass = ecs.new_id(game.state.world);
-                _ = ecs.set(game.state.world, grass, game.components.Position, .{ .x = final_offset, .y = game.settings.ground_height, .z = 20.0 });
+                _ = ecs.set(game.state.world, grass, game.components.Position, .{ .x = final_offset, .y = game.settings.ground_height, .z = back });
                 _ = ecs.set(game.state.world, grass, game.components.SpriteRenderer, .{
                     .index = grass_sprite_index,
                     .flip_x = if (@mod(grass_i, 2) == 0) true else false,
@@ -41,21 +43,23 @@ pub fn create() void {
 
     const distance_color = math.Color.initBytes(3, 0, 0, 255).toSlice();
 
-    for (0..7) |i| {
+    for (0..9) |i| {
         const tree_x: f32 = switch (i) {
-            0 => -360.0,
-            1 => -240.0,
-            2 => -180.0,
-            3 => 100.0,
-            4 => 160.0,
-            5 => 290.0,
-            6 => 340.0,
+            0 => -440.0,
+            1 => -360.0,
+            2 => -240.0,
+            3 => -180.0,
+            4 => 100.0,
+            5 => 160.0,
+            6 => 290.0,
+            7 => 340.0,
+            8 => 440.0,
             else => 0.0,
         };
 
         const tree_color = game.math.Color.initBytes(switch (i) {
             0, 2, 4, 6 => 6,
-            1, 3, 5 => 7,
+            1, 3, 5, 7 => 7,
             else => 6,
         }, 0, 0, 1).toSlice();
 
@@ -112,7 +116,7 @@ pub fn create() void {
     }
 
     const distance_1 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
+    _ = ecs.set(game.state.world, distance_1, game.components.Position, .{ .x = -25.0, .y = game.settings.ground_height - 10.0, .z = 300.0 });
     _ = ecs.set(game.state.world, distance_1, game.components.SpriteRenderer, .{
         .frag_mode = .palette,
         .index = game.assets.scoopems_atlas.distance_1_0_Layer_0,
@@ -122,7 +126,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_1, game.components.Parallax, .{ .value = 0.25 });
 
     const distance_2 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
+    _ = ecs.set(game.state.world, distance_2, game.components.Position, .{ .x = -25.0, .y = game.settings.ground_height - 10.0, .z = 400.0 });
     _ = ecs.set(game.state.world, distance_2, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.distance_2_0_Layer_0,
         .frag_mode = .palette,
@@ -132,7 +136,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, distance_2, game.components.Parallax, .{ .value = 0.50 });
 
     const distance_3 = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -45.0, .y = game.settings.ground_height + 5.0, .z = 500.0 });
+    _ = ecs.set(game.state.world, distance_3, game.components.Position, .{ .x = -25.0, .y = game.settings.ground_height + 5.0, .z = 500.0 });
     _ = ecs.set(game.state.world, distance_3, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.distance_3_0_Layer_0,
         .frag_mode = .palette,
