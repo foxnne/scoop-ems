@@ -54,7 +54,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                                         },
                                                         .release => {
                                                             if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
-                                                                if (hitpoints.value < 8)
+                                                                if (hitpoints.value < 9)
                                                                     hitpoints.value += 1;
                                                             }
                                                         },
