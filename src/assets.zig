@@ -162,12 +162,17 @@ pub const scoopems_atlas = struct {
   pub const Ground_dig_2_Layer_0 = 154;
   pub const Ground_dig_3_Layer_0 = 155;
   pub const Ground_dig_4_Layer_0 = 156;
-  pub const Grass_0_Layer_0 = 157;
-  pub const Grass_1_Layer_0 = 158;
-  pub const Grass_2_Layer_0 = 159;
-  pub const Grass_3_Layer_0 = 160;
-  pub const Grass_4_Layer_0 = 161;
-  pub const Grass_5_Layer_0 = 162;
+  pub const Ground_dig_5_Layer_0 = 157;
+  pub const Ground_dig_6_Layer_0 = 158;
+  pub const Ground_dig_7_Layer_0 = 159;
+  pub const Ground_dig_8_Layer_0 = 160;
+  pub const Ground_dig_9_Layer_0 = 161;
+  pub const Grass_0_Layer_0 = 162;
+  pub const Grass_1_Layer_0 = 163;
+  pub const Grass_2_Layer_0 = 164;
+  pub const Grass_3_Layer_0 = 165;
+  pub const Grass_4_Layer_0 = 166;
+  pub const Grass_5_Layer_0 = 167;
 };
 
 pub const scoopems_png = struct {

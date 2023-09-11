@@ -17,7 +17,7 @@ pub fn create() void {
             sprite_index = game.assets.scoopems_atlas.Ground_dig_4_Layer_0;
             const direction = math.Direction.find(4, offset, 0.0);
             _ = ecs.set(game.state.world, ground, game.components.Direction, direction);
-            _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 4 });
+            _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 5 });
         }
 
         _ = ecs.set(game.state.world, ground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height });
@@ -66,8 +66,8 @@ pub fn create() void {
         };
 
         const tree_color = game.math.Color.initBytes(switch (i) {
-            0, 2, 4, 6 => 6,
-            1, 3, 5, 7 => 7,
+            0, 2, 4, 6, 7 => 6,
+            1, 3, 5 => 7,
             else => 6,
         }, 0, 0, 1).toSlice();
 
