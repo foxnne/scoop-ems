@@ -32,6 +32,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             }
 
                             if (birds[i].state == .fly_tree or birds[i].state == .fly_home) {
+                                birds[i].animation = &game.animations.Redbird_flap_Layer_0;
                                 if (birds[i].progress < 1.0) {
                                     birds[i].progress = std.math.clamp(birds[i].progress + it.delta_time * birds[i].speed, 0.0, 1.0);
                                 } else {
@@ -43,13 +44,12 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                     };
                                 }
 
-                                const p1 = switch (birds[i].state) {
+                                var p1 = switch (birds[i].state) {
                                     .fly_home, .idle_tree => birds[i].tree,
                                     .fly_tree, .idle_home => birds[i].home,
-
                                     else => birds[i].tree,
                                 };
-                                const p2 = switch (birds[i].state) {
+                                var p2 = switch (birds[i].state) {
                                     .fly_home, .idle_tree => birds[i].home,
                                     .fly_tree, .idle_home => birds[i].tree,
 
@@ -78,11 +78,32 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             }
 
                             if (birds[i].state == .idle_tree) {
-                                //birds[i].elapsed += it.delta_time
-
                                 if (ecs.has_pair(it.world, game.state.entities.player, ecs.id(components.Scoop), ecs.id(components.Cooldown))) {
                                     birds[i].state = .fly_home;
                                     birds[i].progress = 0.0;
+                                }
+
+                                if (birds[i].animation.len > 1) {
+                                    birds[i].elapsed += it.delta_time;
+                                    if (birds[i].elapsed > (1.0 / @as(f32, @floatFromInt(birds[i].fps)))) {
+                                        birds[i].elapsed = 0.0;
+
+                                        if (birds[i].frame < birds[i].animation.len - 1) {
+                                            birds[i].frame += 1;
+                                        } else {
+                                            birds[i].animation = &game.animations.Redbird_idle_Layer_0;
+                                            birds[i].frame = 0;
+                                        }
+                                    }
+                                    renderers[i].index = birds[i].animation[birds[i].frame];
+                                } else {
+                                    birds[i].wait += it.delta_time;
+
+                                    if (birds[i].wait > birds[i].wait_action) {
+                                        birds[i].wait = 0.0;
+                                        birds[i].animation = &game.animations.Redbird_peck_Layer_0;
+                                        renderers[i].flip_x = !renderers[i].flip_x;
+                                    }
                                 }
                             }
                         }
