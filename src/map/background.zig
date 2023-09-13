@@ -53,17 +53,30 @@ pub fn create() void {
 
     for (0..9) |i| {
         const tree_x: f32 = switch (i) {
-            0 => -440.0,
-            1 => -360.0,
-            2 => -240.0,
-            3 => -180.0,
-            4 => 100.0,
-            5 => 160.0,
-            6 => 290.0,
-            7 => 340.0,
-            8 => 440.0,
+            0 => -430.0,
+            1 => -350.0,
+            2 => -220.0,
+            3 => -160.0,
+            4 => 110.0,
+            5 => 170.0,
+            6 => 300.0,
+            7 => 350.0,
+            8 => 450.0,
             else => 0.0,
         };
+
+        const bird = ecs.new_id(game.state.world);
+        _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = 0 });
+        _ = ecs.set(game.state.world, bird, game.components.Bird, .{
+            .home = .{ tree_x * 3.0, 400.0, 0.0 },
+            .tree = .{ tree_x + (tree_x / 12.0), 50.0 + tree_x / 12.0, 0.0 },
+            .ground = .{ tree_x - 30.0, game.settings.ground_height + 4.0, 0.0 },
+            .wait_home = @fabs(tree_x) / 20.0,
+        });
+        _ = ecs.set(game.state.world, bird, game.components.Direction, .e);
+        _ = ecs.set(game.state.world, bird, game.components.SpriteRenderer, .{
+            .index = game.assets.scoopems_atlas.Redbird_idle_0_Layer_0,
+        });
 
         const tree_color = game.math.Color.initBytes(switch (i) {
             0, 2, 4, 6, 7 => 6,
@@ -72,14 +85,14 @@ pub fn create() void {
         }, 0, 0, 1).toSlice();
 
         const tree_trunk_0 = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, tree_trunk_0, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 210.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_trunk_0, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height + 4.0, .z = 210.0 + @as(f32, @floatFromInt(i)) * 5.0 });
         _ = ecs.set(game.state.world, tree_trunk_0, game.components.SpriteRenderer, .{
             .index = game.assets.scoopems_atlas.Oak_0_Trunk,
             .flip_x = false,
         });
 
         const tree_leaves_0_0 = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, tree_leaves_0_0, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 196.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_0, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height + 4.0, .z = 196.0 + @as(f32, @floatFromInt(i)) * 5.0 });
         _ = ecs.set(game.state.world, tree_leaves_0_0, game.components.SpriteRenderer, .{
             .index = game.assets.scoopems_atlas.Oak_0_Leaves01,
             .vert_mode = .top_sway,
@@ -90,7 +103,7 @@ pub fn create() void {
         });
 
         const tree_leaves_0_1 = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, tree_leaves_0_1, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 197.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_1, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height + 4.0, .z = 197.0 + @as(f32, @floatFromInt(i)) * 5.0 });
         _ = ecs.set(game.state.world, tree_leaves_0_1, game.components.SpriteRenderer, .{
             .index = game.assets.scoopems_atlas.Oak_0_Leaves02,
             .vert_mode = .top_sway,
@@ -101,7 +114,7 @@ pub fn create() void {
         });
 
         const tree_leaves_0_2 = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, tree_leaves_0_2, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 198.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_2, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height + 4.0, .z = 198.0 + @as(f32, @floatFromInt(i)) * 5.0 });
         _ = ecs.set(game.state.world, tree_leaves_0_2, game.components.SpriteRenderer, .{
             .index = game.assets.scoopems_atlas.Oak_0_Leaves03,
             .vert_mode = .top_sway,
@@ -112,7 +125,7 @@ pub fn create() void {
         });
 
         const tree_leaves_0_3 = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, tree_leaves_0_3, game.components.Position, .{ .x = tree_x + 10.0, .y = game.settings.ground_height + 4.0, .z = 199.0 + @as(f32, @floatFromInt(i)) * 5.0 });
+        _ = ecs.set(game.state.world, tree_leaves_0_3, game.components.Position, .{ .x = tree_x, .y = game.settings.ground_height + 4.0, .z = 199.0 + @as(f32, @floatFromInt(i)) * 5.0 });
         _ = ecs.set(game.state.world, tree_leaves_0_3, game.components.SpriteRenderer, .{
             .index = game.assets.scoopems_atlas.Oak_0_Leaves04,
             .vert_mode = .top_sway,

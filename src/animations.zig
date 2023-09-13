@@ -153,6 +153,19 @@ pub var Pine_Ground = [_]usize {
 pub var clouds_Layer_0 = [_]usize {
     assets.scoopems_atlas.clouds_0_Layer_0,
 };
+pub var Redbird_flap_Layer_0 = [_]usize {
+    assets.scoopems_atlas.Redbird_flap_0_Layer_0,
+    assets.scoopems_atlas.Redbird_flap_1_Layer_0,
+    assets.scoopems_atlas.Redbird_flap_2_Layer_0,
+};
+pub var Redbird_idle_Layer_0 = [_]usize {
+    assets.scoopems_atlas.Redbird_idle_0_Layer_0,
+};
+pub var Redbird_peck_Layer_0 = [_]usize {
+    assets.scoopems_atlas.Redbird_peck_0_Layer_0,
+    assets.scoopems_atlas.Redbird_peck_1_Layer_0,
+    assets.scoopems_atlas.Redbird_peck_2_Layer_0,
+};
 pub var Excavator_rotate_empty_Frame = [_]usize {
     assets.scoopems_atlas.Excavator_rotate_empty_0_Frame,
     assets.scoopems_atlas.Excavator_rotate_empty_1_Frame,

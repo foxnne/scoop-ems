@@ -1,5 +1,5 @@
-const ground = @import("ground.zig");
+const background = @import("background.zig");
 
 pub fn create() void {
-    ground.create();
+    background.create();
 }
