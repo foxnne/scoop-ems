@@ -26,42 +26,54 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 birds[i].elapsed += it.delta_time;
 
                                 if (birds[i].elapsed >= birds[i].wait_home) {
-                                    birds[i].state = .fly_tree;
-                                    birds[i].elapsed = 0.0;
+                                    const x: u64 = @intFromFloat(it.delta_time * 10000000);
+                                    var r = std.rand.DefaultPrng.init(x);
+                                    const random = r.random();
+                                    const state = random.enumValue(components.Bird.State);
+                                    if (state.fromHome()) {
+                                        birds[i].elapsed = 0.0;
+                                        birds[i].state = state;
 
-                                    var color: u8 = @intFromFloat(renderers[i].color[0] * 255.0);
-                                    if (color < 19) {
-                                        color += 1;
-                                    } else {
-                                        color = 17;
+                                        var color: u8 = @intFromFloat(renderers[i].color[0] * 255.0);
+                                        if (color < 19) {
+                                            color += 1;
+                                        } else {
+                                            color = 17;
+                                        }
+
+                                        const color_full = game.math.Color.initBytes(color, 0, 0, 1);
+                                        renderers[i].color = color_full.toSlice();
                                     }
-
-                                    const color_full = game.math.Color.initBytes(color, 0, 0, 1);
-                                    renderers[i].color = color_full.toSlice();
                                 }
                             }
 
-                            if (birds[i].state == .fly_tree or birds[i].state == .fly_home) {
+                            if (birds[i].state.fly()) {
                                 birds[i].animation = &game.animations.Redbird_flap_Layer_0;
                                 if (birds[i].progress < 1.0) {
                                     birds[i].progress = std.math.clamp(birds[i].progress + it.delta_time * birds[i].speed, 0.0, 1.0);
                                 } else {
                                     birds[i].progress = 0.0;
                                     birds[i].state = switch (birds[i].state) {
-                                        .fly_tree => .idle_tree,
-                                        .fly_home => .idle_home,
+                                        .fly_tree_from_home, .fly_tree_from_ground, .fly_tree_from_sky => .idle_tree,
+                                        .fly_home_from_tree, .fly_home_from_ground, .fly_home_from_sky => .idle_home,
+                                        .fly_ground_from_tree, .fly_ground_from_sky, .fly_ground_from_home => .idle_ground,
                                         else => .idle_home,
                                     };
+                                    continue;
                                 }
 
                                 var p1 = switch (birds[i].state) {
-                                    .fly_home, .idle_tree => birds[i].tree,
-                                    .fly_tree, .idle_home => birds[i].home,
+                                    .fly_sky_from_ground, .fly_tree_from_ground, .fly_home_from_ground => birds[i].ground,
+                                    .fly_home_from_tree, .fly_sky_from_tree, .fly_ground_from_tree => birds[i].tree,
+                                    .fly_sky_from_home, .fly_ground_from_home, .fly_tree_from_home => birds[i].home,
+                                    .fly_home_from_sky, .fly_ground_from_sky, .fly_tree_from_sky => birds[i].sky,
                                     else => birds[i].tree,
                                 };
                                 var p2 = switch (birds[i].state) {
-                                    .fly_home, .idle_tree => birds[i].home,
-                                    .fly_tree, .idle_home => birds[i].tree,
+                                    .fly_sky_from_tree, .fly_sky_from_ground, .fly_sky_from_home => birds[i].sky,
+                                    .fly_home_from_tree, .fly_home_from_ground, .fly_home_from_sky => birds[i].home,
+                                    .fly_ground_from_tree, .fly_ground_from_home, .fly_ground_from_sky => birds[i].ground,
+                                    .fly_tree_from_home, .fly_tree_from_ground, .fly_tree_from_sky => birds[i].tree,
                                     else => birds[i].home,
                                 };
 
@@ -86,9 +98,15 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 renderers[i].index = birds[i].animation[birds[i].frame];
                             }
 
-                            if (birds[i].state == .idle_tree) {
+                            if (birds[i].state.idle() and birds[i].state != .idle_home) {
                                 if (ecs.has_pair(it.world, game.state.entities.player, ecs.id(components.Scoop), ecs.id(components.Cooldown))) {
-                                    birds[i].state = .fly_home;
+                                    birds[i].state = switch (birds[i].state) {
+                                        .idle_home => .idle_home,
+                                        .idle_ground => .fly_home_from_ground,
+                                        .idle_tree => .fly_home_from_tree,
+                                        .idle_sky => .fly_home_from_sky,
+                                        else => .idle_home,
+                                    };
                                     birds[i].progress = 0.0;
                                 }
 

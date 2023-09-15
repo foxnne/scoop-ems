@@ -65,12 +65,61 @@ pub const Bird = struct {
     fps: usize = 12.0,
 
     pub const State = enum {
+        fly_sky_from_tree,
+        fly_sky_from_ground,
+        fly_sky_from_home,
+        fly_home_from_tree,
+        fly_home_from_ground,
+        fly_home_from_sky,
+        fly_ground_from_tree,
+        fly_ground_from_home,
+        fly_ground_from_sky,
+        fly_tree_from_home,
+        fly_tree_from_ground,
+        fly_tree_from_sky,
         idle_home,
-        fly_home,
-        fly_ground,
-        fly_sky,
-        fly_tree,
         idle_ground,
         idle_tree,
+        idle_sky,
+
+        pub fn fly(self: State) bool {
+            return switch (self) {
+                .fly_sky_from_tree,
+                .fly_sky_from_ground,
+                .fly_sky_from_home,
+                .fly_home_from_tree,
+                .fly_home_from_ground,
+                .fly_home_from_sky,
+                .fly_ground_from_tree,
+                .fly_ground_from_home,
+                .fly_ground_from_sky,
+                .fly_tree_from_home,
+                .fly_tree_from_ground,
+                .fly_tree_from_sky,
+                => true,
+                else => false,
+            };
+        }
+
+        pub fn idle(self: State) bool {
+            return switch (self) {
+                .idle_home,
+                .idle_ground,
+                .idle_tree,
+                .idle_sky,
+                => true,
+                else => false,
+            };
+        }
+
+        pub fn fromHome(self: State) bool {
+            return switch (self) {
+                .fly_sky_from_home,
+                .fly_ground_from_home,
+                .fly_tree_from_home,
+                => true,
+                else => false,
+            };
+        }
     };
 };
