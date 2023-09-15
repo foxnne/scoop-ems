@@ -46,7 +46,7 @@ pub const ParticleRenderer = particles.ParticleRenderer;
 pub const ParticleAnimator = particles.ParticleAnimator;
 
 pub const Bird = struct {
-    speed: f32 = 0.1,
+    speed: f32 = 0.3,
     home: [3]f32 = .{ 0.0, 0.0, 0.0 },
     tree: [3]f32 = .{ 0.0, 0.0, 0.0 },
     ground: [3]f32 = .{ 0.0, 0.0, 0.0 },

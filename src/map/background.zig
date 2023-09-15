@@ -65,18 +65,46 @@ pub fn create() void {
             else => 0.0,
         };
 
-        const bird = ecs.new_id(game.state.world);
-        _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = 0 });
-        _ = ecs.set(game.state.world, bird, game.components.Bird, .{
-            .home = .{ tree_x * 3.0, 400.0, 0.0 },
-            .tree = .{ tree_x + (tree_x / 12.0), 50.0 + tree_x / 12.0, 0.0 },
-            .ground = .{ tree_x - 30.0, game.settings.ground_height + 4.0, 0.0 },
-            .wait_home = @fabs(tree_x) / 20.0,
-        });
-        _ = ecs.set(game.state.world, bird, game.components.Direction, .e);
-        _ = ecs.set(game.state.world, bird, game.components.SpriteRenderer, .{
-            .index = game.assets.scoopems_atlas.Redbird_idle_0_Layer_0,
-        });
+        const bird_spawn: bool = switch (i) {
+            0 => true,
+            1 => false,
+            2 => false,
+            3 => true,
+            4 => true,
+            5 => true,
+            6 => false,
+            7 => true,
+            8 => true,
+            else => false,
+        };
+
+        const bird_y: f32 = switch (i) {
+            0 => 42.0,
+            1 => 29.0,
+            2 => 37.0,
+            3 => 51.0,
+            4 => 31.0,
+            5 => 47.0,
+            6 => 54.0,
+            7 => 39.0,
+            8 => 32.0,
+            else => 0.0,
+        };
+
+        if (bird_spawn) {
+            const bird = ecs.new_id(game.state.world);
+            _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = 0 });
+            _ = ecs.set(game.state.world, bird, game.components.Bird, .{
+                .home = .{ tree_x * 3.0, 400.0, 0.0 },
+                .tree = .{ tree_x + (tree_x / 14.0), bird_y, 0.0 },
+                .ground = .{ tree_x - 30.0, game.settings.ground_height + 4.0, 0.0 },
+                .wait_home = @fabs(tree_x) / 20.0,
+            });
+            _ = ecs.set(game.state.world, bird, game.components.Direction, .e);
+            _ = ecs.set(game.state.world, bird, game.components.SpriteRenderer, .{
+                .index = game.assets.scoopems_atlas.Redbird_idle_0_Layer_0,
+            });
+        }
 
         const tree_color = game.math.Color.initBytes(switch (i) {
             0, 2, 4, 6, 7 => 6,
