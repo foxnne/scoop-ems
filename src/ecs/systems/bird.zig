@@ -62,7 +62,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 var p2 = switch (birds[i].state) {
                                     .fly_home, .idle_tree => birds[i].home,
                                     .fly_tree, .idle_home => birds[i].tree,
-
                                     else => birds[i].home,
                                 };
 
