@@ -28,6 +28,16 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 if (birds[i].elapsed >= birds[i].wait_home) {
                                     birds[i].state = .fly_tree;
                                     birds[i].elapsed = 0.0;
+
+                                    var color: u8 = @intFromFloat(renderers[i].color[0] * 255.0);
+                                    if (color < 19) {
+                                        color += 1;
+                                    } else {
+                                        color = 17;
+                                    }
+
+                                    const color_full = game.math.Color.initBytes(color, 0, 0, 1);
+                                    renderers[i].color = color_full.toSlice();
                                 }
                             }
 

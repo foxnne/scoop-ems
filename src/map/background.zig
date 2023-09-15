@@ -78,20 +78,33 @@ pub fn create() void {
             else => false,
         };
 
-        const bird_y: f32 = switch (i) {
-            0 => 42.0,
-            1 => 29.0,
-            2 => 37.0,
-            3 => 51.0,
-            4 => 31.0,
-            5 => 47.0,
-            6 => 54.0,
-            7 => 39.0,
-            8 => 32.0,
-            else => 0.0,
-        };
-
         if (bird_spawn) {
+            const bird_y: f32 = switch (i) {
+                0 => 42.0,
+                1 => 29.0,
+                2 => 37.0,
+                3 => 51.0,
+                4 => 31.0,
+                5 => 47.0,
+                6 => 54.0,
+                7 => 39.0,
+                8 => 32.0,
+                else => 0.0,
+            };
+
+            const bird_color: u8 = switch (i) {
+                0 => 17,
+                1 => 18,
+                2 => 19,
+                3 => 17,
+                4 => 18,
+                5 => 19,
+                6 => 17,
+                7 => 18,
+                8 => 19,
+                else => 17,
+            };
+            const color = game.math.Color.initBytes(bird_color, 0, 0, 1);
             const bird = ecs.new_id(game.state.world);
             _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = 0 });
             _ = ecs.set(game.state.world, bird, game.components.Bird, .{
@@ -103,6 +116,8 @@ pub fn create() void {
             _ = ecs.set(game.state.world, bird, game.components.Direction, .e);
             _ = ecs.set(game.state.world, bird, game.components.SpriteRenderer, .{
                 .index = game.assets.scoopems_atlas.Redbird_idle_0_Layer_0,
+                .frag_mode = .palette,
+                .color = color.toSlice(),
             });
         }
 
