@@ -3,7 +3,6 @@ const std = @import("std");
 const core = @import("core");
 const gpu = core.gpu;
 
-const zgui = @import("zgui").MachImgui(core);
 const zstbi = @import("zstbi");
 const zmath = @import("zmath");
 const ecs = @import("zflecs");
@@ -62,7 +61,6 @@ pub const GameState = struct {
     uniform_buffer_final: *gpu.Buffer = undefined,
     output_diffuse: gfx.Texture = undefined,
     output_channel: Channel = .final,
-    fonts: Fonts = .{},
     delta_time: f32 = 0.0,
     time: f32 = 0.0,
     batcher: gfx.Batcher = undefined,
@@ -78,13 +76,6 @@ pub const Entities = struct {
 
 pub const Channel = enum(i32) {
     final = 0,
-};
-
-pub const Fonts = struct {
-    fa_standard_regular: zgui.Font = undefined,
-    fa_standard_solid: zgui.Font = undefined,
-    fa_small_regular: zgui.Font = undefined,
-    fa_small_solid: zgui.Font = undefined,
 };
 
 /// Registers all public declarations within the passed type
@@ -123,8 +114,6 @@ pub fn init(app: *App) !void {
         framebuffer_size[1] / window_size[1],
     };
 
-    const scale_factor = content_scale[1];
-
     zstbi.init(allocator);
 
     state.allocator = allocator;
@@ -144,22 +133,6 @@ pub fn init(app: *App) !void {
     app.* = .{
         .timer = try core.Timer.start(),
     };
-
-    zgui.init(allocator);
-    zgui.mach_backend.init(core.device, core.descriptor.format, .{});
-
-    zgui.io.setIniFilename("imgui.ini");
-
-    _ = zgui.io.addFontFromFile(assets.root ++ "fonts/CozetteVector.ttf", 12 * scale_factor);
-
-    var config = zgui.FontConfig.init();
-    config.merge_mode = true;
-    const ranges: []const u16 = &.{ 0xf000, 0xf976, 0 };
-
-    state.fonts.fa_standard_solid = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-solid-900.ttf", 12 * scale_factor, config, ranges.ptr);
-    state.fonts.fa_standard_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 12 * scale_factor, config, ranges.ptr);
-    state.fonts.fa_small_solid = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-solid-900.ttf", 10 * scale_factor, config, ranges.ptr);
-    state.fonts.fa_small_regular = zgui.io.addFontFromFileWithConfig(assets.root ++ "fonts/fa-regular-400.ttf", 10 * scale_factor, config, ranges.ptr);
 
     const diffuse_shader_module = core.device.createShaderModuleWGSL("diffuse.wgsl", @embedFile("shaders/diffuse.wgsl"));
     const final_shader_module = core.device.createShaderModuleWGSL("final.wgsl", @embedFile("shaders/final.wgsl"));
@@ -341,7 +314,6 @@ pub fn updateMainThread(_: *App) !bool {
 }
 
 pub fn update(app: *App) !bool {
-    zgui.mach_backend.newFrame();
     state.delta_time = app.timer.lap();
     state.time += (state.delta_time);
 
@@ -386,56 +358,17 @@ pub fn update(app: *App) !bool {
             },
             else => {},
         }
-        zgui.mach_backend.passEvent(event, content_scale);
     }
 
     try input.process();
 
     _ = ecs.progress(state.world, 0);
 
-    if (core.swap_chain.getCurrentTextureView()) |back_buffer_view| {
-        defer back_buffer_view.release();
+    const batcher_commands = try state.batcher.finish();
+    defer batcher_commands.release();
 
-        const zgui_commands = commands: {
-            const encoder = core.device.createCommandEncoder(null);
-            defer encoder.release();
-
-            const background: gpu.Color = .{
-                .r = 0.0,
-                .g = 0.0,
-                .b = 0.0,
-                .a = 1.0,
-            };
-
-            // Gui pass.
-            {
-                const color_attachment = gpu.RenderPassColorAttachment{
-                    .view = back_buffer_view,
-                    .clear_value = background,
-                    .load_op = .clear,
-                    .store_op = .store,
-                };
-
-                const render_pass_info = gpu.RenderPassDescriptor.init(.{
-                    .color_attachments = &.{color_attachment},
-                });
-                const pass = encoder.beginRenderPass(&render_pass_info);
-
-                zgui.mach_backend.draw(pass);
-                pass.end();
-                pass.release();
-            }
-
-            break :commands encoder.finish(null);
-        };
-        defer zgui_commands.release();
-
-        const batcher_commands = try state.batcher.finish();
-        defer batcher_commands.release();
-
-        core.queue.submit(&.{ zgui_commands, batcher_commands });
-        core.swap_chain.present();
-    }
+    core.queue.submit(&.{batcher_commands});
+    core.swap_chain.present();
 
     for (state.hotkeys.hotkeys) |*hotkey| {
         hotkey.previous_state = hotkey.state;
@@ -456,8 +389,6 @@ pub fn deinit(_: *App) void {
     state.palette.deinit();
     state.output_diffuse.deinit();
     state.atlas.deinit(state.allocator);
-    zgui.mach_backend.deinit();
-    zgui.deinit();
     zstbi.deinit();
     state.allocator.free(state.root_path);
     state.allocator.destroy(state);

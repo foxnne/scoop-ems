@@ -3,7 +3,6 @@ const builtin = @import("builtin");
 
 const zmath = @import("src/deps/zig-gamedev/zmath/build.zig");
 const zstbi = @import("src/deps/zig-gamedev/zstbi/build.zig");
-const zgui = @import("src/deps/zig-gamedev/zgui/build.zig");
 const zflecs = @import("src/deps/zig-gamedev/zflecs/build.zig");
 
 const mach_core = @import("mach_core");
@@ -23,15 +22,6 @@ pub fn build(b: *std.Build) !void {
     const zmath_pkg = zmath.package(b, target, optimize, .{});
     const zflecs_pkg = zflecs.package(b, target, optimize, .{});
 
-    const zgui_pkg = zgui.Package(.{
-        .gpu_dawn = mach_gpu_dawn,
-    }).build(b, target, optimize, .{
-        .options = .{
-            .backend = .mach,
-        },
-        .gpu_dawn_options = .{},
-    }) catch unreachable;
-
     mach_core.mach_glfw_import_path = "mach_core.mach_glfw";
     const app = try mach_core.App.init(b, .{
         .name = "scoop'ems",
@@ -40,7 +30,6 @@ pub fn build(b: *std.Build) !void {
         .deps = &[_]std.build.ModuleDependency{
             .{ .name = "zstbi", .module = zstbi_pkg.zstbi },
             .{ .name = "zmath", .module = zmath_pkg.zmath },
-            .{ .name = "zgui", .module = zgui_pkg.zgui },
             .{ .name = "zflecs", .module = zflecs_pkg.zflecs },
         },
         .optimize = optimize,
@@ -60,7 +49,6 @@ pub fn build(b: *std.Build) !void {
     });
 
     unit_tests.addModule("zstbi", zstbi_pkg.zstbi);
-    unit_tests.addModule("zgui", zgui_pkg.zgui);
     unit_tests.addModule("zmath", zmath_pkg.zmath);
     unit_tests.addModule("zflecs", zflecs_pkg.zflecs);
 
@@ -69,13 +57,11 @@ pub fn build(b: *std.Build) !void {
     test_step.dependOn(&run_unit_tests.step);
 
     app.compile.addModule("zstbi", zstbi_pkg.zstbi);
-    app.compile.addModule("zgui", zgui_pkg.zgui);
     app.compile.addModule("zmath", zmath_pkg.zmath);
     app.compile.addModule("zflecs", zflecs_pkg.zflecs);
 
     zstbi_pkg.link(app.compile);
     zmath_pkg.link(app.compile);
-    zgui_pkg.link(app.compile);
     zflecs_pkg.link(app.compile);
 
     const assets = ProcessAssetsStep.init(b, "assets", "src/assets.zig", "src/animations.zig");
