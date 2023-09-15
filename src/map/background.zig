@@ -108,8 +108,8 @@ pub fn create() void {
             const bird = ecs.new_id(game.state.world);
             _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = 0 });
             _ = ecs.set(game.state.world, bird, game.components.Bird, .{
-                .home = .{ tree_x * 3.0, 144.0, 0.0 },
-                .sky = .{ -tree_x * 3.0, 128.0, 0.0 },
+                .home = .{ tree_x * 3.0, 244.0, 0.0 },
+                .sky = .{ -tree_x * 3.0, 228.0, 0.0 },
                 .tree = .{ tree_x + (tree_x / 14.0), bird_y, 0.0 },
                 .ground = .{ tree_x + (tree_x / 14.0), game.settings.ground_height + 2.0, 0.0 },
                 .wait_home = @fabs(tree_x) / 20.0,
