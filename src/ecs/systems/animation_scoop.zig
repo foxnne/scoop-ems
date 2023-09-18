@@ -12,6 +12,7 @@ pub fn system() ecs.system_desc_t {
     desc.query.filter.terms[3] = .{ .id = ecs.id(components.ExcavatorAction) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.Direction) };
     desc.query.filter.terms[5] = .{ .id = ecs.id(components.ParticleAnimator) };
+    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Event), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Optional };
     desc.run = run;
     return desc;
 }
@@ -50,6 +51,17 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                                             if (ecs.get_mut(it.world, target, components.Hitpoints)) |hitpoints| {
                                                                 if (hitpoints.value > 0)
                                                                     hitpoints.value -= 1;
+
+                                                                if (hitpoints.value == 0) {
+                                                                    if (ecs.field(it, components.Cooldown, 7)) |_| {} else {
+                                                                        _ = ecs.set_pair(it.world, it.entities()[i], ecs.id(components.Event), ecs.id(components.Cooldown), components.Cooldown, .{
+                                                                            .end = 10.0,
+                                                                        });
+                                                                        _ = ecs.set_pair(it.world, it.entities()[i], ecs.id(components.Trigger), ecs.id(components.Rainbow), components.Trigger, .{
+                                                                            .direction = directions[i],
+                                                                        });
+                                                                    }
+                                                                }
                                                             }
                                                         },
                                                         .release => {

@@ -266,6 +266,9 @@ pub var Ground_dig_Layer_0 = [_]usize {
     assets.scoopems_atlas.Ground_dig_8_Layer_0,
     assets.scoopems_atlas.Ground_dig_9_Layer_0,
 };
+pub var Rainbow_Layer_0 = [_]usize {
+    assets.scoopems_atlas.Rainbow_0_Layer_0,
+};
 pub var Grass_Layer_0 = [_]usize {
     assets.scoopems_atlas.Grass_0_Layer_0,
     assets.scoopems_atlas.Grass_1_Layer_0,

@@ -7,7 +7,9 @@ pub const Player = struct {};
 pub const Turn = struct {};
 pub const Scoop = struct {};
 pub const Target = struct {};
+pub const Event = struct {};
 
+pub const Trigger = struct { direction: game.math.Direction };
 pub const Direction = game.math.Direction;
 pub const Rotation = struct { value: f32 = 0 };
 
@@ -44,6 +46,19 @@ pub const SpriteAnimator = sprites.SpriteAnimator;
 const particles = @import("particles.zig");
 pub const ParticleRenderer = particles.ParticleRenderer;
 pub const ParticleAnimator = particles.ParticleAnimator;
+
+pub const Rainbow = struct {
+    elapsed: f32 = 0.0,
+    end: f32 = 10.0,
+    progress: f32 = 0.0,
+    target_scale: f32 = 10.0,
+    state: State = .foreground,
+
+    pub const State = enum {
+        foreground,
+        background,
+    };
+};
 
 pub const Bird = struct {
     speed: f32 = 0.3,

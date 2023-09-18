@@ -187,6 +187,7 @@ pub const Batcher = struct {
         color: [4]f32 = .{ 1.0, 1.0, 1.0, 1.0 },
         flip_x: bool = false,
         flip_y: bool = false,
+        scale: [2]f32 = .{ 1.0, 1.0 },
         vert_mode: VertRenderMode = .standard,
         frag_mode: FragRenderMode = .standard,
         time: f32 = 0.0,
@@ -218,38 +219,38 @@ pub const Batcher = struct {
         const origin_y = if (options.flip_y) -o_y else o_y - height;
         const pos = zm.trunc(position);
 
-        const vert_mode = switch (options.vert_mode) {
-            .standard => @as(f32, 0.0),
-            .top_sway => @as(f32, 1.0),
+        const vert_mode: f32 = switch (options.vert_mode) {
+            .standard => 0.0,
+            .top_sway => 1.0,
         };
 
-        const frag_mode = switch (options.frag_mode) {
-            .standard => @as(f32, 0.0),
-            .palette => @as(f32, 1.0),
+        const frag_mode: f32 = switch (options.frag_mode) {
+            .standard => 0.0,
+            .palette => 1.0,
         };
 
         var quad = gfx.Quad{
             .vertices = [_]gfx.Vertex{
                 .{
-                    .position = [3]f32{ pos[0] + origin_x, pos[1] + height + origin_y, pos[2] },
+                    .position = [3]f32{ (pos[0] + origin_x), (pos[1] + height) + origin_y, pos[2] },
                     .uv = [2]f32{ 0.0, 0.0 },
                     .color = options.color,
                     .data = [3]f32{ vert_mode, frag_mode, options.time },
                 }, //Bl
                 .{
-                    .position = [3]f32{ pos[0] + width + origin_x, pos[1] + height + origin_y, pos[2] },
+                    .position = [3]f32{ (pos[0] + width + origin_x), (pos[1] + height) + origin_y, pos[2] },
                     .uv = [2]f32{ 1.0, 0.0 },
                     .color = options.color,
                     .data = [3]f32{ vert_mode, frag_mode, options.time },
                 }, //Br
                 .{
-                    .position = [3]f32{ pos[0] + width + origin_x, pos[1] + origin_y, pos[2] },
+                    .position = [3]f32{ (pos[0] + width + origin_x), (pos[1]) + origin_y, pos[2] },
                     .uv = [2]f32{ 1.0, 1.0 },
                     .color = options.color,
                     .data = [3]f32{ vert_mode, frag_mode, options.time },
                 }, //Tr
                 .{
-                    .position = [3]f32{ pos[0] + origin_x, pos[1] + origin_y, pos[2] },
+                    .position = [3]f32{ (pos[0] + origin_x), (pos[1]) + origin_y, pos[2] },
                     .uv = [2]f32{ 0.0, 1.0 },
                     .color = options.color,
                     .data = [3]f32{ vert_mode, frag_mode, options.time },
@@ -266,6 +267,8 @@ pub const Batcher = struct {
 
         // Apply rotation
         if (options.rotation > 0.0 or options.rotation < 0.0) quad.rotate(options.rotation, pos[0], pos[1], origin_x, origin_y);
+
+        quad.scale(options.scale, pos[0], pos[1], origin_x, origin_y);
 
         return self.append(quad);
     }

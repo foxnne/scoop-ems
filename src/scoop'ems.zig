@@ -257,6 +257,8 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "AnimationScoopSystem", ecs.OnUpdate, &animation_scoop_system);
     var bird_system = @import("ecs/systems/bird.zig").system();
     ecs.SYSTEM(state.world, "BirdSystem", ecs.OnUpdate, &bird_system);
+    var rainbow_system = @import("ecs/systems/rainbow.zig").system();
+    ecs.SYSTEM(state.world, "RainbowSystem", ecs.OnUpdate, &rainbow_system);
     var animation_hitpoints_system = @import("ecs/systems/animation_hitpoints.zig").system();
     ecs.SYSTEM(state.world, "AnimationHitpointsSystem", ecs.OnUpdate, &animation_hitpoints_system);
     var animation_direction_system = @import("ecs/systems/animation_direction.zig").system();

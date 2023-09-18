@@ -18,6 +18,28 @@ pub fn create() void {
             const direction = math.Direction.find(4, offset, 0.0);
             _ = ecs.set(game.state.world, ground, game.components.Direction, direction);
             _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 5 });
+
+            const rainbow_foreground = ecs.new_id(game.state.world);
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height - 26.0 });
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.SpriteRenderer, .{
+                .index = game.assets.scoopems_atlas.Rainbow_0_Layer_0,
+                .scale = .{ 1.0, 0.0 },
+                .color = game.math.Color.initBytes(255, 255, 255, 200).toSlice(),
+            });
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.Rainbow, .{});
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.Direction, direction);
+
+            const rainbow_background = ecs.new_id(game.state.world);
+            _ = ecs.set(game.state.world, rainbow_background, game.components.Position, .{ .x = offset + 64.0, .y = 300.0, .z = 700.0 });
+            _ = ecs.set(game.state.world, rainbow_background, game.components.SpriteRenderer, .{
+                .index = game.assets.scoopems_atlas.Rainbow_0_Layer_0,
+                .scale = .{ 0.5, 0.0 },
+                .color = game.math.Color.initBytes(255, 255, 255, 200).toSlice(),
+                .flip_x = true,
+            });
+            _ = ecs.set(game.state.world, rainbow_background, game.components.Rainbow, .{ .target_scale = -10.0, .state = .background });
+            _ = ecs.set(game.state.world, rainbow_background, game.components.Parallax, .{ .value = 1.0 });
+            _ = ecs.set(game.state.world, rainbow_background, game.components.Direction, direction);
         }
 
         _ = ecs.set(game.state.world, ground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height });

@@ -56,6 +56,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             .time = game.state.time + @as(f32, @floatFromInt(renderers[i].order)) + position[0],
                             .flip_x = renderers[i].flip_x,
                             .flip_y = renderers[i].flip_y,
+                            .scale = renderers[i].scale,
                             .rotation = rotation,
                         },
                     ) catch unreachable;

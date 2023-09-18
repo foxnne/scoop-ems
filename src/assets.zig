@@ -174,12 +174,13 @@ pub const scoopems_atlas = struct {
   pub const Ground_dig_7_Layer_0 = 166;
   pub const Ground_dig_8_Layer_0 = 167;
   pub const Ground_dig_9_Layer_0 = 168;
-  pub const Grass_0_Layer_0 = 169;
-  pub const Grass_1_Layer_0 = 170;
-  pub const Grass_2_Layer_0 = 171;
-  pub const Grass_3_Layer_0 = 172;
-  pub const Grass_4_Layer_0 = 173;
-  pub const Grass_5_Layer_0 = 174;
+  pub const Rainbow_0_Layer_0 = 169;
+  pub const Grass_0_Layer_0 = 170;
+  pub const Grass_1_Layer_0 = 171;
+  pub const Grass_2_Layer_0 = 172;
+  pub const Grass_3_Layer_0 = 173;
+  pub const Grass_4_Layer_0 = 174;
+  pub const Grass_5_Layer_0 = 175;
 };
 
 pub const scoopems_png = struct {

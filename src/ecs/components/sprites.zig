@@ -6,6 +6,7 @@ pub const SpriteRenderer = struct {
     index: usize = 0,
     flip_x: bool = false,
     flip_y: bool = false,
+    scale: [2]f32 = .{ 1.0, 1.0 },
     color: [4]f32 = math.Colors.white.toSlice(),
     frag_mode: gfx.Batcher.SpriteOptions.FragRenderMode = .standard,
     vert_mode: gfx.Batcher.SpriteOptions.VertRenderMode = .standard,
