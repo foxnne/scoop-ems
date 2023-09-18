@@ -28,6 +28,18 @@ pub fn create() void {
             });
             _ = ecs.set(game.state.world, rainbow_foreground, game.components.Rainbow, .{});
             _ = ecs.set(game.state.world, rainbow_foreground, game.components.Direction, direction);
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.ParticleRenderer, .{
+                .particles = game.state.allocator.alloc(game.components.ParticleRenderer.Particle, 100) catch unreachable,
+                .offset = .{ 0.0, 16.0, 0.0, 0.0 },
+            });
+            _ = ecs.set(game.state.world, rainbow_foreground, game.components.ParticleAnimator, .{
+                .animation = &game.animations.Star_Layer,
+                .rate = 10.0,
+                .start_life = 0.5,
+                .velocity_min = .{ -30.0, 40.5 },
+                .velocity_max = .{ 30.0, 80.5 },
+                .state = .pause,
+            });
 
             const rainbow_background = ecs.new_id(game.state.world);
             _ = ecs.set(game.state.world, rainbow_background, game.components.Position, .{ .x = offset - (offset * 2.0), .y = 300.0, .z = 700.0 });

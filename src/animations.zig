@@ -89,6 +89,13 @@ pub var Smoke_Layer = [_]usize {
 pub var Reeds_Layer = [_]usize {
     assets.scoopems_atlas.Reeds_0_Layer,
 };
+pub var Star_Layer = [_]usize {
+    assets.scoopems_atlas.Star_0_Layer,
+    assets.scoopems_atlas.Star_1_Layer,
+    assets.scoopems_atlas.Star_2_Layer,
+    assets.scoopems_atlas.Star_3_Layer,
+    assets.scoopems_atlas.Star_4_Layer,
+};
 pub var Gold_Layer = [_]usize {
     assets.scoopems_atlas.Gold_0_Layer,
     assets.scoopems_atlas.Gold_1_Layer,
