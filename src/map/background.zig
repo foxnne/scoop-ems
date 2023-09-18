@@ -30,7 +30,7 @@ pub fn create() void {
             _ = ecs.set(game.state.world, rainbow_foreground, game.components.Direction, direction);
 
             const rainbow_background = ecs.new_id(game.state.world);
-            _ = ecs.set(game.state.world, rainbow_background, game.components.Position, .{ .x = offset + 64.0, .y = 300.0, .z = 700.0 });
+            _ = ecs.set(game.state.world, rainbow_background, game.components.Position, .{ .x = offset - (offset * 2.0), .y = 300.0, .z = 700.0 });
             _ = ecs.set(game.state.world, rainbow_background, game.components.SpriteRenderer, .{
                 .index = game.assets.scoopems_atlas.Rainbow_0_Layer_0,
                 .scale = .{ 0.5, 0.0 },
