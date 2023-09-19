@@ -87,6 +87,7 @@ pub const Sounds = struct {
     play_engine_rev: bool = false,
     engine_rev_counter: usize = 0,
     engine_rev_duration: usize = 0,
+    birds_idle: Opus = undefined,
 };
 
 pub const Channel = enum(i32) {
@@ -154,6 +155,9 @@ pub fn init(app: *App) !void {
         const engine_rev = try std.fs.cwd().openFile(assets.engine_rev_opus.path, .{});
         state.sounds.engine_rev = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_rev });
         state.sounds.engine_rev_counter = 0;
+
+        const birds_idle = try std.fs.cwd().openFile(assets.birds_opus.path, .{});
+        state.sounds.birds_idle = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = birds_idle });
 
         state.sounds.player = try state.sounds.ctx.createPlayer(state.sounds.device, writeCallback, .{});
 
@@ -445,12 +449,17 @@ pub fn deinit(_: *App) void {
 
 var idle_i: usize = 0;
 var rev_i: usize = 0;
+var birds_i: usize = 0;
 fn writeCallback(_: ?*anyopaque, frames: usize) void {
     for (0..frames) |fi| {
+        if (birds_i >= state.sounds.engine_idle.samples.len) birds_i = 0;
+
         if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
 
         for (0..state.sounds.engine_idle.channels) |ch| {
-            state.sounds.player.write(state.sounds.player.channels()[ch], fi, state.sounds.engine_idle.samples[idle_i]);
+            const sample_1 = state.sounds.engine_idle.samples[idle_i] + state.sounds.birds_idle.samples[birds_i];
+            state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample_1);
+            birds_i += 1;
             idle_i += 1;
         }
 

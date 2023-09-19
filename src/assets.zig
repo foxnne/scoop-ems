@@ -200,6 +200,10 @@ pub const engine_idle_opus = struct {
   pub const path = "assets/sounds/engine_idle.opus";
 };
 
+pub const birds_opus = struct {
+  pub const path = "assets/sounds/birds.opus";
+};
+
 pub const engine_rev_opus = struct {
   pub const path = "assets/sounds/engine_rev.opus";
 };
