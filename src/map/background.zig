@@ -17,7 +17,7 @@ pub fn create() void {
             sprite_index = game.assets.scoopems_atlas.Ground_dig_4_Layer_0;
             const direction = math.Direction.find(4, offset, 0.0);
             _ = ecs.set(game.state.world, ground, game.components.Direction, direction);
-            _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 5 });
+            _ = ecs.set(game.state.world, ground, game.components.Hitpoints, .{ .value = 4 });
 
             const rainbow_foreground = ecs.new_id(game.state.world);
             _ = ecs.set(game.state.world, rainbow_foreground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height - 26.0 });
@@ -249,7 +249,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, clouds_static, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.clouds_0_Layer_0,
         .flip_x = false,
-        .vert_mode = .top_sway,
+        //.vert_mode = .top_sway,
         .color = .{ 1.0, 1.0, 1.0, 1.0 },
     });
     _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 1.0 });

@@ -249,8 +249,6 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "CooldownSystem", ecs.OnUpdate, &cooldown_system);
     var camera_system = @import("ecs/systems/camera.zig").system();
     ecs.SYSTEM(state.world, "CameraSystem", ecs.OnUpdate, &camera_system);
-    var parallax_system = @import("ecs/systems/parallax.zig").system();
-    ecs.SYSTEM(state.world, "ParallaxSystem", ecs.OnUpdate, &parallax_system);
 
     // - Animation
     var animation_scoop_system = @import("ecs/systems/animation_scoop.zig").system();
@@ -273,6 +271,9 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "RenderDiffuseSystem", ecs.PostUpdate, &render_diffuse_system);
     var render_final_system = @import("ecs/systems/render_final_pass.zig").system();
     ecs.SYSTEM(state.world, "RenderFinalSystem", ecs.PostUpdate, &render_final_system);
+
+    var parallax_system = @import("ecs/systems/parallax.zig").system();
+    ecs.SYSTEM(state.world, "ParallaxSystem", ecs.PostUpdate, &parallax_system);
 
     map.create();
 
