@@ -66,6 +66,13 @@ pub const ProcessAssetsStep = struct {
                         try assets_writer.print("}};\n\n", .{});
                     }
 
+                    // Opus
+                    if (std.mem.eql(u8, ext, ".opus")) {
+                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_opus" });
+                        try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
+                        try assets_writer.print("}};\n\n", .{});
+                    }
+
                     // Atlases
                     if (std.mem.eql(u8, ext, ".atlas")) {
                         try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_atlas" });

@@ -7,6 +7,9 @@ const zstbi = @import("zstbi");
 const zmath = @import("zmath");
 const ecs = @import("zflecs");
 
+const sysaudio = @import("mach-sysaudio");
+const Opus = @import("mach-opus");
+
 pub const App = @This();
 
 timer: core.Timer,
@@ -66,12 +69,20 @@ pub const GameState = struct {
     batcher: gfx.Batcher = undefined,
     world: *ecs.world_t = undefined,
     entities: Entities = .{},
+    sounds: Sounds = undefined,
 };
 
 pub const Entities = struct {
     player: usize = 0,
     ground_west: usize = 0,
     ground_east: usize = 0,
+};
+
+pub const Sounds = struct {
+    player: sysaudio.Player,
+    ctx: sysaudio.Context,
+    device: sysaudio.Device,
+    engine_idle: Opus,
 };
 
 pub const Channel = enum(i32) {
@@ -117,18 +128,36 @@ pub fn init(app: *App) !void {
     zstbi.init(allocator);
 
     state.allocator = allocator;
-    state.palette = try gfx.Texture.loadFromFile(assets.scoopems_palette_png.path, .{});
-    state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
-    state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
 
-    state.output_diffuse = try gfx.Texture.createEmpty(settings.design_width, settings.design_height, .{ .format = core.descriptor.format });
+    // Images
+    {
+        state.palette = try gfx.Texture.loadFromFile(assets.scoopems_palette_png.path, .{});
+        state.diffusemap = try gfx.Texture.loadFromFile(assets.scoopems_png.path, .{});
+        state.atlas = try gfx.Atlas.loadFromFile(allocator, assets.scoopems_atlas.path);
+        state.output_diffuse = try gfx.Texture.createEmpty(settings.design_width, settings.design_height, .{ .format = core.descriptor.format });
+    }
 
-    state.hotkeys = try input.Hotkeys.initDefault(allocator);
-    state.mouse = try input.Mouse.initDefault(allocator);
+    // Sounds
+    {
+        state.sounds.ctx = try sysaudio.Context.init(null, allocator, .{});
+        try state.sounds.ctx.refresh();
 
-    state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(framebuffer_size[0], framebuffer_size[1], 0, 0), zmath.f32x4(-32.0, 0, 0, 0));
+        state.sounds.device = state.sounds.ctx.defaultDevice(.playback) orelse return error.NoDevice;
 
-    state.batcher = try gfx.Batcher.init(allocator, 1000);
+        const engine_idle = try std.fs.cwd().openFile(assets.engine_idle_opus.path, .{});
+        state.sounds.engine_idle = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_idle });
+
+        state.sounds.player = try state.sounds.ctx.createPlayer(state.sounds.device, writeCallback, .{});
+        try state.sounds.player.start();
+    }
+
+    // Input and Rendering
+    {
+        state.hotkeys = try input.Hotkeys.initDefault(allocator);
+        state.mouse = try input.Mouse.initDefault(allocator);
+        state.camera = gfx.Camera.init(settings.design_size, zmath.f32x4(framebuffer_size[0], framebuffer_size[1], 0, 0), zmath.f32x4(-32.0, 0, 0, 0));
+        state.batcher = try gfx.Batcher.init(allocator, 1000);
+    }
 
     app.* = .{
         .timer = try core.Timer.start(),
@@ -387,6 +416,9 @@ pub fn update(app: *App) !bool {
 }
 
 pub fn deinit(_: *App) void {
+    state.sounds.ctx.deinit();
+    state.allocator.free(state.sounds.engine_idle.samples);
+    state.sounds.player.deinit();
     state.allocator.free(state.hotkeys.hotkeys);
     state.diffusemap.deinit();
     state.palette.deinit();
@@ -396,4 +428,15 @@ pub fn deinit(_: *App) void {
     state.allocator.free(state.root_path);
     state.allocator.destroy(state);
     core.deinit();
+}
+
+var i: usize = 0;
+fn writeCallback(_: ?*anyopaque, frames: usize) void {
+    for (0..frames) |fi| {
+        if (i >= state.sounds.engine_idle.samples.len) i = 0;
+        for (0..state.sounds.engine_idle.channels) |ch| {
+            state.sounds.player.write(state.sounds.player.channels()[ch], fi, state.sounds.engine_idle.samples[i]);
+            i += 1;
+        }
+    }
 }

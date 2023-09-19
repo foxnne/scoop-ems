@@ -9,6 +9,9 @@ const mach_core = @import("mach_core");
 const mach_gpu_dawn = @import("mach_gpu_dawn");
 const xcode_frameworks = @import("xcode_frameworks");
 
+const mach_opus = @import("mach_opus");
+const sysaudio = @import("mach_sysaudio");
+
 const content_dir = "assets/";
 const src_path = "src/scoop'ems.zig";
 
@@ -34,6 +37,8 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zstbi", .module = zstbi_pkg.zstbi },
             .{ .name = "zmath", .module = zmath_pkg.zmath },
             .{ .name = "zflecs", .module = zflecs_pkg.zflecs },
+            .{ .name = "mach-opus", .module = b.dependency("mach_opus", .{ .target = target, .optimize = optimize }).module("mach-opus") },
+            .{ .name = "mach-sysaudio", .module = sysaudio.module(b, optimize, target) },
         },
         .optimize = optimize,
     });
