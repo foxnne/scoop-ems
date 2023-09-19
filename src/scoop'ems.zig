@@ -452,15 +452,14 @@ var rev_i: usize = 0;
 var birds_i: usize = 0;
 fn writeCallback(_: ?*anyopaque, frames: usize) void {
     for (0..frames) |fi| {
-        if (birds_i >= state.sounds.engine_idle.samples.len) birds_i = 0;
-
         if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
 
         for (0..state.sounds.engine_idle.channels) |ch| {
             const sample_1 = state.sounds.engine_idle.samples[idle_i] + state.sounds.birds_idle.samples[birds_i];
             state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample_1);
-            birds_i += 1;
             idle_i += 1;
+            birds_i += 1;
+            if (birds_i >= state.sounds.birds_idle.samples.len) birds_i = 0;
         }
 
         if (state.sounds.play_engine_rev) {
