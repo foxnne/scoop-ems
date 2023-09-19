@@ -52,6 +52,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 }
 
                                 rainbows[i].elapsed += it.delta_time;
+                                game.state.sounds.play_sparkes = true;
                             }
                         }
                     }
