@@ -69,7 +69,7 @@ pub const GameState = struct {
     batcher: gfx.Batcher = undefined,
     world: *ecs.world_t = undefined,
     entities: Entities = .{},
-    sounds: Sounds = undefined,
+    sounds: Sounds = .{},
 };
 
 pub const Entities = struct {
@@ -79,10 +79,14 @@ pub const Entities = struct {
 };
 
 pub const Sounds = struct {
-    player: sysaudio.Player,
-    ctx: sysaudio.Context,
-    device: sysaudio.Device,
-    engine_idle: Opus,
+    player: sysaudio.Player = undefined,
+    ctx: sysaudio.Context = undefined,
+    device: sysaudio.Device = undefined,
+    engine_idle: Opus = undefined,
+    engine_rev: Opus = undefined,
+    play_engine_rev: bool = false,
+    engine_rev_counter: usize = 0,
+    engine_rev_duration: usize = 0,
 };
 
 pub const Channel = enum(i32) {
@@ -147,8 +151,15 @@ pub fn init(app: *App) !void {
         const engine_idle = try std.fs.cwd().openFile(assets.engine_idle_opus.path, .{});
         state.sounds.engine_idle = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_idle });
 
+        const engine_rev = try std.fs.cwd().openFile(assets.engine_rev_opus.path, .{});
+        state.sounds.engine_rev = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_rev });
+        state.sounds.engine_rev_counter = 0;
+
         state.sounds.player = try state.sounds.ctx.createPlayer(state.sounds.device, writeCallback, .{});
+
+        state.sounds.engine_rev_duration = @intCast(state.sounds.player.sampleRate());
         try state.sounds.player.start();
+        try state.sounds.player.setVolume(0.5);
     }
 
     // Input and Rendering
@@ -412,6 +423,8 @@ pub fn update(app: *App) !bool {
 
     state.mouse.previous_position = state.mouse.position;
 
+    state.sounds.play_engine_rev = false;
+
     return false;
 }
 
@@ -430,13 +443,38 @@ pub fn deinit(_: *App) void {
     core.deinit();
 }
 
-var i: usize = 0;
+var idle_i: usize = 0;
+var rev_i: usize = 0;
 fn writeCallback(_: ?*anyopaque, frames: usize) void {
     for (0..frames) |fi| {
-        if (i >= state.sounds.engine_idle.samples.len) i = 0;
+        if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
+
         for (0..state.sounds.engine_idle.channels) |ch| {
-            state.sounds.player.write(state.sounds.player.channels()[ch], fi, state.sounds.engine_idle.samples[i]);
-            i += 1;
+            state.sounds.player.write(state.sounds.player.channels()[ch], fi, state.sounds.engine_idle.samples[idle_i]);
+            idle_i += 1;
+        }
+
+        if (state.sounds.play_engine_rev) {
+            if (rev_i >= state.sounds.engine_rev.samples.len) rev_i = 0;
+
+            state.sounds.engine_rev_counter += 1;
+
+            if (state.sounds.engine_rev_counter >= state.sounds.engine_rev_duration) state.sounds.engine_rev_counter = 0;
+
+            const sample_counter = @as(f32, @floatFromInt(state.sounds.engine_rev_counter));
+            const duration = @as(f32, @floatFromInt(state.sounds.engine_rev_duration));
+
+            // A number ranging from 0.0 to 1.0 in the first 1/64th of the duration of the tone.
+            const fade_in = @min(sample_counter / (duration / 2.0), 1.0);
+
+            if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
+
+            const sample = (state.sounds.engine_idle.samples[idle_i] + state.sounds.engine_rev.samples[rev_i] * fade_in);
+
+            for (0..state.sounds.engine_rev.channels) |ch| {
+                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
+                rev_i += 1;
+            }
         }
     }
 }

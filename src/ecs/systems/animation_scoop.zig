@@ -29,6 +29,8 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 if (ecs.field(it, components.Cooldown, 3)) |cooldowns| {
                                     _ = cooldowns;
 
+                                    game.state.sounds.play_engine_rev = true;
+
                                     if (animators[i].state == .play) {
                                         particles[i].rate = 12.0;
                                         animators[i].elapsed += it.delta_time;

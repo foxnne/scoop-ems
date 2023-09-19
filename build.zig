@@ -29,6 +29,7 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
+
     const app = try mach_core.App.init(b, mach_core_dep.builder, .{
         .name = "scoop'ems",
         .src = src_path,
@@ -67,6 +68,23 @@ pub fn build(b: *std.Build) !void {
     app.compile.addModule("zstbi", zstbi_pkg.zstbi);
     app.compile.addModule("zmath", zmath_pkg.zmath);
     app.compile.addModule("zflecs", zflecs_pkg.zflecs);
+
+    const mach_sysaudio_dep = b.dependency("mach_sysaudio", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    app.compile.addModule("mach-sysaudio", sysaudio.module(mach_sysaudio_dep.builder, optimize, target));
+    sysaudio.link(mach_sysaudio_dep.builder, app.compile);
+
+    app.compile.addModule("mach-opus", b.dependency("mach_opus", .{
+        .target = target,
+        .optimize = optimize,
+    }).module("mach-opus"));
+
+    mach_opus.link(b.dependency("mach_opus", .{
+        .target = target,
+        .optimize = optimize,
+    }).builder, app.compile);
 
     zstbi_pkg.link(app.compile);
     zmath_pkg.link(app.compile);
