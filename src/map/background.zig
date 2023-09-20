@@ -253,4 +253,16 @@ pub fn create() void {
         .color = .{ 1.0, 1.0, 1.0, 1.0 },
     });
     _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 1.0 });
+
+    const sun = ecs.new_id(game.state.world);
+    _ = ecs.set(game.state.world, sun, game.components.Position, .{ .x = 64.0, .y = 96.0, .z = 700.0 });
+    _ = ecs.set(game.state.world, sun, game.components.SpriteRenderer, .{
+        .index = game.assets.scoopems_atlas.Sun_0_Layer,
+    });
+    _ = ecs.set(game.state.world, sun, game.components.SpriteAnimator, .{
+        .animation = &game.animations.Sun_Layer,
+        .fps = 4,
+        .state = .play,
+    });
+    _ = ecs.set(game.state.world, sun, game.components.Parallax, .{ .value = 1.0 });
 }

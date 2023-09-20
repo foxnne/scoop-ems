@@ -8,6 +8,7 @@ pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.SpriteAnimator) };
     desc.query.filter.terms[1] = .{ .id = ecs.id(components.SpriteRenderer) };
+
     desc.run = run;
     return desc;
 }
@@ -18,6 +19,8 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
         while (i < it.count()) : (i += 1) {
             if (ecs.field(it, components.SpriteAnimator, 1)) |animators| {
                 if (ecs.field(it, components.SpriteRenderer, 2)) |renderers| {
+                    if (it.entities()[i] == game.state.entities.player) continue;
+
                     if (animators[i].state == components.SpriteAnimator.State.play) {
                         animators[i].elapsed += it.delta_time;
 

@@ -311,6 +311,8 @@ pub fn init(app: *App) !void {
     ecs.SYSTEM(state.world, "CameraSystem", ecs.OnUpdate, &camera_system);
 
     // - Animation
+    var animation_sprite_system = @import("ecs/systems/animation_sprite.zig").system();
+    ecs.SYSTEM(state.world, "AnimationSpriteSystem", ecs.OnUpdate, &animation_sprite_system);
     var animation_scoop_system = @import("ecs/systems/animation_scoop.zig").system();
     ecs.SYSTEM(state.world, "AnimationScoopSystem", ecs.OnUpdate, &animation_scoop_system);
     var bird_system = @import("ecs/systems/bird.zig").system();

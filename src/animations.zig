@@ -103,6 +103,12 @@ pub var Gold_Layer = [_]usize {
     assets.scoopems_atlas.Gold_3_Layer,
     assets.scoopems_atlas.Gold_4_Layer,
 };
+pub var Sun_Layer = [_]usize {
+    assets.scoopems_atlas.Sun_0_Layer,
+    assets.scoopems_atlas.Sun_1_Layer,
+    assets.scoopems_atlas.Sun_2_Layer,
+    assets.scoopems_atlas.Sun_3_Layer,
+};
 pub var distance_0_Layer_0 = [_]usize {
     assets.scoopems_atlas.distance_0_0_Layer_0,
 };
