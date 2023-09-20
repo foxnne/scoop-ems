@@ -208,6 +208,10 @@ pub const engine_dig_opus = struct {
   pub const path = "assets/sounds/engine_dig.opus";
 };
 
+pub const music_opus = struct {
+  pub const path = "assets/sounds/music.opus";
+};
+
 pub const engine_idle_opus = struct {
   pub const path = "assets/sounds/engine_idle.opus";
 };
