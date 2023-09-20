@@ -255,7 +255,7 @@ pub fn create() void {
     _ = ecs.set(game.state.world, clouds_static, game.components.Parallax, .{ .value = 1.0 });
 
     const sun = ecs.new_id(game.state.world);
-    _ = ecs.set(game.state.world, sun, game.components.Position, .{ .x = 64.0, .y = 96.0, .z = 700.0 });
+    _ = ecs.set(game.state.world, sun, game.components.Position, .{ .x = -32.0, .y = 48.0, .z = 700.0 });
     _ = ecs.set(game.state.world, sun, game.components.SpriteRenderer, .{
         .index = game.assets.scoopems_atlas.Sun_0_Layer,
     });
