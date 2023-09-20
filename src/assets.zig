@@ -196,12 +196,24 @@ pub const scoopems_h_png = struct {
   pub const path = "assets/scoopems_h.png";
 };
 
+pub const engine_dig_2_opus = struct {
+  pub const path = "assets/sounds/engine_dig_2.opus";
+};
+
 pub const sparkles_opus = struct {
   pub const path = "assets/sounds/sparkles.opus";
 };
 
+pub const engine_dig_opus = struct {
+  pub const path = "assets/sounds/engine_dig.opus";
+};
+
 pub const engine_idle_opus = struct {
   pub const path = "assets/sounds/engine_idle.opus";
+};
+
+pub const engine_release_opus = struct {
+  pub const path = "assets/sounds/engine_release.opus";
 };
 
 pub const birds_opus = struct {

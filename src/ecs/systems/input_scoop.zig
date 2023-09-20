@@ -34,6 +34,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 states[i] = .full;
 
                                 _ = ecs.set(it.world, entity, components.ExcavatorAction, .scoop);
+                                game.state.sounds.play_engine_rev = true;
                             } else {
                                 _ = ecs.set_pair(it.world, entity, ecs.id(components.Scoop), ecs.id(components.Cooldown), components.Cooldown, .{
                                     .end = 1.0,
@@ -44,6 +45,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 animators[i].animation = &game.animations.Excavator_dump_Frame;
                                 states[i] = .empty;
                                 _ = ecs.set(it.world, entity, components.ExcavatorAction, .release);
+                                game.state.sounds.play_engine_release = true;
                             }
                         }
                     }

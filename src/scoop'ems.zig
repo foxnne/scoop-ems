@@ -83,11 +83,14 @@ pub const Sounds = struct {
     ctx: sysaudio.Context = undefined,
     device: sysaudio.Device = undefined,
     engine_idle: Opus = undefined,
-    engine_rev: Opus = undefined,
+    engine_rev_1: Opus = undefined,
+    engine_rev_2: Opus = undefined,
+    engine_rev_3: Opus = undefined,
+    engine_rev_4: Opus = undefined,
+    engine_release: Opus = undefined,
     play_engine_rev: bool = false,
-    play_sparkes: bool = false,
-    engine_rev_counter: usize = 0,
-    engine_rev_duration: usize = 0,
+    play_engine_release: bool = false,
+    play_sparkles: bool = false,
     birds_idle: Opus = undefined,
     sparkles: Opus = undefined,
 };
@@ -154,9 +157,14 @@ pub fn init(app: *App) !void {
         const engine_idle = try std.fs.cwd().openFile(assets.engine_idle_opus.path, .{});
         state.sounds.engine_idle = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_idle });
 
-        const engine_rev = try std.fs.cwd().openFile(assets.engine_rev_opus.path, .{});
-        state.sounds.engine_rev = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_rev });
-        state.sounds.engine_rev_counter = 0;
+        const engine_rev = try std.fs.cwd().openFile(assets.engine_dig_opus.path, .{});
+        state.sounds.engine_rev_1 = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_rev });
+
+        const engine_rev_2 = try std.fs.cwd().openFile(assets.engine_dig_2_opus.path, .{});
+        state.sounds.engine_rev_2 = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_rev_2 });
+
+        const engine_release = try std.fs.cwd().openFile(assets.engine_release_opus.path, .{});
+        state.sounds.engine_release = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = engine_release });
 
         const birds_idle = try std.fs.cwd().openFile(assets.birds_opus.path, .{});
         state.sounds.birds_idle = try Opus.decodeStream(allocator, std.io.StreamSource{ .file = birds_idle });
@@ -166,7 +174,6 @@ pub fn init(app: *App) !void {
 
         state.sounds.player = try state.sounds.ctx.createPlayer(state.sounds.device, writeCallback, .{});
 
-        state.sounds.engine_rev_duration = @intCast(state.sounds.player.sampleRate());
         try state.sounds.player.start();
         try state.sounds.player.setVolume(0.5);
     }
@@ -432,8 +439,7 @@ pub fn update(app: *App) !bool {
 
     state.mouse.previous_position = state.mouse.position;
 
-    state.sounds.play_engine_rev = false;
-    state.sounds.play_sparkes = false;
+    state.sounds.play_sparkles = false;
 
     return false;
 }
@@ -455,47 +461,75 @@ pub fn deinit(_: *App) void {
 
 var idle_i: usize = 0;
 var rev_i: usize = 0;
+var release_i: usize = 0;
 var birds_i: usize = 0;
 var sparkles_i: usize = 0;
+var rev_swap: usize = 0;
 fn writeCallback(_: ?*anyopaque, frames: usize) void {
     for (0..frames) |fi| {
+        birds_i += 1;
+        sparkles_i += 1;
+        if (birds_i >= state.sounds.birds_idle.samples.len) birds_i = 0;
+        if (sparkles_i >= state.sounds.sparkles.samples.len) sparkles_i = 0;
+        idle_i += 1;
         if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
 
-        for (0..state.sounds.engine_idle.channels) |ch| {
-            var sample_1 = state.sounds.engine_idle.samples[idle_i] + state.sounds.birds_idle.samples[birds_i];
-            if (state.sounds.play_sparkes) {
-                sample_1 = state.sounds.engine_idle.samples[idle_i] + state.sounds.sparkles.samples[sparkles_i];
-            }
-
-            idle_i += 1;
-            birds_i += 1;
-            sparkles_i += 1;
-            if (birds_i >= state.sounds.birds_idle.samples.len) birds_i = 0;
-            if (sparkles_i >= state.sounds.sparkles.samples.len) sparkles_i = 0;
-
-            state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample_1);
-        }
+        const channels = @max(state.sounds.birds_idle.channels, state.sounds.engine_idle.channels);
 
         if (state.sounds.play_engine_rev) {
-            if (rev_i >= state.sounds.engine_rev.samples.len) rev_i = 0;
+            const rev_sound = if (@mod(rev_swap, 2) == 0) state.sounds.engine_rev_1 else state.sounds.engine_rev_2;
+            rev_swap += 3;
+            if (rev_i >= rev_sound.samples.len) {
+                rev_i = 0;
+                state.sounds.play_engine_rev = false;
+            }
 
-            state.sounds.engine_rev_counter += 1;
+            const fade_in: f32 = @min(1.0, @as(f32, @floatFromInt(rev_i / 10)));
+            const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(rev_i / rev_sound.samples.len)));
 
-            if (state.sounds.engine_rev_counter >= state.sounds.engine_rev_duration) state.sounds.engine_rev_counter = 0;
-
-            const sample_counter = @as(f32, @floatFromInt(state.sounds.engine_rev_counter));
-            const duration = @as(f32, @floatFromInt(state.sounds.engine_rev_duration));
-
-            // A number ranging from 0.0 to 1.0 in the first 1/64th of the duration of the tone.
-            const fade_in = @min(sample_counter / (duration / 2.0), 1.0);
-
-            if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
-
-            const sample = (state.sounds.engine_idle.samples[idle_i] + state.sounds.engine_rev.samples[rev_i] * fade_in);
-
-            for (0..state.sounds.engine_rev.channels) |ch| {
+            for (0..channels) |ch| {
+                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0;
+                if (state.sounds.play_sparkles) {
+                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0;
+                }
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 rev_i += 1;
+            }
+            idle_i = 0;
+            continue;
+        }
+        if (state.sounds.play_engine_release) {
+            const release_sound = state.sounds.engine_release;
+
+            if (release_i >= release_sound.samples.len) {
+                release_i = 0;
+                state.sounds.play_engine_release = false;
+            }
+
+            const fade_in: f32 = @min(1.0, @as(f32, @floatFromInt(release_i / 10)));
+            const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(release_i / release_sound.samples.len)));
+
+            for (0..channels) |ch| {
+                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0;
+                if (state.sounds.play_sparkles) {
+                    sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0;
+                }
+                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
+                release_i += 1;
+            }
+            idle_i = 0;
+            continue;
+        }
+        {
+            rev_i = 0;
+            release_i = 0;
+            for (0..channels) |ch| {
+                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 4.0;
+                if (state.sounds.play_sparkles) {
+                    sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5;
+                }
+
+                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
             }
         }
     }
