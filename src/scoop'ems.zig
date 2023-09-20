@@ -496,9 +496,9 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(rev_i / rev_sound.samples.len)));
 
             for (0..channels) |ch| {
-                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.3;
+                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
                 if (state.sounds.play_sparkles) {
-                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.3;
+                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
                 }
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 rev_i += 1;
@@ -518,9 +518,9 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(release_i / release_sound.samples.len)));
 
             for (0..channels) |ch| {
-                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.3;
+                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
                 if (state.sounds.play_sparkles) {
-                    sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.3;
+                    sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
                 }
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 release_i += 1;
@@ -533,9 +533,9 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             rev_i = 0;
             release_i = 0;
             for (0..channels) |ch| {
-                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 4.0 + state.sounds.music.samples[music_i] * 0.3;
+                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.2;
                 if (state.sounds.play_sparkles) {
-                    sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.3;
+                    sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.2;
                 }
 
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
