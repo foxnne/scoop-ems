@@ -487,6 +487,8 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
         }
 
         if (state.sounds.play_engine_rev) {
+            idle_i += 1;
+            if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
             const rev_sound = if (@mod(rev_swap, 2) == 0) state.sounds.engine_rev_1 else state.sounds.engine_rev_2;
 
             if (rev_i >= rev_sound.samples.len) {
@@ -509,6 +511,8 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             continue;
         }
         if (state.sounds.play_engine_release) {
+            idle_i += 1;
+            if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
             const release_sound = state.sounds.engine_release;
 
             if (release_i >= release_sound.samples.len) {
