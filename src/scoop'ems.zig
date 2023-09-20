@@ -474,7 +474,7 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
         idle_i += 1;
         if (idle_i >= state.sounds.engine_idle.samples.len) idle_i = 0;
 
-        const channels = @max(state.sounds.birds_idle.channels, state.sounds.engine_idle.channels);
+        const channels = state.sounds.engine_idle.channels;
 
         if (state.sounds.play_engine_rev) {
             const rev_sound = if (@mod(rev_swap, 2) == 0) state.sounds.engine_rev_1 else state.sounds.engine_rev_2;
