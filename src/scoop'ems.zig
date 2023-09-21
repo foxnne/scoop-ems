@@ -477,7 +477,8 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
         const channels = state.sounds.engine_idle.channels;
         for (0..channels) |_| {
             birds_i += 1;
-            sparkles_i += 1;
+            if (state.sounds.play_sparkles)
+                sparkles_i += 1;
             if (birds_i >= state.sounds.birds_idle.samples.len) birds_i = 0;
             if (sparkles_i >= state.sounds.sparkles.samples.len) sparkles_i = 0;
             idle_i += 1;
@@ -500,9 +501,9 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(rev_i / rev_sound.samples.len)));
 
             for (0..channels) |ch| {
-                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
+                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
-                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
+                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 rev_i += 1;
@@ -524,9 +525,9 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(release_i / release_sound.samples.len)));
 
             for (0..channels) |ch| {
-                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
+                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
-                    sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.2;
+                    sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 release_i += 1;
@@ -539,9 +540,11 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             rev_i = 0;
             release_i = 0;
             for (0..channels) |ch| {
-                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.2;
+                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
-                    sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.2;
+                    sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.5;
+                } else {
+                    sparkles_i = 0;
                 }
 
                 state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);

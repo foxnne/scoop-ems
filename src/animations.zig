@@ -109,6 +109,16 @@ pub var Sun_Layer = [_]usize {
     assets.scoopems_atlas.Sun_2_Layer,
     assets.scoopems_atlas.Sun_3_Layer,
 };
+pub var Balloon_Layer = [_]usize {
+    assets.scoopems_atlas.Balloon_0_Layer,
+    assets.scoopems_atlas.Balloon_1_Layer,
+    assets.scoopems_atlas.Balloon_2_Layer,
+    assets.scoopems_atlas.Balloon_3_Layer,
+    assets.scoopems_atlas.Balloon_4_Layer,
+    assets.scoopems_atlas.Balloon_5_Layer,
+    assets.scoopems_atlas.Balloon_6_Layer,
+    assets.scoopems_atlas.Balloon_7_Layer,
+};
 pub var distance_0_Layer_0 = [_]usize {
     assets.scoopems_atlas.distance_0_0_Layer_0,
 };

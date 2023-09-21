@@ -60,6 +60,8 @@ pub const Rainbow = struct {
     };
 };
 
+pub const Balloons = struct {};
+
 pub const Bird = struct {
     speed: f32 = 0.3,
     home: [3]f32 = .{ 0.0, 0.0, 0.0 },

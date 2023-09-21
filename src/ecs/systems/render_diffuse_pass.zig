@@ -70,6 +70,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 &game.state.diffusemap,
                                 game.state.atlas.sprites[particle.index],
                                 .{
+                                    .frag_mode = renderers[i].frag_mode,
                                     .color = particle.color,
                                 },
                             ) catch unreachable;

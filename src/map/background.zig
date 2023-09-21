@@ -52,6 +52,25 @@ pub fn create() void {
             _ = ecs.set(game.state.world, rainbow_background, game.components.Rainbow, .{ .target_scale = -10.0, .state = .background });
             _ = ecs.set(game.state.world, rainbow_background, game.components.Parallax, .{ .value = 1.0 });
             _ = ecs.set(game.state.world, rainbow_background, game.components.Direction, direction);
+
+            const balloons = ecs.new_id(game.state.world);
+            _ = ecs.set(game.state.world, balloons, game.components.Position, .{ .x = offset, .y = game.settings.ground_height - 26.0 });
+            _ = ecs.add(game.state.world, balloons, game.components.Balloons);
+            _ = ecs.set(game.state.world, balloons, game.components.Direction, direction);
+            _ = ecs.set(game.state.world, balloons, game.components.ParticleRenderer, .{
+                .particles = game.state.allocator.alloc(game.components.ParticleRenderer.Particle, 500) catch unreachable,
+                .offset = .{ 0.0, 12.0, 0.0, 0.0 },
+            });
+            _ = ecs.set(game.state.world, balloons, game.components.ParticleAnimator, .{
+                .animation = &game.animations.Balloon_Layer,
+                .rate = 100.0,
+                .start_life = 2.0,
+                .velocity_min = .{ -60.0, 100.0 },
+                .velocity_max = .{ 60.0, 200.0 },
+                .random_start_frag_color = 12,
+                .random_end_frag_color = 16,
+                .state = .pause,
+            });
         }
 
         _ = ecs.set(game.state.world, ground, game.components.Position, .{ .x = offset, .y = game.settings.ground_height });
