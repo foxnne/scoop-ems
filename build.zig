@@ -39,7 +39,7 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zmath", .module = zmath_pkg.zmath },
             .{ .name = "zflecs", .module = zflecs_pkg.zflecs },
             .{ .name = "mach-opus", .module = b.dependency("mach_opus", .{ .target = target, .optimize = optimize }).module("mach-opus") },
-            .{ .name = "mach-sysaudio", .module = sysaudio.module(b, optimize, target) },
+            .{ .name = "mach-sysaudio", .module = b.dependency("mach_sysaudio", .{ .target = target, .optimize = optimize }).module("mach-sysaudio") },
         },
         .optimize = optimize,
     });
@@ -73,7 +73,7 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    app.compile.addModule("mach-sysaudio", sysaudio.module(mach_sysaudio_dep.builder, optimize, target));
+    //app.compile.addModule("mach-sysaudio", sysaudio.module(mach_sysaudio_dep.builder, optimize, target));
     sysaudio.link(mach_sysaudio_dep.builder, app.compile);
 
     app.compile.addModule("mach-opus", b.dependency("mach_opus", .{

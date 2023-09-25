@@ -5,7 +5,7 @@ const game = @import("../../scoop'ems.zig");
 const gfx = game.gfx;
 const math = game.math;
 const components = game.components;
-const core = @import("core");
+const core = @import("mach-core");
 
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};

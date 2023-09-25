@@ -2,7 +2,7 @@ const std = @import("std");
 const game = @import("../scoop'ems.zig");
 const gfx = game.gfx;
 const zm = @import("zmath");
-const core = @import("core");
+const core = @import("mach-core");
 
 pub const Batcher = struct {
     allocator: std.mem.Allocator,
