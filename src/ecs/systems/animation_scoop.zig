@@ -29,8 +29,6 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 if (ecs.field(it, components.Cooldown, 3)) |cooldowns| {
                                     _ = cooldowns;
 
-                                    
-
                                     if (animators[i].state == .play) {
                                         particles[i].rate = 12.0;
                                         animators[i].elapsed += it.delta_time;
@@ -80,6 +78,12 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                             }
                                         }
                                         renderers[i].index = animators[i].animation[animators[i].frame];
+
+                                        if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteRenderer)) |renderer| {
+                                            if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteAnimator)) |animator| {
+                                                renderer.index = animator.animation[animators[i].frame];
+                                            }
+                                        }
                                     }
                                 } else {
                                     particles[i].rate = 3.0;

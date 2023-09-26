@@ -74,6 +74,7 @@ pub const GameState = struct {
 
 pub const Entities = struct {
     player: usize = 0,
+    character: usize = 0,
     ground_west: usize = 0,
     ground_east: usize = 0,
 };
@@ -372,6 +373,17 @@ pub fn init(app: *App) !void {
         .start_color = .{ 0.6, 0.6, 0.6, 1.0 },
         .end_color = .{ 1.0, 1.0, 1.0, 0.5 },
     });
+
+    state.entities.character = ecs.new_id(state.world);
+    _ = ecs.set(state.world, state.entities.character , components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 0.5 });
+   _ = ecs.set(state.world, state.entities.character , components.SpriteRenderer, .{
+        .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
+    });
+    _ = ecs.set(state.world, state.entities.character , components.SpriteAnimator, .{
+        .animation = &animations.Excavator_scoop_Arlynn,
+        .fps = 12,
+    });
+    _ = ecs.set(state.world, state.entities.character , components.Direction, .w);
 }
 
 pub fn updateMainThread(_: *App) !bool {

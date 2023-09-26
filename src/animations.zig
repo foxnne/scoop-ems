@@ -226,6 +226,43 @@ pub var Excavator_dump_Frame = [_]usize {
     assets.scoopems_atlas.Excavator_dump_6_Frame,
     assets.scoopems_atlas.Excavator_dump_7_Frame,
 };
+pub var Excavator_rotate_empty_Arlynn = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
+    assets.scoopems_atlas.Excavator_rotate_empty_1_Arlynn,
+    assets.scoopems_atlas.Excavator_rotate_empty_2_Arlynn,
+};
+pub var Excavator_rotate_full_Arlynn = [_]usize {
+    assets.scoopems_atlas.Excavator_rotate_full_0_Arlynn,
+    assets.scoopems_atlas.Excavator_rotate_full_1_Arlynn,
+    assets.scoopems_atlas.Excavator_rotate_full_2_Arlynn,
+};
+pub var Excavator_scoop_Arlynn = [_]usize {
+    assets.scoopems_atlas.Excavator_scoop_0_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_1_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_2_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_3_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_4_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_5_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_6_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_7_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_8_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_9_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_10_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_11_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_12_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_13_Arlynn,
+    assets.scoopems_atlas.Excavator_scoop_14_Arlynn,
+};
+pub var Excavator_dump_Arlynn = [_]usize {
+    assets.scoopems_atlas.Excavator_dump_0_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_1_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_2_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_3_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_4_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_5_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_6_Arlynn,
+    assets.scoopems_atlas.Excavator_dump_7_Arlynn,
+};
 pub var Excavator_rotate_empty_Tracks = [_]usize {
     assets.scoopems_atlas.Excavator_rotate_empty_0_Tracks,
     assets.scoopems_atlas.Excavator_rotate_empty_1_Tracks,

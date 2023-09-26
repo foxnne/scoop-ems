@@ -33,6 +33,12 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 animators[i].animation = &game.animations.Excavator_scoop_Frame;
                                 states[i] = .full;
 
+                                if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteAnimator)) |animator| {
+                                    animator.animation = &game.animations.Excavator_scoop_Arlynn;
+                                    animator.fps = 12;
+                                    animator.frame = 0;
+                                }
+
                                 _ = ecs.set(it.world, entity, components.ExcavatorAction, .scoop);
                                 game.state.sounds.play_engine_rev = true;
                             } else {
@@ -43,6 +49,13 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 animators[i].state = .play;
                                 animators[i].frame = 0;
                                 animators[i].animation = &game.animations.Excavator_dump_Frame;
+
+                                if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteAnimator)) |animator| {
+                                    animator.animation = &game.animations.Excavator_dump_Arlynn;
+                                    animator.fps = 8;
+                                    animator.frame = 0;
+                                }
+
                                 states[i] = .empty;
                                 _ = ecs.set(it.world, entity, components.ExcavatorAction, .release);
                                 game.state.sounds.play_engine_release = true;

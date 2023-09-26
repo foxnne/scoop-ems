@@ -68,6 +68,19 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                         },
                                         else => {},
                                     }
+
+                                    if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteRenderer)) |renderer| {
+                                        renderer.flip_x = renderers[i].flip_x;
+                                        renderer.index = switch(renderers[i].index) {
+                                            game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
+                                            game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_1_Arlynn,
+                                            game.assets.scoopems_atlas.Excavator_rotate_empty_2_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_2_Arlynn,
+                                            game.assets.scoopems_atlas.Excavator_rotate_full_0_Frame => game.assets.scoopems_atlas.Excavator_rotate_full_0_Arlynn,
+                                            game.assets.scoopems_atlas.Excavator_rotate_full_1_Frame => game.assets.scoopems_atlas.Excavator_rotate_full_1_Arlynn,
+                                            game.assets.scoopems_atlas.Excavator_rotate_full_2_Frame => game.assets.scoopems_atlas.Excavator_rotate_full_2_Arlynn,
+                                            else => game.assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
+                                        };
+                                    }
                                 }
                             }
                         }
