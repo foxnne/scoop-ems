@@ -9,6 +9,8 @@ This is a little game I'm making for my daughter's 4th birthday.
 
 All assets are included, check `assets/src` for Pixi files for the artwork.
 
+REQUIRES ZIG 2024.3.0-mach (0.12.0-dev.3180+83e578a18)
+
 ### Building
 To build, simply:
 - `git clone https://github.com/foxnne/scoop-ems.git`

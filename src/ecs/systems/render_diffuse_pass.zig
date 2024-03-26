@@ -5,7 +5,9 @@ const game = @import("../../scoop'ems.zig");
 const gfx = game.gfx;
 const math = game.math;
 const components = game.components;
-const core = @import("mach-core");
+
+const mach = @import("mach");
+const core = mach.core;
 
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
@@ -42,7 +44,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
         while (i < it.count()) : (i += 1) {
             if (ecs.field(it, components.Position, 1)) |positions| {
                 const rotation = if (ecs.field(it, components.Rotation, 2)) |rotations| rotations[i].value else 0.0;
-                var position = positions[i].toF32x4();
+                const position = positions[i].toF32x4();
 
                 if (ecs.field(it, components.SpriteRenderer, 3)) |renderers| {
                     game.state.batcher.sprite(

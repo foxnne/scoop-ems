@@ -7,7 +7,7 @@ const components = game.components;
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.pair(ecs.id(components.Target), ecs.id(components.Direction)) };
-    desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Turn), ecs.id(components.Cooldown)) };
+    desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Turn)) };
     desc.run = run;
     return desc;
 }

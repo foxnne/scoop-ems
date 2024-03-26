@@ -159,13 +159,13 @@ pub fn create() void {
             };
             const color = game.math.Color.initBytes(bird_color, 0, 0, 1);
             const bird = ecs.new_id(game.state.world);
-            _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @fabs(tree_x), .z = -100 });
+            _ = ecs.set(game.state.world, bird, game.components.Position, .{ .x = tree_x * 3.0, .y = 400.0 - @abs(tree_x), .z = -100 });
             _ = ecs.set(game.state.world, bird, game.components.Bird, .{
                 .home = .{ tree_x * 2.0, 244.0, 0.0 },
                 .sky = .{ -tree_x * 2.0, 228.0, 0.0 },
                 .tree = .{ tree_x + (tree_x / 14.0), bird_y, 0.0 },
                 .ground = .{ tree_x + (tree_x / 14.0), game.settings.ground_height + 2.0, 0.0 },
-                .wait_home = @fabs(tree_x) / 20.0,
+                .wait_home = @abs(tree_x) / 20.0,
             });
             _ = ecs.set(game.state.world, bird, game.components.Direction, .e);
             _ = ecs.set(game.state.world, bird, game.components.SpriteRenderer, .{

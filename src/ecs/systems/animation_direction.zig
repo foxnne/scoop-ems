@@ -9,10 +9,10 @@ pub fn system() ecs.system_desc_t {
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.Direction) };
     desc.query.filter.terms[1] = .{ .id = ecs.id(components.SpriteRenderer) };
     desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Target), ecs.id(components.Direction)) };
-    desc.query.filter.terms[3] = .{ .id = ecs.pair(ecs.id(components.Turn), ecs.id(components.Cooldown)) };
+    desc.query.filter.terms[3] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Turn)) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.ParticleRenderer) };
     desc.query.filter.terms[5] = .{ .id = ecs.id(components.ExcavatorState) };
-    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Not };
+    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Scoop)), .oper = ecs.oper_kind_t.Not };
     desc.run = run;
     return desc;
 }
@@ -71,7 +71,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
 
                                     if (ecs.get_mut(it.world, game.state.entities.character, components.SpriteRenderer)) |renderer| {
                                         renderer.flip_x = renderers[i].flip_x;
-                                        renderer.index = switch(renderers[i].index) {
+                                        renderer.index = switch (renderers[i].index) {
                                             game.assets.scoopems_atlas.Excavator_rotate_empty_0_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
                                             game.assets.scoopems_atlas.Excavator_rotate_empty_1_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_1_Arlynn,
                                             game.assets.scoopems_atlas.Excavator_rotate_empty_2_Frame => game.assets.scoopems_atlas.Excavator_rotate_empty_2_Arlynn,

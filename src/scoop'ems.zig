@@ -1,13 +1,14 @@
 const std = @import("std");
 
-const core = @import("mach-core");
+const mach = @import("mach");
+const core = mach.core;
 const gpu = core.gpu;
 
 const zstbi = @import("zstbi");
 const zmath = @import("zmath");
 const ecs = @import("zflecs");
 
-const sysaudio = @import("mach-sysaudio");
+const sysaudio = mach.sysaudio;
 const Opus = @import("mach-opus");
 
 pub const App = @This();
@@ -375,15 +376,15 @@ pub fn init(app: *App) !void {
     });
 
     state.entities.character = ecs.new_id(state.world);
-    _ = ecs.set(state.world, state.entities.character , components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 0.5 });
-   _ = ecs.set(state.world, state.entities.character , components.SpriteRenderer, .{
+    _ = ecs.set(state.world, state.entities.character, components.Position, .{ .x = 0.0, .y = settings.ground_height, .z = 0.5 });
+    _ = ecs.set(state.world, state.entities.character, components.SpriteRenderer, .{
         .index = assets.scoopems_atlas.Excavator_rotate_empty_0_Arlynn,
     });
-    _ = ecs.set(state.world, state.entities.character , components.SpriteAnimator, .{
+    _ = ecs.set(state.world, state.entities.character, components.SpriteAnimator, .{
         .animation = &animations.Excavator_scoop_Arlynn,
         .fps = 12,
     });
-    _ = ecs.set(state.world, state.entities.character , components.Direction, .w);
+    _ = ecs.set(state.world, state.entities.character, components.Direction, .w);
 }
 
 pub fn updateMainThread(_: *App) !bool {
@@ -437,8 +438,6 @@ pub fn update(app: *App) !bool {
         }
     }
 
-    try input.process();
-
     _ = ecs.progress(state.world, 0);
 
     const batcher_commands = try state.batcher.finish();
@@ -484,8 +483,9 @@ var birds_i: usize = 0;
 var sparkles_i: usize = 0;
 var rev_swap: usize = 0;
 var music_i: usize = 0;
-fn writeCallback(_: ?*anyopaque, frames: usize) void {
-    for (0..frames) |fi| {
+fn writeCallback(_: ?*anyopaque, frames: []u8) void {
+    for (frames, 0..) |_, fi| {
+        _ = fi; // autofix
         const channels = state.sounds.engine_idle.channels;
         for (0..channels) |_| {
             birds_i += 1;
@@ -513,11 +513,12 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(rev_i / rev_sound.samples.len)));
 
             for (0..channels) |ch| {
+                _ = ch; // autofix
                 var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
                     sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
-                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
+                //state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 rev_i += 1;
             }
             idle_i = 0;
@@ -537,11 +538,12 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             const fade_out: f32 = 1.0 - @min(1.0, @as(f32, @floatFromInt(release_i / release_sound.samples.len)));
 
             for (0..channels) |ch| {
+                _ = ch; // autofix
                 var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
                     sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
-                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
+                //state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 release_i += 1;
             }
             idle_i = 0;
@@ -552,6 +554,7 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
             rev_i = 0;
             release_i = 0;
             for (0..channels) |ch| {
+                _ = ch; // autofix
                 var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
                     sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.5;
@@ -559,7 +562,7 @@ fn writeCallback(_: ?*anyopaque, frames: usize) void {
                     sparkles_i = 0;
                 }
 
-                state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
+                //state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
             }
         }
     }

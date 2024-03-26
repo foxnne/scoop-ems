@@ -2,7 +2,9 @@ const std = @import("std");
 const zm = @import("zmath");
 const math = @import("../math/math.zig");
 const game = @import("../scoop'ems.zig");
-const core = @import("mach-core");
+
+const mach = @import("mach");
+const core = mach.core;
 
 const builtin = @import("builtin");
 

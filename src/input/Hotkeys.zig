@@ -3,7 +3,9 @@ const zm = @import("zmath");
 const math = @import("../math/math.zig");
 const game = @import("../scoop'ems.zig");
 const nfd = @import("nfd");
-const core = @import("mach-core");
+
+const mach = @import("mach");
+const core = mach.core;
 
 const Key = core.Key;
 const Mods = core.KeyMods;

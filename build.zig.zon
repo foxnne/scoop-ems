@@ -1,26 +1,32 @@
 .{
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+        "README.md",
+    },
     .name = "scoop'ems",
     .version = "0.1.0",
     .dependencies = .{
-        .mach_core = .{
-            .url = "https://pkg.machengine.org/mach-core/93f390f61edd09a39b67fb6fee1f13a432572b4e.tar.gz",
-           .hash = "1220c90fcb6a12a9659f4971e12ec53db017eb082abd3ebf4d1b8f703412c84228ae",
+        .mach = .{
+            .url = "https://pkg.machengine.org/mach/279290bbf2f1adab0af00323280a07d6bfff47a5.tar.gz",
+            .hash = "1220ba5472217ef81455b19d540967049bbfaf768b30d04534865707e907ee1c4aec",
         },
         .mach_opus = .{
-            .url = "https://pkg.machengine.org/mach-opus/a7da14a2071cd4984f43f4e0a1bc332f9327d859.tar.gz",
-            .hash = "1220cbb573129bfbfe727c791dfe21770c77d8926f1fc59d62bb77d639fc415f369f",
+            .url = "https://pkg.machengine.org/mach-opus/58a22201881d7639339f3c029d13a00bbfe005e2.tar.gz",
+            .hash = "1220821426e087874779f8d76a6bb74844aa3934648aad5b7331701e5f386791c51e",
         },
-        .opusfile = .{
-            .url = "https://pkg.machengine.org/opusfile/b7cb4d90df453e52852d49612f4a09cf376e334d.tar.gz",
-            .hash = "122055087a131deda8b6a3d4963574f7ff78c52abefcc7d0794789d6cf86a93a1f42",
+        .zflecs = .{
+            .url = "https://github.com/foxnne/zflecs/archive/f78f4f17527fce2867b580c88e441880b3875b32.tar.gz",
+            .hash = "1220ca6986000ebcfc2276df3b9e482a64daa7c8cb365e26a06e02259574e13eb105",
         },
-        .mach_sysaudio = .{
-            .url = "https://pkg.machengine.org/mach-sysaudio/381b3815caef1f631d64360cc51525adf638189c.tar.gz",
-            .hash = "12205e0f7e775161606bd55c92eb4244c69cb7072ee5d8205e50300048cbf1f6dc5c",
+        .zstbi = .{
+            .url = "https://github.com/foxnne/zstbi/archive/731369dfcdf3f23965e4e5d924d1e1e6fbf23aa9.tar.gz",
+            .hash = "12201163a30d7d3f4fd80d5c18a0e06edfdfa052961e43f4fb49b8d36638f807d18d",
         },
-        .linux_audio_headers = .{
-            .url = "https://pkg.machengine.org/linux-audio-headers/32aaed47da614b259f8d5efa3aea2b59e4987254.tar.gz",
-            .hash = "122042ed4fbf479e897d3a253f3f43d4f7369f8ec678fa6765c46dbc8b5ac63b1284",
+        .zmath = .{
+            .url = "https://github.com/foxnne/zmath/archive/ecfdbf57c6fd0a8ac8a9bf01dafe1e5adae869ae.tar.gz",
+            .hash = "1220a105762825631ef4dfd4730109120600bba51368f1207fc63b7536333c5748c3",
         },
     },
 }

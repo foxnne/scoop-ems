@@ -7,7 +7,7 @@ const components = game.components;
 pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.Player) };
-    desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Not };
+    desc.query.filter.terms[1] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Scoop)), .oper = ecs.oper_kind_t.Not };
     desc.query.filter.terms[2] = .{ .id = ecs.id(components.SpriteAnimator) };
     desc.query.filter.terms[3] = .{ .id = ecs.id(components.ExcavatorState) };
     desc.run = run;
@@ -24,7 +24,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                     if (game.state.hotkeys.hotkey(.scoop)) |hk| {
                         if (hk.pressed()) {
                             if (states[i] == .empty) {
-                                _ = ecs.set_pair(it.world, entity, ecs.id(components.Scoop), ecs.id(components.Cooldown), components.Cooldown, .{
+                                _ = ecs.set_pair(it.world, entity, ecs.id(components.Cooldown), ecs.id(components.Scoop), components.Cooldown, .{
                                     .end = 1.3,
                                 });
                                 animators[i].fps = 12;
@@ -42,7 +42,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                 _ = ecs.set(it.world, entity, components.ExcavatorAction, .scoop);
                                 game.state.sounds.play_engine_rev = true;
                             } else {
-                                _ = ecs.set_pair(it.world, entity, ecs.id(components.Scoop), ecs.id(components.Cooldown), components.Cooldown, .{
+                                _ = ecs.set_pair(it.world, entity, ecs.id(components.Cooldown), ecs.id(components.Scoop), components.Cooldown, .{
                                     .end = 1.0,
                                 });
                                 animators[i].fps = 8;

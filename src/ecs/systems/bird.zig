@@ -62,14 +62,14 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                                     continue;
                                 }
 
-                                var p1 = switch (birds[i].state) {
+                                const p1 = switch (birds[i].state) {
                                     .fly_sky_from_ground, .fly_tree_from_ground, .fly_home_from_ground => birds[i].ground,
                                     .fly_home_from_tree, .fly_sky_from_tree, .fly_ground_from_tree => birds[i].tree,
                                     .fly_sky_from_home, .fly_ground_from_home, .fly_tree_from_home => birds[i].home,
                                     .fly_home_from_sky, .fly_ground_from_sky, .fly_tree_from_sky => birds[i].sky,
                                     else => birds[i].tree,
                                 };
-                                var p2 = switch (birds[i].state) {
+                                const p2 = switch (birds[i].state) {
                                     .fly_sky_from_tree, .fly_sky_from_ground, .fly_sky_from_home => birds[i].sky,
                                     .fly_home_from_tree, .fly_home_from_ground, .fly_home_from_sky => birds[i].home,
                                     .fly_ground_from_tree, .fly_ground_from_home, .fly_ground_from_sky => birds[i].ground,

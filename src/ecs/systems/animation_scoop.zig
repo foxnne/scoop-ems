@@ -8,11 +8,11 @@ pub fn system() ecs.system_desc_t {
     var desc: ecs.system_desc_t = .{};
     desc.query.filter.terms[0] = .{ .id = ecs.id(components.SpriteAnimator) };
     desc.query.filter.terms[1] = .{ .id = ecs.id(components.SpriteRenderer) };
-    desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Scoop), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Optional };
+    desc.query.filter.terms[2] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Scoop)), .oper = ecs.oper_kind_t.Optional };
     desc.query.filter.terms[3] = .{ .id = ecs.id(components.ExcavatorAction) };
     desc.query.filter.terms[4] = .{ .id = ecs.id(components.Direction) };
     desc.query.filter.terms[5] = .{ .id = ecs.id(components.ParticleAnimator) };
-    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Event), ecs.id(components.Cooldown)), .oper = ecs.oper_kind_t.Optional };
+    desc.query.filter.terms[6] = .{ .id = ecs.pair(ecs.id(components.Cooldown), ecs.id(components.Event)), .oper = ecs.oper_kind_t.Optional };
     desc.run = run;
     return desc;
 }
