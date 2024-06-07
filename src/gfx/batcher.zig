@@ -294,6 +294,7 @@ pub const Batcher = struct {
         pass: {
             const encoder = self.encoder orelse break :pass;
             const back_buffer_view = core.swap_chain.getCurrentTextureView() orelse break :pass;
+            defer back_buffer_view.release();
 
             const color_attachments = [_]mach.gpu.RenderPassColorAttachment{.{
                 .view = if (self.context.output_handle) |out_handle| out_handle else back_buffer_view,

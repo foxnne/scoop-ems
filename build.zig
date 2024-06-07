@@ -35,7 +35,6 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zstbi", .module = zstbi.module("root") },
             .{ .name = "zmath", .module = zmath.module("root") },
             .{ .name = "zflecs", .module = zflecs.module("root") },
-            //.{ .name = "mach-opus", .module = b.dependency("mach_opus", .{ .target = target, .optimize = optimize }).module("mach-opus") },
             .{ .name = "build-options", .module = build_options.createModule() },
         },
         .optimize = optimize,
