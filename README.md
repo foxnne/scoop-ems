@@ -9,7 +9,7 @@ This is a little game I'm making for my daughter's 4th birthday.
 
 All assets are included, check `assets/src` for Pixi files for the artwork.
 
-REQUIRES ZIG 2024.3.0-mach (0.12.0-dev.3180+83e578a18)
+REQUIRES ZIG 2024.5.0-mach (zigup 0.13.0-dev.351+64ef45eb0)
 
 ### Building
 To build, simply:

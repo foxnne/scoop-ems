@@ -2,14 +2,14 @@ const std = @import("std");
 
 const mach = @import("mach");
 const core = mach.core;
-const gpu = core.gpu;
+const gpu = mach.gpu;
 
 const zstbi = @import("zstbi");
 const zmath = @import("zmath");
 const ecs = @import("zflecs");
 
 const sysaudio = mach.sysaudio;
-const Opus = @import("mach-opus");
+const Opus = mach.Audio.Opus;
 
 pub const App = @This();
 

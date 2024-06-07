@@ -7,7 +7,7 @@ const zm = @import("zmath");
 
 const mach = @import("mach");
 const core = mach.core;
-const gpu = core.gpu;
+const gpu = mach.gpu;
 
 const game = @import("../scoop'ems.zig");
 

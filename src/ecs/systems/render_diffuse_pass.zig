@@ -24,7 +24,7 @@ pub fn system() ecs.system_desc_t {
 pub fn run(it: *ecs.iter_t) callconv(.C) void {
     const uniforms = gfx.UniformBufferObject{ .mvp = zm.transpose(game.state.camera.renderTextureMatrix()) };
 
-    const background: core.gpu.Color = .{
+    const background: mach.gpu.Color = .{
         .r = 0.0,
         .g = 0.8,
         .b = 1.0,

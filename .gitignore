@@ -1,6 +1,7 @@
 zig-cache
 zig-arm-cache
 zig-out
+.zig-cache/
 buildrunner.zig
 .DS_Store
 imgui.ini

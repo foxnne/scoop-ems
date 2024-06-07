@@ -24,9 +24,10 @@ pub const ProcessAssetsStep = struct {
         return self;
     }
 
-    fn process(step: *Step, prog_node: *std.Progress.Node) anyerror!void {
-        _ = prog_node;
-        const self = @fieldParentPtr(ProcessAssetsStep, "step", step);
+    fn process(step: *Step, prog_node: std.Progress.Node) anyerror!void {
+        const progress = prog_node.start("Processing assets...", 100);
+        defer progress.end();
+        const self = @as(*ProcessAssetsStep, @fieldParentPtr("step", step));
         const root = self.assets_root_path;
         const assets_output = self.assets_output_path;
         const animations_output = self.animations_output_path;
@@ -48,6 +49,12 @@ pub const ProcessAssetsStep = struct {
                 // Add root assets location as const.
                 try assets_writer.print("pub const root = \"{s}/\";\n\n", .{root});
 
+                // Add palettes location as const.
+                try assets_writer.print("pub const palettes = \"{s}/{s}/\";\n\n", .{ root, "palettes" });
+
+                // Add themes location as const.
+                try assets_writer.print("pub const themes = \"{s}/{s}/\";\n\n", .{ root, "themes" });
+
                 // Iterate all files
                 for (files) |file| {
                     const ext = std.fs.path.extension(file);
@@ -58,9 +65,19 @@ pub const ProcessAssetsStep = struct {
                     const path_fixed = try self.builder.allocator.alloc(u8, file.len);
                     _ = std.mem.replace(u8, file, "\\", "/", path_fixed);
 
+                    const name_fixed = try self.builder.allocator.alloc(u8, name.len);
+                    _ = std.mem.replace(u8, name, "-", "_", name_fixed);
+
                     // Pngs
                     if (std.mem.eql(u8, ext, ".png")) {
-                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name, "_png" });
+                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name_fixed, "_png" });
+                        try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
+                        try assets_writer.print("}};\n\n", .{});
+                    }
+
+                    // Hex
+                    if (std.mem.eql(u8, ext, ".hex")) {
+                        try assets_writer.print("pub const {s}{s} = struct {{\n", .{ name_fixed, "_hex" });
                         try assets_writer.print("  pub const path = \"{s}\";\n", .{path_fixed});
                         try assets_writer.print("}};\n\n", .{});
                     }
@@ -112,12 +129,18 @@ pub const ProcessAssetsStep = struct {
                                 try animations_writer.print("}};\n", .{});
                             }
 
-                            try std.fs.cwd().writeFile(animations_output, animations_array_list.items);
+                            try std.fs.cwd().writeFile(.{
+                                .sub_path = animations_output,
+                                .data = animations_array_list.items,
+                            });
                         }
                     }
                 }
 
-                try std.fs.cwd().writeFile(assets_output, assets_array_list.items);
+                try std.fs.cwd().writeFile(.{
+                    .sub_path = assets_output,
+                    .data = assets_array_list.items,
+                });
             } else {
                 std.debug.print("No assets found!", .{});
             }

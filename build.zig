@@ -2,7 +2,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 const mach = @import("mach");
-const mach_opus = @import("mach_opus");
+//const mach_opus = @import("mach_opus");
 
 const content_dir = "assets/";
 const src_path = "src/scoop'ems.zig";
@@ -35,7 +35,7 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zstbi", .module = zstbi.module("root") },
             .{ .name = "zmath", .module = zmath.module("root") },
             .{ .name = "zflecs", .module = zflecs.module("root") },
-            .{ .name = "mach-opus", .module = b.dependency("mach_opus", .{ .target = target, .optimize = optimize }).module("mach-opus") },
+            //.{ .name = "mach-opus", .module = b.dependency("mach_opus", .{ .target = target, .optimize = optimize }).module("mach-opus") },
             .{ .name = "build-options", .module = build_options.createModule() },
         },
         .optimize = optimize,
@@ -49,7 +49,7 @@ pub fn build(b: *std.Build) !void {
     run_step.dependOn(&app.run.step);
 
     const unit_tests = b.addTest(.{
-        .root_source_file = .{ .path = src_path },
+        .root_source_file = b.path(src_path),
         .target = target,
         .optimize = optimize,
     });
@@ -69,17 +69,17 @@ pub fn build(b: *std.Build) !void {
     app.compile.linkLibrary(zstbi.artifact("zstbi"));
     app.compile.linkLibrary(zflecs.artifact("flecs"));
 
-    app.compile.root_module.addImport("mach-opus", b.dependency("mach_opus", .{
-        .target = target,
-        .optimize = optimize,
-    }).module("mach-opus"));
+    // app.compile.root_module.addImport("mach-opus", b.dependency("mach_opus", .{
+    //     .target = target,
+    //     .optimize = optimize,
+    // }).module("mach-opus"));
 
     const assets = ProcessAssetsStep.init(b, "assets", "src/assets.zig", "src/animations.zig");
     const process_assets_step = b.step("process-assets", "generates struct for all assets");
     process_assets_step.dependOn(&assets.step);
 
     const install_content_step = b.addInstallDirectory(.{
-        .source_dir = .{ .path = thisDir() ++ "/" ++ content_dir },
+        .source_dir = .{ .cwd_relative = thisDir() ++ "/" ++ content_dir },
         .install_dir = .{ .custom = "" },
         .install_subdir = "bin/" ++ content_dir,
     });
