@@ -99,7 +99,7 @@ pub fn run(it: *ecs.iter_t) callconv(.C) void {
                             }
 
                             if (birds[i].state.idle() and birds[i].state != .idle_home) {
-                                if (ecs.has_pair(it.world, game.state.entities.player, ecs.id(components.Scoop), ecs.id(components.Cooldown))) {
+                                if (ecs.has_pair(it.world, game.state.entities.player, ecs.id(components.Cooldown), ecs.id(components.Scoop))) {
                                     birds[i].state = switch (birds[i].state) {
                                         .idle_home => .idle_home,
                                         .idle_ground => .fly_home_from_ground,

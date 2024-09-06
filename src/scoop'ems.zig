@@ -492,10 +492,16 @@ var birds_i: usize = 0;
 var sparkles_i: usize = 0;
 var rev_swap: usize = 0;
 var music_i: usize = 0;
-fn writeCallback(_: ?*anyopaque, frames: []u8) void {
-    for (frames, 0..) |_, fi| {
-        _ = fi; // autofix
+fn writeCallback(_: ?*anyopaque, output: []u8) void {
+    const frame_size = state.sounds.player.format().frameSize(@intCast(state.sounds.player.channels().len));
+
+    var i: usize = 0;
+    var src: [16]f32 = undefined;
+    while (i < output.len) : (i += frame_size) {
         const channels = state.sounds.engine_idle.channels;
+
+        var sample: f32 = 0.0;
+
         for (0..channels) |_| {
             birds_i += 1;
             if (state.sounds.play_sparkles)
@@ -523,15 +529,13 @@ fn writeCallback(_: ?*anyopaque, frames: []u8) void {
 
             for (0..channels) |ch| {
                 _ = ch; // autofix
-                var sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
+                sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
-                    sample = rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
+                    sample += rev_sound.samples[rev_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
-                //state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
                 rev_i += 1;
             }
             idle_i = 0;
-            continue;
         }
         if (state.sounds.play_engine_release) {
             idle_i += 1;
@@ -548,7 +552,7 @@ fn writeCallback(_: ?*anyopaque, frames: []u8) void {
 
             for (0..channels) |ch| {
                 _ = ch; // autofix
-                var sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
+                sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
                     sample = release_sound.samples[release_i] * fade_in * fade_out + state.sounds.sparkles.samples[sparkles_i] + state.sounds.engine_idle.samples[idle_i] * 2.0 + state.sounds.music.samples[music_i] * 0.5;
                 }
@@ -556,7 +560,6 @@ fn writeCallback(_: ?*anyopaque, frames: []u8) void {
                 release_i += 1;
             }
             idle_i = 0;
-            continue;
         }
         {
             rev_swap += 1;
@@ -564,15 +567,23 @@ fn writeCallback(_: ?*anyopaque, frames: []u8) void {
             release_i = 0;
             for (0..channels) |ch| {
                 _ = ch; // autofix
-                var sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.5;
+                sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.birds_idle.samples[birds_i] * 3.0 + state.sounds.music.samples[music_i] * 0.5;
                 if (state.sounds.play_sparkles) {
                     sample = state.sounds.engine_idle.samples[idle_i] * 0.35 + state.sounds.sparkles.samples[sparkles_i] * 0.5 + state.sounds.music.samples[music_i] * 0.5;
                 } else {
                     sparkles_i = 0;
                 }
-
                 //state.sounds.player.write(state.sounds.player.channels()[ch], fi, sample);
             }
         }
+
+        for (0..state.sounds.player.channels().len) |ch| src[ch] = sample;
+
+        sysaudio.convertTo(
+            f32,
+            src[0..state.sounds.player.channels().len],
+            state.sounds.player.format(),
+            output[i..][0..frame_size],
+        );
     }
 }
